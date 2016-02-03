@@ -28,6 +28,12 @@ use \ParagonIE\ConstantTime\Encoding;
 
 $data = random_bytes(32);
 echo Encoding::base64Encode($data), "\n";
+echo Encoding::hexEncode($data), "\n";
 ```
 
-Example output: `hKBHmZuDM9N99tXDoSNrZVoQSpVChxKXjG85cuOuSYI=`
+Example output:
+ 
+```
+hKBHmZuDM9N99tXDoSNrZVoQSpVChxKXjG85cuOuSYI=
+84a047999b8333d37df6d5c3a1236b655a104a95428712978c6f3972e3ae4982
+```
