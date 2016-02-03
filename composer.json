@@ -1,0 +1,40 @@
+{
+  "name": "paragonie/constant_time_encoding",
+  "description": "Constant-time Implementations of RFC 4648 Base-64 Encoding (original by Steve 'Sc00bz' Thomas)",
+  "keywords": [
+    "base64", "encoding", "rfc4648"
+  ],
+  "license": "MIT",
+  "type": "library",
+  "authors": [
+      {
+        "name":     "Paragon Initiative Enterprises",
+        "email":    "security@paragonie.com",
+        "homepage": "https://paragonie.com",
+        "role":     "Maintainer"
+      },
+      {
+        "name":     "Steve 'Sc00bz' Thomas",
+        "email":    "steve@tobtu.com",
+        "homepage": "https://www.tobtu.com",
+        "role":     "Original Developer"
+      }
+  ],
+  "support": {
+    "issues":   "https://github.com/paragonie/constant_time_encoding/issues",
+    "email":    "info@paragonie.com",
+    "source":   "https://github.com/paragonie/constant_time_encoding"
+  },
+  "require": {
+    "php": "^5.5|^7"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "4.*|5.*",
+    "paragonie/random_compat": "^1.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "ParagonIE\\ConstantTime\\": "src/"
+    }
+  }
+}
