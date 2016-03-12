@@ -25,11 +25,204 @@ namespace ParagonIE\ConstantTime;
 class Encoding
 {
     /**
+     * Decode a Base32-encoded string into raw binary
+     *
+     * @param string $src
+     * @return string
+     */
+    public static function base32Decode($src)
+    {
+        // Remove padding
+        $srcLen = self::safeStrlen($src);
+        if ($srcLen === 0) {
+            return '';
+        }
+        if (($srcLen & 7) === 0) {
+            if ($src[$srcLen - 1] === '=') {
+                $srcLen--;
+                if ($src[$srcLen - 1] === '=') {
+                    $srcLen--;
+                }
+                if ($src[$srcLen - 1] === '=') {
+                    $srcLen--;
+                }
+                if ($src[$srcLen - 1] === '=') {
+                    $srcLen--;
+                }
+                if ($src[$srcLen - 1] === '=') {
+                    $srcLen--;
+                }
+                if ($src[$srcLen - 1] === '=') {
+                    $srcLen--;
+                }
+                if ($src[$srcLen - 1] === '=') {
+                    $srcLen--;
+                }
+            }
+        }
+        if (($srcLen & 7) === 1) {
+            return false;
+        }
+
+        $err = 0;
+        $dest = '';
+        for ($i = 0; $i + 8 <= $srcLen; $i += 8) {
+            $c0 = self::base32Decode5Bits(ord($src[$i]));
+            $c1 = self::base32Decode5Bits(ord($src[$i + 1]));
+            $c2 = self::base32Decode5Bits(ord($src[$i + 2]));
+            $c3 = self::base32Decode5Bits(ord($src[$i + 3]));
+            $c4 = self::base32Decode5Bits(ord($src[$i + 4]));
+            $c5 = self::base32Decode5Bits(ord($src[$i + 5]));
+            $c6 = self::base32Decode5Bits(ord($src[$i + 6]));
+            $c7 = self::base32Decode5Bits(ord($src[$i + 7]));
+
+            $dest .=
+                chr((($c0 << 3) | ($c1 >> 2)             ) & 0xff) .
+                chr((($c1 << 6) | ($c2 << 1) | ($c3 >> 4)) & 0xff) .
+                chr((($c3 << 4) | ($c4 >> 1)             ) & 0xff) .
+                chr((($c4 << 7) | ($c5 << 2) | ($c6 >> 3)) & 0xff) .
+                chr((($c6 << 5) | ($c7     )             ) & 0xff);
+        }
+        if ($i < $srcLen) {
+            $c0 = self::base32Decode5Bits(ord($src[$i]));
+            if ($i + 6 < $srcLen) {
+                $c1 = self::base32Decode5Bits(ord($src[$i + 1]));
+                $c2 = self::base32Decode5Bits(ord($src[$i + 2]));
+                $c3 = self::base32Decode5Bits(ord($src[$i + 3]));
+                $c4 = self::base32Decode5Bits(ord($src[$i + 4]));
+                $c5 = self::base32Decode5Bits(ord($src[$i + 5]));
+                $c6 = self::base32Decode5Bits(ord($src[$i + 6]));
+
+                $dest .=
+                    chr((($c0 << 3) | ($c1 >> 2)             ) & 0xff) .
+                    chr((($c1 << 6) | ($c2 << 1) | ($c3 >> 4)) & 0xff) .
+                    chr((($c3 << 4) | ($c4 >> 1)             ) & 0xff) .
+                    chr((($c4 << 7) | ($c5 << 2) | ($c6 >> 3)) & 0xff);
+            } elseif ($i + 5 < $srcLen) {
+                $c1 = self::base32Decode5Bits(ord($src[$i + 1]));
+                $c2 = self::base32Decode5Bits(ord($src[$i + 2]));
+                $c3 = self::base32Decode5Bits(ord($src[$i + 3]));
+                $c4 = self::base32Decode5Bits(ord($src[$i + 4]));
+                $c5 = self::base32Decode5Bits(ord($src[$i + 5]));
+
+                $dest .=
+                    chr((($c0 << 3) | ($c1 >> 2)             ) & 0xff) .
+                    chr((($c1 << 6) | ($c2 << 1) | ($c3 >> 4)) & 0xff) .
+                    chr((($c3 << 4) | ($c4 >> 1)             ) & 0xff) .
+                    chr((($c4 << 7) | ($c5 << 2)             ) & 0xff);
+            } elseif ($i + 4 < $srcLen) {
+                $c1 = self::base32Decode5Bits(ord($src[$i + 1]));
+                $c2 = self::base32Decode5Bits(ord($src[$i + 2]));
+                $c3 = self::base32Decode5Bits(ord($src[$i + 3]));
+                $c4 = self::base32Decode5Bits(ord($src[$i + 4]));
+
+                $dest .=
+                    chr((($c0 << 3) | ($c1 >> 2)             ) & 0xff) .
+                    chr((($c1 << 6) | ($c2 << 1) | ($c3 >> 4)) & 0xff) .
+                    chr((($c3 << 4) | ($c4 >> 1)             ) & 0xff);
+            } elseif ($i + 3 < $srcLen) {
+                $c1 = self::base32Decode5Bits(ord($src[$i + 1]));
+                $c2 = self::base32Decode5Bits(ord($src[$i + 2]));
+                $c3 = self::base32Decode5Bits(ord($src[$i + 3]));
+
+                $dest .=
+                    chr((($c0 << 3) | ($c1 >> 2)             ) & 0xff) .
+                    chr((($c1 << 6) | ($c2 << 1) | ($c3 >> 4)) & 0xff) .
+                    ''; //chr((($c3 << 4)                          ) & 0xff);
+            } elseif ($i + 2 < $srcLen) {
+                $c1 = self::base32Decode5Bits(ord($src[$i + 1]));
+                $c2 = self::base32Decode5Bits(ord($src[$i + 2]));
+
+                $dest .=
+                    chr((($c0 << 3) | ($c1 >> 2)             ) & 0xff) .
+                    chr((($c1 << 6) | ($c2 << 1)             ) & 0xff);
+            } elseif ($i + 1 < $srcLen) {
+                $c1 = self::base32Decode5Bits(ord($src[$i + 1]));
+                $dest .=
+                    chr((($c0 << 3) | ($c1 >> 2)             ) & 0xff);
+            } else {
+                $dest .=
+                    chr((($c0 << 3)                          ) & 0xff);
+            }
+        }
+        return $dest;
+    }
+
+    /**
+     * Encode into Base32 (RFC 4648)
+     *
+     * @param string $src
+     * @return string
+     */
+    public static function base32Encode($src)
+    {
+        $dest = '';
+        $srcLen = self::safeStrlen($src);
+        for ($i = 0; $i + 5 <= $srcLen; $i += 5) {
+            $b0 = ord($src[$i]);
+            $b1 = ord($src[$i + 1]);
+            $b2 = ord($src[$i + 2]);
+            $b3 = ord($src[$i + 3]);
+            $b4 = ord($src[$i + 4]);
+            $dest .=
+                self::base32Encode5Bits(              ($b0 >> 3)  & 31) .
+                self::base32Encode5Bits((($b0 << 2) | ($b1 >> 6)) & 31) .
+                self::base32Encode5Bits((($b1 >> 1)             ) & 31) .
+                self::base32Encode5Bits((($b1 << 4) | ($b2 >> 4)) & 31) .
+                self::base32Encode5Bits((($b2 << 1) | ($b3 >> 7)) & 31) .
+                self::base32Encode5Bits((($b3 >> 2)             ) & 31) .
+                self::base32Encode5Bits((($b3 << 3) | ($b4 >> 5)) & 31) .
+                self::base32Encode5Bits(  $b4                     & 31);
+        }
+        if ($i < $srcLen) {
+            $b0 = ord($src[$i]);
+            if ($i + 3 < $srcLen) {
+                $b1 = ord($src[$i + 1]);
+                $b2 = ord($src[$i + 2]);
+                $b3 = ord($src[$i + 3]);
+                $dest .=
+                    self::base32Encode5Bits(              ($b0 >> 3)  & 31) .
+                    self::base32Encode5Bits((($b0 << 2) | ($b1 >> 6)) & 31) .
+                    self::base32Encode5Bits((($b1 >> 1)             ) & 31) .
+                    self::base32Encode5Bits((($b1 << 4) | ($b2 >> 4)) & 31) .
+                    self::base32Encode5Bits((($b2 << 1) | ($b3 >> 7)) & 31) .
+                    self::base32Encode5Bits((($b3 >> 2)             ) & 31) .
+                    self::base32Encode5Bits((($b3 << 3)             ) & 31) .
+                    '=';
+            } elseif ($i + 2 < $srcLen) {
+                $b1 = ord($src[$i + 1]);
+                $b2 = ord($src[$i + 2]);
+                $dest .=
+                    self::base32Encode5Bits(              ($b0 >> 3)  & 31) .
+                    self::base32Encode5Bits((($b0 << 2) | ($b1 >> 6)) & 31) .
+                    self::base32Encode5Bits((($b1 >> 1)             ) & 31) .
+                    self::base32Encode5Bits((($b1 << 4) | ($b2 >> 4)) & 31) .
+                    self::base32Encode5Bits((($b2 << 1)             ) & 31) .
+                    '===';
+            } elseif ($i + 1 < $srcLen) {
+                $b1 = ord($src[$i + 1]);
+                $dest .=
+                    self::base32Encode5Bits(              ($b0 >> 3)  & 31) .
+                    self::base32Encode5Bits((($b0 << 2) | ($b1 >> 6)) & 31) .
+                    self::base32Encode5Bits((($b1 >> 1)             ) & 31) .
+                    self::base32Encode5Bits((($b1 << 4)             ) & 31) .
+                    '====';
+            } else {
+                $dest .=
+                    self::base32Encode5Bits(              ($b0 >> 3)  & 31) .
+                    self::base32Encode5Bits( ($b0 << 2)               & 31) .
+                    '======';
+            }
+        }
+        return $dest;
+    }
+
+    /**
      * Encode into Base64
      *
      * Base64 character set "[A-Z][a-z][0-9]+/"
      *
-     * @param $src
+     * @param string $src
      * @return string
      */
     public static function base64Encode($src)
@@ -366,6 +559,7 @@ class Encoding
     {
         $hex_pos = 0;
         $bin = '';
+        $c_acc = 0;
         $hex_len = self::safeStrlen($hex_string);
         $state = 0;
 
@@ -390,6 +584,38 @@ class Encoding
             ++$hex_pos;
         }
         return $bin;
+    }
+
+    /**
+     *
+     * @param $src
+     * @return int
+     */
+    protected static function base32Decode5Bits($src)
+    {
+        $ret = -1;
+
+        // if ($src > 64 && $src < 91) $ret += $src - 65 + 1; // -64
+        $ret += (((0x40 - $src) & ($src - 0x5b)) >> 8) & ($src - 64);
+
+        // if ($src > 0x31 && $src < 0x38) $ret += $src - 24 + 1; // -23
+        $ret += (((0x31 - $src) & ($src - 0x38)) >> 8) & ($src - 23);
+
+        return $ret;
+    }
+
+    /**
+     * @param $src
+     * @return string
+     */
+    protected static function base32Encode5Bits($src)
+    {
+        $diff = 0x41;
+
+        // if ($src > 25) $ret -= 40;
+        $diff -= ((25 - $src) >> 8) & 41;
+
+        return chr($src + $diff);
     }
 
     /**
