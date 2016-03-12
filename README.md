@@ -11,6 +11,7 @@ Our fork offers the following enchancements:
 * `mbstring.func_overload` resistance
 * Unit tests
 * Composer- and Packagist-ready
+* Base32 encoding
 
 ## How to Install
 
