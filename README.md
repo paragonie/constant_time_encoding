@@ -2,8 +2,6 @@
 
 [![Build Status](https://travis-ci.org/paragonie/constant_time_encoding.svg?branch=master)](https://travis-ci.org/paragonie/constant_time_encoding)
 
-### Security Warning: Due to how PHP implements `chr()` (and there is no way to work around it), this cannot achieve true cache-timing safety. 
-
 However, if you implement the algorithms in C as part of php-src, you can.
 
 ---
@@ -18,6 +16,7 @@ Our fork offers the following enchancements:
 * Unit tests
 * Composer- and Packagist-ready
 * Base32 encoding
+* Uses `pack()` and `unpack()` instead of `chr()` and `ord()`
 
 ## How to Install
 

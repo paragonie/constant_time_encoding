@@ -67,83 +67,112 @@ class Encoding
         $err = 0;
         $dest = '';
         for ($i = 0; $i + 8 <= $srcLen; $i += 8) {
-            $c0 = self::base32Decode5Bits(ord($src[$i]));
-            $c1 = self::base32Decode5Bits(ord($src[$i + 1]));
-            $c2 = self::base32Decode5Bits(ord($src[$i + 2]));
-            $c3 = self::base32Decode5Bits(ord($src[$i + 3]));
-            $c4 = self::base32Decode5Bits(ord($src[$i + 4]));
-            $c5 = self::base32Decode5Bits(ord($src[$i + 5]));
-            $c6 = self::base32Decode5Bits(ord($src[$i + 6]));
-            $c7 = self::base32Decode5Bits(ord($src[$i + 7]));
+            $chunk = unpack('C*', self::safeSubstr($src, $i, 8));
+            $c0 = self::base32Decode5Bits($chunk[1]);
+            $c1 = self::base32Decode5Bits($chunk[2]);
+            $c2 = self::base32Decode5Bits($chunk[3]);
+            $c3 = self::base32Decode5Bits($chunk[4]);
+            $c4 = self::base32Decode5Bits($chunk[5]);
+            $c5 = self::base32Decode5Bits($chunk[6]);
+            $c6 = self::base32Decode5Bits($chunk[7]);
+            $c7 = self::base32Decode5Bits($chunk[8]);
 
-            $dest .=
-                chr((($c0 << 3) | ($c1 >> 2)             ) & 0xff) .
-                chr((($c1 << 6) | ($c2 << 1) | ($c3 >> 4)) & 0xff) .
-                chr((($c3 << 4) | ($c4 >> 1)             ) & 0xff) .
-                chr((($c4 << 7) | ($c5 << 2) | ($c6 >> 3)) & 0xff) .
-                chr((($c6 << 5) | ($c7     )             ) & 0xff);
+            $dest .= pack(
+                'CCCCC',
+                (($c0 << 3) | ($c1 >> 2)             ) & 0xff,
+                (($c1 << 6) | ($c2 << 1) | ($c3 >> 4)) & 0xff,
+                (($c3 << 4) | ($c4 >> 1)             ) & 0xff,
+                (($c4 << 7) | ($c5 << 2) | ($c6 >> 3)) & 0xff,
+                (($c6 << 5) | ($c7     )             ) & 0xff
+            );
+            $err |= ($c0 | $c1 | $c2 | $c3 | $c4 | $c5 | $c6 | $c7) >> 8;
         }
         if ($i < $srcLen) {
-            $c0 = self::base32Decode5Bits(ord($src[$i]));
+            $chunk = unpack('C*', self::safeSubstr($src, $i, $srcLen - $i));
+            $c0 = self::base32Decode5Bits($chunk[1]);
             if ($i + 6 < $srcLen) {
-                $c1 = self::base32Decode5Bits(ord($src[$i + 1]));
-                $c2 = self::base32Decode5Bits(ord($src[$i + 2]));
-                $c3 = self::base32Decode5Bits(ord($src[$i + 3]));
-                $c4 = self::base32Decode5Bits(ord($src[$i + 4]));
-                $c5 = self::base32Decode5Bits(ord($src[$i + 5]));
-                $c6 = self::base32Decode5Bits(ord($src[$i + 6]));
+                $c1 = self::base32Decode5Bits($chunk[2]);
+                $c2 = self::base32Decode5Bits($chunk[3]);
+                $c3 = self::base32Decode5Bits($chunk[4]);
+                $c4 = self::base32Decode5Bits($chunk[5]);
+                $c5 = self::base32Decode5Bits($chunk[6]);
+                $c6 = self::base32Decode5Bits($chunk[7]);
 
-                $dest .=
-                    chr((($c0 << 3) | ($c1 >> 2)             ) & 0xff) .
-                    chr((($c1 << 6) | ($c2 << 1) | ($c3 >> 4)) & 0xff) .
-                    chr((($c3 << 4) | ($c4 >> 1)             ) & 0xff) .
-                    chr((($c4 << 7) | ($c5 << 2) | ($c6 >> 3)) & 0xff);
+                $dest .= pack(
+                    'CCCC',
+                    (($c0 << 3) | ($c1 >> 2)             ) & 0xff,
+                    (($c1 << 6) | ($c2 << 1) | ($c3 >> 4)) & 0xff,
+                    (($c3 << 4) | ($c4 >> 1)             ) & 0xff,
+                    (($c4 << 7) | ($c5 << 2) | ($c6 >> 3)) & 0xff
+                );
+                $err |= ($c0 | $c1 | $c2 | $c3 | $c4 | $c5 | $c6) >> 8;
             } elseif ($i + 5 < $srcLen) {
-                $c1 = self::base32Decode5Bits(ord($src[$i + 1]));
-                $c2 = self::base32Decode5Bits(ord($src[$i + 2]));
-                $c3 = self::base32Decode5Bits(ord($src[$i + 3]));
-                $c4 = self::base32Decode5Bits(ord($src[$i + 4]));
-                $c5 = self::base32Decode5Bits(ord($src[$i + 5]));
+                $c1 = self::base32Decode5Bits($chunk[2]);
+                $c2 = self::base32Decode5Bits($chunk[3]);
+                $c3 = self::base32Decode5Bits($chunk[4]);
+                $c4 = self::base32Decode5Bits($chunk[5]);
+                $c5 = self::base32Decode5Bits($chunk[6]);
 
-                $dest .=
-                    chr((($c0 << 3) | ($c1 >> 2)             ) & 0xff) .
-                    chr((($c1 << 6) | ($c2 << 1) | ($c3 >> 4)) & 0xff) .
-                    chr((($c3 << 4) | ($c4 >> 1)             ) & 0xff) .
-                    chr((($c4 << 7) | ($c5 << 2)             ) & 0xff);
+                $dest .= pack(
+                    'CCCC',
+                    (($c0 << 3) | ($c1 >> 2)             ) & 0xff,
+                    (($c1 << 6) | ($c2 << 1) | ($c3 >> 4)) & 0xff,
+                    (($c3 << 4) | ($c4 >> 1)             ) & 0xff,
+                    (($c4 << 7) | ($c5 << 2)             ) & 0xff
+                );
+                $err |= ($c0 | $c1 | $c2 | $c3 | $c4 | $c5) >> 8;
             } elseif ($i + 4 < $srcLen) {
-                $c1 = self::base32Decode5Bits(ord($src[$i + 1]));
-                $c2 = self::base32Decode5Bits(ord($src[$i + 2]));
-                $c3 = self::base32Decode5Bits(ord($src[$i + 3]));
-                $c4 = self::base32Decode5Bits(ord($src[$i + 4]));
+                $c1 = self::base32Decode5Bits($chunk[2]);
+                $c2 = self::base32Decode5Bits($chunk[3]);
+                $c3 = self::base32Decode5Bits($chunk[4]);
+                $c4 = self::base32Decode5Bits($chunk[5]);
 
-                $dest .=
-                    chr((($c0 << 3) | ($c1 >> 2)             ) & 0xff) .
-                    chr((($c1 << 6) | ($c2 << 1) | ($c3 >> 4)) & 0xff) .
-                    chr((($c3 << 4) | ($c4 >> 1)             ) & 0xff);
+                $dest .= pack(
+                    'CCC',
+                    (($c0 << 3) | ($c1 >> 2)             ) & 0xff,
+                    (($c1 << 6) | ($c2 << 1) | ($c3 >> 4)) & 0xff,
+                    (($c3 << 4) | ($c4 >> 1)             ) & 0xff
+                );
+                $err |= ($c0 | $c1 | $c2 | $c3 | $c4) >> 8;
             } elseif ($i + 3 < $srcLen) {
-                $c1 = self::base32Decode5Bits(ord($src[$i + 1]));
-                $c2 = self::base32Decode5Bits(ord($src[$i + 2]));
-                $c3 = self::base32Decode5Bits(ord($src[$i + 3]));
+                $c1 = self::base32Decode5Bits($chunk[2]);
+                $c2 = self::base32Decode5Bits($chunk[3]);
+                $c3 = self::base32Decode5Bits($chunk[4]);
 
-                $dest .=
-                    chr((($c0 << 3) | ($c1 >> 2)             ) & 0xff) .
-                    chr((($c1 << 6) | ($c2 << 1) | ($c3 >> 4)) & 0xff) .
-                    ''; //chr((($c3 << 4)                          ) & 0xff);
+                $dest .= pack(
+                    'CC',
+                    (($c0 << 3) | ($c1 >> 2)             ) & 0xff,
+                    (($c1 << 6) | ($c2 << 1) | ($c3 >> 4)) & 0xff
+                );
+                $err |= ($c0 | $c1 | $c2 | $c3) >> 8;
             } elseif ($i + 2 < $srcLen) {
-                $c1 = self::base32Decode5Bits(ord($src[$i + 1]));
-                $c2 = self::base32Decode5Bits(ord($src[$i + 2]));
+                $c1 = self::base32Decode5Bits($chunk[2]);
+                $c2 = self::base32Decode5Bits($chunk[3]);
 
-                $dest .=
-                    chr((($c0 << 3) | ($c1 >> 2)             ) & 0xff) .
-                    chr((($c1 << 6) | ($c2 << 1)             ) & 0xff);
+                $dest .= pack(
+                    'CC',
+                    (($c0 << 3) | ($c1 >> 2)             ) & 0xff,
+                    (($c1 << 6) | ($c2 << 1)             ) & 0xff
+                );
+                $err |= ($c0 | $c1 | $c2) >> 8;
             } elseif ($i + 1 < $srcLen) {
-                $c1 = self::base32Decode5Bits(ord($src[$i + 1]));
-                $dest .=
-                    chr((($c0 << 3) | ($c1 >> 2)             ) & 0xff);
+                $c1 = self::base32Decode5Bits($chunk[2]);
+
+                $dest .= pack(
+                    'C',
+                    (($c0 << 3) | ($c1 >> 2)             ) & 0xff
+                );
+                $err |= ($c0 | $c1) >> 8;
             } else {
-                $dest .=
-                    chr((($c0 << 3)                          ) & 0xff);
+                $dest .= pack(
+                    'C',
+                    (($c0 << 3)                          ) & 0xff
+                );
+                $err |= ($c0) >> 8;
             }
+        }
+        if ($err !== 0) {
+            return false;
         }
         return $dest;
     }
@@ -159,11 +188,12 @@ class Encoding
         $dest = '';
         $srcLen = self::safeStrlen($src);
         for ($i = 0; $i + 5 <= $srcLen; $i += 5) {
-            $b0 = ord($src[$i]);
-            $b1 = ord($src[$i + 1]);
-            $b2 = ord($src[$i + 2]);
-            $b3 = ord($src[$i + 3]);
-            $b4 = ord($src[$i + 4]);
+            $chunk = unpack('C*', self::safeSubstr($src, $i, 5));
+            $b0 = $chunk[1];
+            $b1 = $chunk[2];
+            $b2 = $chunk[3];
+            $b3 = $chunk[4];
+            $b4 = $chunk[5];
             $dest .=
                 self::base32Encode5Bits(              ($b0 >> 3)  & 31) .
                 self::base32Encode5Bits((($b0 << 2) | ($b1 >> 6)) & 31) .
@@ -175,11 +205,12 @@ class Encoding
                 self::base32Encode5Bits(  $b4                     & 31);
         }
         if ($i < $srcLen) {
-            $b0 = ord($src[$i]);
+            $chunk = unpack('C*', self::safeSubstr($src, $i, $srcLen - $i));
+            $b0 = $chunk[1];
             if ($i + 3 < $srcLen) {
-                $b1 = ord($src[$i + 1]);
-                $b2 = ord($src[$i + 2]);
-                $b3 = ord($src[$i + 3]);
+                $b1 = $chunk[2];
+                $b2 = $chunk[3];
+                $b3 = $chunk[4];
                 $dest .=
                     self::base32Encode5Bits(              ($b0 >> 3)  & 31) .
                     self::base32Encode5Bits((($b0 << 2) | ($b1 >> 6)) & 31) .
@@ -190,8 +221,8 @@ class Encoding
                     self::base32Encode5Bits((($b3 << 3)             ) & 31) .
                     '=';
             } elseif ($i + 2 < $srcLen) {
-                $b1 = ord($src[$i + 1]);
-                $b2 = ord($src[$i + 2]);
+                $b1 = $chunk[2];
+                $b2 = $chunk[3];
                 $dest .=
                     self::base32Encode5Bits(              ($b0 >> 3)  & 31) .
                     self::base32Encode5Bits((($b0 << 2) | ($b1 >> 6)) & 31) .
@@ -200,7 +231,7 @@ class Encoding
                     self::base32Encode5Bits((($b2 << 1)             ) & 31) .
                     '===';
             } elseif ($i + 1 < $srcLen) {
-                $b1 = ord($src[$i + 1]);
+                $b1 = $chunk[2];
                 $dest .=
                     self::base32Encode5Bits(              ($b0 >> 3)  & 31) .
                     self::base32Encode5Bits((($b0 << 2) | ($b1 >> 6)) & 31) .
@@ -230,9 +261,10 @@ class Encoding
         $dest = '';
         $srcLen = self::safeStrlen($src);
         for ($i = 0; $i + 3 <= $srcLen; $i += 3) {
-            $b0 = ord($src[$i]);
-            $b1 = ord($src[$i + 1]);
-            $b2 = ord($src[$i + 2]);
+            $chunk = unpack('C*', self::safeSubstr($src, $i, 3));
+            $b0 = $chunk[1];
+            $b1 = $chunk[2];
+            $b2 = $chunk[3];
 
             $dest .=
                 self::base64Encode6Bits(               $b0 >> 2       ) .
@@ -241,9 +273,10 @@ class Encoding
                 self::base64Encode6Bits(  $b2                     & 63);
         }
         if ($i < $srcLen) {
-            $b0 = ord($src[$i]);
+            $chunk = unpack('C*', self::safeSubstr($src, $i, $srcLen - $i));
+            $b0 = $chunk[1];
             if ($i + 1 < $srcLen) {
-                $b1 = ord($src[$i + 1]);
+                $b1 = $chunk[2];
                 $dest .=
                     self::base64Encode6Bits(               $b0 >> 2       ) .
                     self::base64Encode6Bits((($b0 << 4) | ($b1 >> 4)) & 63) .
@@ -287,31 +320,40 @@ class Encoding
         $err = 0;
         $dest = '';
         for ($i = 0; $i + 4 <= $srcLen; $i += 4) {
-            $c0 = self::base64Decode6Bits(ord($src[$i]));
-            $c1 = self::base64Decode6Bits(ord($src[$i + 1]));
-            $c2 = self::base64Decode6Bits(ord($src[$i + 2]));
-            $c3 = self::base64Decode6Bits(ord($src[$i + 3]));
+            $chunk = unpack('C*', self::safeSubstr($src, $i, 4));
+            $c0 = self::base64Decode6Bits($chunk[1]);
+            $c1 = self::base64Decode6Bits($chunk[2]);
+            $c2 = self::base64Decode6Bits($chunk[3]);
+            $c3 = self::base64Decode6Bits($chunk[4]);
 
-            $dest .=
-                chr((($c0 << 2) | ($c1 >> 4)) & 0xff) .
-                chr((($c1 << 4) | ($c2 >> 2)) & 0xff) .
-                chr((($c2 << 6) |  $c3      ) & 0xff);
+            $dest .= pack(
+                'CCC',
+                ((($c0 << 2) | ($c1 >> 4)) & 0xff),
+                ((($c1 << 4) | ($c2 >> 2)) & 0xff),
+                ((($c2 << 6) |  $c3      ) & 0xff)
+            );
             $err |= ($c0 | $c1 | $c2 | $c3) >> 8;
         }
         if ($i < $srcLen) {
-            $c0 = self::base64Decode6Bits(ord($src[$i]));
-            $c1 = self::base64Decode6Bits(ord($src[$i + 1]));
+            $chunk = unpack('C*', self::safeSubstr($src, $i, $srcLen - $i));
+            $c0 = self::base64Decode6Bits($chunk[1]);
+            $c1 = self::base64Decode6Bits($chunk[2]);
             if ($i + 2 < $srcLen) {
-                $c2 = self::base64Decode6Bits(ord($src[$i + 2]));
-                $dest .=
-                    chr((($c0 << 2) | ($c1 >> 4)) & 0xff) .
-                    chr((($c1 << 4) | ($c2 >> 2)) & 0xff) .
-                    chr( ($c2 << 6)               & 0xff);
+                $c1 = self::base64Decode6Bits($chunk[3]);
+
+                $dest .= pack(
+                    'CCC',
+                    ((($c0 << 2) | ($c1 >> 4)) & 0xff),
+                    ((($c1 << 4) | ($c2 >> 2)) & 0xff),
+                    ((($c2 << 6)             ) & 0xff)
+                );
                 $err |= ($c0 | $c1 | $c2) >> 8;
             } else {
-                $dest .=
-                    chr((($c0 << 2) | ($c1 >> 4)) & 0xff) .
-                    chr( ($c1 << 4)               & 0xff);
+                $dest .= pack(
+                    'CCC',
+                    ((($c0 << 2) | ($c1 >> 4)) & 0xff),
+                    ((($c1 << 4)             ) & 0xff)
+                );
                 $err |= ($c0 | $c1) >> 8;
             }
         }
@@ -333,9 +375,10 @@ class Encoding
         $dest = '';
         $srcLen = self::safeStrlen($src);
         for ($i = 0; $i + 3 <= $srcLen; $i += 3) {
-            $b0 = ord($src[$i]);
-            $b1 = ord($src[$i + 1]);
-            $b2 = ord($src[$i + 2]);
+            $chunk = unpack('C*', self::safeSubstr($src, $i, 3));
+            $b0 = $chunk[1];
+            $b1 = $chunk[2];
+            $b2 = $chunk[3];
 
             $dest .=
                 self::base64Encode6BitsDotSlash(               $b0 >> 2       ) .
@@ -344,9 +387,10 @@ class Encoding
                 self::base64Encode6BitsDotSlash(  $b2                     & 63);
         }
         if ($i < $srcLen) {
-            $b0 = ord($src[$i]);
+            $chunk = unpack('C*', self::safeSubstr($src, $i, 3));
+            $b0 = $chunk[1];
             if ($i + 1 < $srcLen) {
-                $b1 = ord($src[$i + 1]);
+                $b1 = $chunk[2];
                 $dest .=
                     self::base64Encode6BitsDotSlash(               $b0 >> 2       ) .
                     self::base64Encode6BitsDotSlash((($b0 << 4) | ($b1 >> 4)) & 63) .
@@ -390,31 +434,39 @@ class Encoding
         $err = 0;
         $dest = '';
         for ($i = 0; $i + 4 <= $srcLen; $i += 4) {
-            $c0 = self::base64Decode6BitsDotSlash(ord($src[$i]));
-            $c1 = self::base64Decode6BitsDotSlash(ord($src[$i + 1]));
-            $c2 = self::base64Decode6BitsDotSlash(ord($src[$i + 2]));
-            $c3 = self::base64Decode6BitsDotSlash(ord($src[$i + 3]));
+            $chunk = unpack('C*', self::safeSubstr($src, $i, 4));
+            $c0 = self::base64Decode6BitsDotSlash($chunk[1]);
+            $c1 = self::base64Decode6BitsDotSlash($chunk[2]);
+            $c2 = self::base64Decode6BitsDotSlash($chunk[3]);
+            $c3 = self::base64Decode6BitsDotSlash($chunk[4]);
 
-            $dest .=
-                chr((($c0 << 2) | ($c1 >> 4)) & 0xff) .
-                chr((($c1 << 4) | ($c2 >> 2)) & 0xff) .
-                chr((($c2 << 6) |  $c3      ) & 0xff);
+            $dest .= pack(
+                'CCC',
+                ((($c0 << 2) | ($c1 >> 4)) & 0xff),
+                ((($c1 << 4) | ($c2 >> 2)) & 0xff),
+                ((($c2 << 6) |  $c3      ) & 0xff)
+            );
             $err |= ($c0 | $c1 | $c2 | $c3) >> 8;
         }
         if ($i < $srcLen) {
-            $c0 = self::base64Decode6BitsDotSlash(ord($src[$i]));
-            $c1 = self::base64Decode6BitsDotSlash(ord($src[$i + 1]));
+            $chunk = unpack('C*', self::safeSubstr($src, $i, $srcLen - $i));
+            $c0 = self::base64Decode6BitsDotSlash($chunk[1]);
+            $c1 = self::base64Decode6BitsDotSlash($chunk[2]);
             if ($i + 2 < $srcLen) {
-                $c2 = self::base64Decode6BitsDotSlash(ord($src[$i + 2]));
-                $dest .=
-                    chr((($c0 << 2) | ($c1 >> 4)) & 0xff) .
-                    chr((($c1 << 4) | ($c2 >> 2)) & 0xff) .
-                    chr( ($c2 << 6)               & 0xff);
+                $c2 = self::base64Decode6BitsDotSlash($chunk[3]);
+                $dest .= pack(
+                    'CCC',
+                    ((($c0 << 2) | ($c1 >> 4)) & 0xff),
+                    ((($c1 << 4) | ($c2 >> 2)) & 0xff),
+                    ((($c2 << 6)             ) & 0xff)
+                );
                 $err |= ($c0 | $c1 | $c2) >> 8;
             } else {
-                $dest .=
-                    chr((($c0 << 2) | ($c1 >> 4)) & 0xff) .
-                    chr( ($c1 << 4)               & 0xff);
+                $dest .= pack(
+                    'CC',
+                    ((($c0 << 2) | ($c1 >> 4)) & 0xff),
+                    ((($c1 << 4)             ) & 0xff)
+                );
                 $err |= ($c0 | $c1) >> 8;
             }
         }
@@ -436,10 +488,9 @@ class Encoding
         $dest = '';
         $srcLen = self::safeStrlen($src);
         for ($i = 0; $i + 3 <= $srcLen; $i += 3) {
-            $b0 = ord($src[$i]);
-            $b1 = ord($src[$i + 1]);
-            $b2 = ord($src[$i + 2]);
-
+            $chunk = unpack('C*', self::safeSubstr($src, $i, 3));
+            $b0 = $chunk[1];
+            $b1 = $chunk[2];
             $dest .=
                 self::base64Encode6BitsDotSlashOrdered(               $b0 >> 2       ) .
                 self::base64Encode6BitsDotSlashOrdered((($b0 << 4) | ($b1 >> 4)) & 63) .
@@ -447,9 +498,11 @@ class Encoding
                 self::base64Encode6BitsDotSlashOrdered(  $b2                     & 63);
         }
         if ($i < $srcLen) {
+            $chunk = unpack('C*', self::safeSubstr($src, $i, 3));
+            $b0 = $chunk[1];
             $b0 = ord($src[$i]);
             if ($i + 1 < $srcLen) {
-                $b1 = ord($src[$i + 1]);
+                $b1 = $chunk[2];
                 $dest .=
                     self::base64Encode6BitsDotSlashOrdered(               $b0 >> 2       ) .
                     self::base64Encode6BitsDotSlashOrdered((($b0 << 4) | ($b1 >> 4)) & 63) .
@@ -494,31 +547,39 @@ class Encoding
         $err = 0;
         $dest = '';
         for ($i = 0; $i + 4 <= $srcLen; $i += 4) {
-            $c0 = self::base64Decode6BitsDotSlashOrdered(ord($src[$i]));
-            $c1 = self::base64Decode6BitsDotSlashOrdered(ord($src[$i + 1]));
-            $c2 = self::base64Decode6BitsDotSlashOrdered(ord($src[$i + 2]));
-            $c3 = self::base64Decode6BitsDotSlashOrdered(ord($src[$i + 3]));
+            $chunk = unpack('C*', self::safeSubstr($src, $i, 4));
+            $c0 = self::base64Decode6BitsDotSlashOrdered($chunk[1]);
+            $c1 = self::base64Decode6BitsDotSlashOrdered($chunk[2]);
+            $c2 = self::base64Decode6BitsDotSlashOrdered($chunk[3]);
+            $c3 = self::base64Decode6BitsDotSlashOrdered($chunk[4]);
 
-            $dest .=
-                chr((($c0 << 2) | ($c1 >> 4)) & 0xff) .
-                chr((($c1 << 4) | ($c2 >> 2)) & 0xff) .
-                chr((($c2 << 6) |  $c3      ) & 0xff);
+            $dest .= pack(
+                'CCC',
+                ((($c0 << 2) | ($c1 >> 4)) & 0xff),
+                ((($c1 << 4) | ($c2 >> 2)) & 0xff),
+                ((($c2 << 6) |  $c3      ) & 0xff)
+            );
             $err |= ($c0 | $c1 | $c2 | $c3) >> 8;
         }
         if ($i < $srcLen) {
-            $c0 = self::base64Decode6BitsDotSlashOrdered(ord($src[$i]));
-            $c1 = self::base64Decode6BitsDotSlashOrdered(ord($src[$i + 1]));
+            $chunk = unpack('C*', self::safeSubstr($src, $i, $srcLen - $i));
+            $c0 = self::base64Decode6BitsDotSlashOrdered($chunk[1]);
+            $c1 = self::base64Decode6BitsDotSlashOrdered($chunk[2]);
             if ($i + 2 < $srcLen) {
-                $c2 = self::base64Decode6BitsDotSlashOrdered(ord($src[$i + 2]));
-                $dest .=
-                    chr((($c0 << 2) | ($c1 >> 4)) & 0xff) .
-                    chr((($c1 << 4) | ($c2 >> 2)) & 0xff) .
-                    chr( ($c2 << 6)               & 0xff);
+                $c2 = self::base64Decode6BitsDotSlashOrdered($chunk[3]);
+                $dest .= pack(
+                    'CCC',
+                    ((($c0 << 2) | ($c1 >> 4)) & 0xff),
+                    ((($c1 << 4) | ($c2 >> 2)) & 0xff),
+                    ((($c2 << 6)             ) & 0xff)
+                );
                 $err |= ($c0 | $c1 | $c2) >> 8;
             } else {
-                $dest .=
-                    chr((($c0 << 2) | ($c1 >> 4)) & 0xff) .
-                    chr( ($c1 << 4)               & 0xff);
+                $dest .= pack(
+                    'CC',
+                    ((($c0 << 2) | ($c1 >> 4)) & 0xff),
+                    ((($c1 << 4)             ) & 0xff)
+                );
                 $err |= ($c0 | $c1) >> 8;
             }
         }
@@ -540,10 +601,14 @@ class Encoding
         $hex = '';
         $len = self::safeStrlen($bin_string);
         for ($i = 0; $i < $len; ++$i) {
-            $c = \ord($bin_string[$i]) & 0xf;
-            $b = \ord($bin_string[$i]) >> 4;
-            $hex .= \chr(87 + $b + ((($b - 10) >> 8) & ~38));
-            $hex .= \chr(87 + $c + ((($c - 10) >> 8) & ~38));
+            $chunk = unpack('C*', self::safeSubstr($bin_string, $i, 2));
+            $c = $chunk[0] & 0xf;
+            $b = $chunk[1] >> 4;
+            $hex .= pack(
+                'CC',
+                (87 + $b + ((($b - 10) >> 8) & ~38)),
+                (87 + $c + ((($c - 10) >> 8) & ~38))
+            );
         }
         return $hex;
     }
@@ -563,8 +628,9 @@ class Encoding
         $hex_len = self::safeStrlen($hex_string);
         $state = 0;
 
+        $chunk = unpack('C*', $hex_string);
         while ($hex_pos < $hex_len) {
-            $c = \ord($hex_string[$hex_pos]);
+            $c = $chunk[$hex_pos];
             $c_num = $c ^ 48;
             $c_num0 = ($c_num - 10) >> 8;
             $c_alpha = ($c & ~32) - 55;
@@ -578,7 +644,7 @@ class Encoding
             if ($state === 0) {
                 $c_acc = $c_val * 16;
             } else {
-                $bin .= \chr($c_acc | $c_val);
+                $bin .= \pack('C', $c_acc | $c_val);
             }
             $state = $state ? 0 : 1;
             ++$hex_pos;
@@ -615,7 +681,7 @@ class Encoding
         // if ($src > 25) $ret -= 40;
         $diff -= ((25 - $src) >> 8) & 41;
 
-        return chr($src + $diff);
+        return \pack('C', $src + $diff);
     }
 
     /**
@@ -669,7 +735,7 @@ class Encoding
         // if ($src > 62) $diff += 0x2f - 0x2b - 1; // 3
         $diff += ((62 - $src) >> 8) & 3;
 
-        return chr($src + $diff);
+        return \pack('C', $src + $diff);
     }
 
     /**
@@ -716,7 +782,7 @@ class Encoding
         // if ($src > 0x7a) $src += 0x30 - 0x7b; // -75
         $src -= ((0x7a - $src) >> 8) & 75;
 
-        return chr($src);
+        return \pack('C', $src);
     }
 
     /**
@@ -759,7 +825,7 @@ class Encoding
         // if ($src > 0x5a) $src += 0x61 - 0x5b; // 6
         $src += ((0x5a - $src) >> 8) & 6;
 
-        return chr($src);
+        return \pack('C', $src);
     }
 
     /**
@@ -776,6 +842,50 @@ class Encoding
             return \mb_strlen($str, '8bit');
         } else {
             return \strlen($str);
+        }
+    }
+
+    /**
+     * Safe substring
+     *
+     * @ref mbstring.func_overload
+     *
+     * @staticvar boolean $exists
+     * @param string $str
+     * @param int $start
+     * @param int $length
+     * @return string
+     * @throws \TypeError
+     */
+    public static function safeSubstr(
+        $str,
+        $start = 0,
+        $length = null
+    ) {
+        if (\function_exists('mb_substr')) {
+            // mb_substr($str, 0, NULL, '8bit') returns an empty string on PHP
+            // 5.3, so we have to find the length ourselves.
+            if ($length === null) {
+                if ($start >= 0) {
+                    $length = self::safeStrlen($str) - $start;
+                } else {
+                    $length = -$start;
+                }
+            }
+            // $length calculation above might result in a 0-length string
+            if ($length === 0) {
+                return '';
+            }
+            return \mb_substr($str, $start, $length, '8bit');
+        }
+        if ($length === 0) {
+            return '';
+        }
+        // Unlike mb_substr(), substr() doesn't accept NULL for length
+        if ($length !== null) {
+            return \substr($str, $start, $length);
+        } else {
+            return \substr($str, $start);
         }
     }
 }
