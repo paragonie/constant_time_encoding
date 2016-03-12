@@ -45,6 +45,27 @@ abstract class Encoding
     {
         return Base32::decode($str);
     }
+    /**
+     * RFC 4648 Base32 encoding
+     *
+     * @param $str
+     * @return string
+     */
+    public static function base32HexEncode($str)
+    {
+        return Base32Hex::encode($str);
+    }
+
+    /**
+     * RFC 4648 Base32 decoding
+     *
+     * @param $str
+     * @return string
+     */
+    public static function base32HexDecode($str)
+    {
+        return Base32Hex::decode($str);
+    }
 
     /**
      * RFC 4648 Base64 encoding

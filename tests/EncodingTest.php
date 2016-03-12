@@ -1,5 +1,11 @@
 <?php
+use \ParagonIE\ConstantTime\Base32;
+use \ParagonIE\ConstantTime\Base32Hex;
+use \ParagonIE\ConstantTime\Base64;
+use \ParagonIE\ConstantTime\Base64DotSlash;
+use \ParagonIE\ConstantTime\Base64DotSlashOrdered;
 use \ParagonIE\ConstantTime\Encoding;
+use \ParagonIE\ConstantTime\Hex;
 
 class EncodingTest extends PHPUnit_Framework_TestCase
 {
@@ -70,6 +76,41 @@ class EncodingTest extends PHPUnit_Framework_TestCase
             '22222222'
         );
     }
+
+    public function testBase32Hex()
+    {
+        $this->assertEquals(
+            Base32Hex::encode("\x00"),
+            '00======'
+        );
+        $this->assertEquals(
+            Base32Hex::encode("\x00\x00"),
+            '0000===='
+        );
+        $this->assertEquals(
+            Base32Hex::encode("\x00\x00\x00"),
+            '00000==='
+        );
+        $this->assertEquals(
+            Base32Hex::encode("\x00\x00\x00\x00"),
+            '0000000='
+        );
+        $this->assertEquals(
+            Base32Hex::encode("\x00\x00\x00\x00\x00"),
+            '00000000'
+        );
+        $this->assertEquals(
+            Base32Hex::encode("\x00\x00\x0F\xFF\xFF"),
+            '0000VVVV'
+        );
+        $this->assertEquals(
+            Base32Hex::encode("\xFF\xFF\xF0\x00\x00"),
+            'VVVV0000'
+        );
+
+
+    }
+
     /**
      * Based on test vectors from RFC 4648
      */
@@ -183,6 +224,13 @@ class EncodingTest extends PHPUnit_Framework_TestCase
                 $this->assertEquals(
                     $rand,
                     Encoding::base32Decode($enc),
+                    "Base32 Encoding - Length: " . $i
+                );
+
+                $enc = Encoding::base32HexEncode($rand);
+                $this->assertEquals(
+                    bin2hex($rand),
+                    bin2hex(Encoding::base32HexDecode($enc)),
                     "Base32 Encoding - Length: " . $i
                 );
 

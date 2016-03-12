@@ -1,14 +1,20 @@
 <?php
 namespace ParagonIE\ConstantTime;
 
+/**
+ * Class Base64DotSlashOrdered
+ * ./[0-9][A-Z][a-z]
+ *
+ * @package ParagonIE\ConstantTime
+ */
 abstract class Base64DotSlashOrdered extends Base64
 {
     /**
      * Base64 character set:
-     * [A-Z]      [a-z]      [0-9]      +     /
-     * 0x41-0x5a, 0x61-0x7a, 0x30-0x39, 0x2b, 0x2f
+     * [.-9]      [A-Z]      [a-z]
+     * 0x2e-0x39, 0x41-0x5a, 0x61-0x7a
      *
-     * @param $src
+     * @param int $src
      * @return int
      */
     protected static function decode6Bits($src)
@@ -28,7 +34,7 @@ abstract class Base64DotSlashOrdered extends Base64
     }
 
     /**
-     * @param $src
+     * @param int $src
      * @return string
      */
     protected static function encode6Bits($src)

@@ -1,6 +1,12 @@
 <?php
 namespace ParagonIE\ConstantTime;
 
+/**
+ * Class Base64
+ * [A-Z][a-z][0-9]+/
+ *
+ * @package ParagonIE\ConstantTime
+ */
 abstract class Base64
 {
     /**
@@ -22,10 +28,10 @@ abstract class Base64
             $b2 = $chunk[3];
 
             $dest .=
-                self::encode6Bits(               $b0 >> 2       ) .
-                self::encode6Bits((($b0 << 4) | ($b1 >> 4)) & 63) .
-                self::encode6Bits((($b1 << 2) | ($b2 >> 6)) & 63) .
-                self::encode6Bits(  $b2                     & 63);
+                static::encode6Bits(               $b0 >> 2       ) .
+                static::encode6Bits((($b0 << 4) | ($b1 >> 4)) & 63) .
+                static::encode6Bits((($b1 << 2) | ($b2 >> 6)) & 63) .
+                static::encode6Bits(  $b2                     & 63);
         }
         if ($i < $srcLen) {
             $chunk = \unpack('C*', Core::safeSubstr($src, $i, $srcLen - $i));
@@ -33,13 +39,13 @@ abstract class Base64
             if ($i + 1 < $srcLen) {
                 $b1 = $chunk[2];
                 $dest .=
-                    self::encode6Bits(               $b0 >> 2       ) .
-                    self::encode6Bits((($b0 << 4) | ($b1 >> 4)) & 63) .
-                    self::encode6Bits( ($b1 << 2)               & 63) . '=';
+                    static::encode6Bits(               $b0 >> 2       ) .
+                    static::encode6Bits((($b0 << 4) | ($b1 >> 4)) & 63) .
+                    static::encode6Bits( ($b1 << 2)               & 63) . '=';
             } else {
                 $dest .=
-                    self::encode6Bits( $b0 >> 2) .
-                    self::encode6Bits(($b0 << 4) & 63) . '==';
+                    static::encode6Bits( $b0 >> 2) .
+                    static::encode6Bits(($b0 << 4) & 63) . '==';
             }
         }
         return $dest;
@@ -50,8 +56,8 @@ abstract class Base64
      *
      * Base64 character set "./[A-Z][a-z][0-9]"
      *
-     * @param $src
-     * @return bool|string
+     * @param string $src
+     * @return string
      * @throws \RangeException
      */
     public static function decode($src)
@@ -77,10 +83,10 @@ abstract class Base64
         $dest = '';
         for ($i = 0; $i + 4 <= $srcLen; $i += 4) {
             $chunk = \unpack('C*', Core::safeSubstr($src, $i, 4));
-            $c0 = self::decode6Bits($chunk[1]);
-            $c1 = self::decode6Bits($chunk[2]);
-            $c2 = self::decode6Bits($chunk[3]);
-            $c3 = self::decode6Bits($chunk[4]);
+            $c0 = static::decode6Bits($chunk[1]);
+            $c1 = static::decode6Bits($chunk[2]);
+            $c2 = static::decode6Bits($chunk[3]);
+            $c3 = static::decode6Bits($chunk[4]);
 
             $dest .= \pack(
                 'CCC',
@@ -92,11 +98,11 @@ abstract class Base64
         }
         if ($i < $srcLen) {
             $chunk = \unpack('C*', Core::safeSubstr($src, $i, $srcLen - $i));
-            $c0 = self::decode6Bits($chunk[1]);
-            $c1 = self::decode6Bits($chunk[2]);
+            $c0 = static::decode6Bits($chunk[1]);
+            $c1 = static::decode6Bits($chunk[2]);
 
             if ($i + 2 < $srcLen) {
-                $c2 = self::decode6Bits($chunk[3]);
+                $c2 = static::decode6Bits($chunk[3]);
                 $dest .= \pack(
                     'CC',
                     ((($c0 << 2) | ($c1 >> 4)) & 0xff),
@@ -125,7 +131,7 @@ abstract class Base64
      * [A-Z]      [a-z]      [0-9]      +     /
      * 0x41-0x5a, 0x61-0x7a, 0x30-0x39, 0x2b, 0x2f
      *
-     * @param $src
+     * @param int $src
      * @return int
      */
     protected static function decode6Bits($src)
@@ -151,7 +157,7 @@ abstract class Base64
     }
 
     /**
-     * @param $src
+     * @param int $src
      * @return string
      */
     protected static function encode6Bits($src)
