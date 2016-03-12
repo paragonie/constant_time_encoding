@@ -2,10 +2,6 @@
 
 [![Build Status](https://travis-ci.org/paragonie/constant_time_encoding.svg?branch=master)](https://travis-ci.org/paragonie/constant_time_encoding)
 
-However, if you implement the algorithms in C as part of php-src, you can.
-
----
-
 Based on the work of [Steve "Sc00bz" Thomas](https://github.com/Sc00bz/ConstTimeEncoding), this library aims to offer
 character encoding functions that do not leak information about what you are encoding/decoding via processor cache 
 misses. Further reading on [cache-timing attacks](http://blog.ircmaxell.com/2014/11/its-all-about-time.html).
