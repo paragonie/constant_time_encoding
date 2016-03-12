@@ -149,22 +149,51 @@ class EncodingTest extends PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @covers Encoding::hexDecode()
+     * @covers Encoding::hexEncode()
+     * @covers Encoding::base64Decode()
+     * @covers Encoding::base64Encode()
+     * @covers Encoding::base32Decode()
+     * @covers Encoding::base32Encode()
+     */
     public function testBasicEncoding()
     {
-        $str = random_bytes(33);
-        $enc = base64_encode($str);
-        $this->assertEquals(
-            $str,
-            Encoding::base64Decode($enc)
-        );
+        // Re-run the test at least 3 times for each length
+        for ($j = 0; $j < 3; ++$j) {
+            for ($i = 1; $i < 84; ++$i) {
+                $rand = random_bytes($i);
+                $enc = Encoding::hexEncode($rand);
+                $this->assertEquals(
+                    $rand,
+                    Encoding::hexDecode($enc)
+                );
 
-        for ($i = 1; $i < 34; ++$i) {
-            $rand = random_bytes($i);
-            $enc = Encoding::base32Encode($rand);
-            $this->assertEquals(
-                bin2hex($rand),
-                bin2hex(Encoding::base32Decode($enc))
-            );
+                $enc = Encoding::base32Encode($rand);
+                $this->assertEquals(
+                    $rand,
+                    Encoding::base32Decode($enc)
+                );
+
+                $enc = Encoding::base64Encode($rand);
+
+                $this->assertEquals(
+                    bin2hex($rand),
+                    bin2hex(Encoding::base64Decode($enc)),
+                    "Length: " . $i
+                );
+
+                $enc = Encoding::base64EncodeDotSlash($rand);
+                $this->assertEquals(
+                    bin2hex($rand),
+                    bin2hex(Encoding::base64DecodeDotSlash($enc))
+                );
+                $enc = Encoding::base64EncodeDotSlashOrdered($rand);
+                $this->assertEquals(
+                    bin2hex($rand),
+                    bin2hex(Encoding::base64DecodeDotSlashOrdered($enc))
+                );
+            }
         }
     }
 }

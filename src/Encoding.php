@@ -67,7 +67,7 @@ class Encoding
         $err = 0;
         $dest = '';
         for ($i = 0; $i + 8 <= $srcLen; $i += 8) {
-            $chunk = unpack('C*', self::safeSubstr($src, $i, 8));
+            $chunk = \unpack('C*', self::safeSubstr($src, $i, 8));
             $c0 = self::base32Decode5Bits($chunk[1]);
             $c1 = self::base32Decode5Bits($chunk[2]);
             $c2 = self::base32Decode5Bits($chunk[3]);
@@ -77,7 +77,7 @@ class Encoding
             $c6 = self::base32Decode5Bits($chunk[7]);
             $c7 = self::base32Decode5Bits($chunk[8]);
 
-            $dest .= pack(
+            $dest .= \pack(
                 'CCCCC',
                 (($c0 << 3) | ($c1 >> 2)             ) & 0xff,
                 (($c1 << 6) | ($c2 << 1) | ($c3 >> 4)) & 0xff,
@@ -88,8 +88,9 @@ class Encoding
             $err |= ($c0 | $c1 | $c2 | $c3 | $c4 | $c5 | $c6 | $c7) >> 8;
         }
         if ($i < $srcLen) {
-            $chunk = unpack('C*', self::safeSubstr($src, $i, $srcLen - $i));
+            $chunk = \unpack('C*', self::safeSubstr($src, $i, $srcLen - $i));
             $c0 = self::base32Decode5Bits($chunk[1]);
+
             if ($i + 6 < $srcLen) {
                 $c1 = self::base32Decode5Bits($chunk[2]);
                 $c2 = self::base32Decode5Bits($chunk[3]);
@@ -98,7 +99,7 @@ class Encoding
                 $c5 = self::base32Decode5Bits($chunk[6]);
                 $c6 = self::base32Decode5Bits($chunk[7]);
 
-                $dest .= pack(
+                $dest .= \pack(
                     'CCCC',
                     (($c0 << 3) | ($c1 >> 2)             ) & 0xff,
                     (($c1 << 6) | ($c2 << 1) | ($c3 >> 4)) & 0xff,
@@ -113,7 +114,7 @@ class Encoding
                 $c4 = self::base32Decode5Bits($chunk[5]);
                 $c5 = self::base32Decode5Bits($chunk[6]);
 
-                $dest .= pack(
+                $dest .= \pack(
                     'CCCC',
                     (($c0 << 3) | ($c1 >> 2)             ) & 0xff,
                     (($c1 << 6) | ($c2 << 1) | ($c3 >> 4)) & 0xff,
@@ -127,7 +128,7 @@ class Encoding
                 $c3 = self::base32Decode5Bits($chunk[4]);
                 $c4 = self::base32Decode5Bits($chunk[5]);
 
-                $dest .= pack(
+                $dest .= \pack(
                     'CCC',
                     (($c0 << 3) | ($c1 >> 2)             ) & 0xff,
                     (($c1 << 6) | ($c2 << 1) | ($c3 >> 4)) & 0xff,
@@ -139,7 +140,7 @@ class Encoding
                 $c2 = self::base32Decode5Bits($chunk[3]);
                 $c3 = self::base32Decode5Bits($chunk[4]);
 
-                $dest .= pack(
+                $dest .= \pack(
                     'CC',
                     (($c0 << 3) | ($c1 >> 2)             ) & 0xff,
                     (($c1 << 6) | ($c2 << 1) | ($c3 >> 4)) & 0xff
@@ -149,7 +150,7 @@ class Encoding
                 $c1 = self::base32Decode5Bits($chunk[2]);
                 $c2 = self::base32Decode5Bits($chunk[3]);
 
-                $dest .= pack(
+                $dest .= \pack(
                     'CC',
                     (($c0 << 3) | ($c1 >> 2)             ) & 0xff,
                     (($c1 << 6) | ($c2 << 1)             ) & 0xff
@@ -158,13 +159,13 @@ class Encoding
             } elseif ($i + 1 < $srcLen) {
                 $c1 = self::base32Decode5Bits($chunk[2]);
 
-                $dest .= pack(
+                $dest .= \pack(
                     'C',
                     (($c0 << 3) | ($c1 >> 2)             ) & 0xff
                 );
                 $err |= ($c0 | $c1) >> 8;
             } else {
-                $dest .= pack(
+                $dest .= \pack(
                     'C',
                     (($c0 << 3)                          ) & 0xff
                 );
@@ -172,7 +173,9 @@ class Encoding
             }
         }
         if ($err !== 0) {
-            return false;
+            throw new \RangeException(
+                'base32Decode() only expects characters in the correct base32 alphabet'
+            );
         }
         return $dest;
     }
@@ -188,7 +191,7 @@ class Encoding
         $dest = '';
         $srcLen = self::safeStrlen($src);
         for ($i = 0; $i + 5 <= $srcLen; $i += 5) {
-            $chunk = unpack('C*', self::safeSubstr($src, $i, 5));
+            $chunk = \unpack('C*', self::safeSubstr($src, $i, 5));
             $b0 = $chunk[1];
             $b1 = $chunk[2];
             $b2 = $chunk[3];
@@ -205,7 +208,7 @@ class Encoding
                 self::base32Encode5Bits(  $b4                     & 31);
         }
         if ($i < $srcLen) {
-            $chunk = unpack('C*', self::safeSubstr($src, $i, $srcLen - $i));
+            $chunk = \unpack('C*', self::safeSubstr($src, $i, $srcLen - $i));
             $b0 = $chunk[1];
             if ($i + 3 < $srcLen) {
                 $b1 = $chunk[2];
@@ -261,7 +264,7 @@ class Encoding
         $dest = '';
         $srcLen = self::safeStrlen($src);
         for ($i = 0; $i + 3 <= $srcLen; $i += 3) {
-            $chunk = unpack('C*', self::safeSubstr($src, $i, 3));
+            $chunk = \unpack('C*', self::safeSubstr($src, $i, 3));
             $b0 = $chunk[1];
             $b1 = $chunk[2];
             $b2 = $chunk[3];
@@ -273,7 +276,7 @@ class Encoding
                 self::base64Encode6Bits(  $b2                     & 63);
         }
         if ($i < $srcLen) {
-            $chunk = unpack('C*', self::safeSubstr($src, $i, $srcLen - $i));
+            $chunk = \unpack('C*', self::safeSubstr($src, $i, $srcLen - $i));
             $b0 = $chunk[1];
             if ($i + 1 < $srcLen) {
                 $b1 = $chunk[2];
@@ -297,6 +300,7 @@ class Encoding
      *
      * @param $src
      * @return bool|string
+     * @throws \RangeException
      */
     public static function base64Decode($src)
     {
@@ -320,13 +324,13 @@ class Encoding
         $err = 0;
         $dest = '';
         for ($i = 0; $i + 4 <= $srcLen; $i += 4) {
-            $chunk = unpack('C*', self::safeSubstr($src, $i, 4));
+            $chunk = \unpack('C*', self::safeSubstr($src, $i, 4));
             $c0 = self::base64Decode6Bits($chunk[1]);
             $c1 = self::base64Decode6Bits($chunk[2]);
             $c2 = self::base64Decode6Bits($chunk[3]);
             $c3 = self::base64Decode6Bits($chunk[4]);
 
-            $dest .= pack(
+            $dest .= \pack(
                 'CCC',
                 ((($c0 << 2) | ($c1 >> 4)) & 0xff),
                 ((($c1 << 4) | ($c2 >> 2)) & 0xff),
@@ -335,30 +339,30 @@ class Encoding
             $err |= ($c0 | $c1 | $c2 | $c3) >> 8;
         }
         if ($i < $srcLen) {
-            $chunk = unpack('C*', self::safeSubstr($src, $i, $srcLen - $i));
+            $chunk = \unpack('C*', self::safeSubstr($src, $i, $srcLen - $i));
             $c0 = self::base64Decode6Bits($chunk[1]);
             $c1 = self::base64Decode6Bits($chunk[2]);
-            if ($i + 2 < $srcLen) {
-                $c1 = self::base64Decode6Bits($chunk[3]);
 
-                $dest .= pack(
-                    'CCC',
+            if ($i + 2 < $srcLen) {
+                $c2 = self::base64Decode6Bits($chunk[3]);
+                $dest .= \pack(
+                    'CC',
                     ((($c0 << 2) | ($c1 >> 4)) & 0xff),
-                    ((($c1 << 4) | ($c2 >> 2)) & 0xff),
-                    ((($c2 << 6)             ) & 0xff)
+                    ((($c1 << 4) | ($c2 >> 2)) & 0xff)
                 );
                 $err |= ($c0 | $c1 | $c2) >> 8;
-            } else {
-                $dest .= pack(
-                    'CCC',
-                    ((($c0 << 2) | ($c1 >> 4)) & 0xff),
-                    ((($c1 << 4)             ) & 0xff)
+            } elseif($i + 1 < $srcLen) {
+                $dest .= \pack(
+                    'C',
+                    ((($c0 << 2) | ($c1 >> 4)) & 0xff)
                 );
                 $err |= ($c0 | $c1) >> 8;
             }
         }
         if ($err !== 0) {
-            return false;
+            throw new \RangeException(
+                'base64Decode() only expects characters in the correct base64 alphabet'
+            );
         }
         return $dest;
     }
@@ -375,7 +379,7 @@ class Encoding
         $dest = '';
         $srcLen = self::safeStrlen($src);
         for ($i = 0; $i + 3 <= $srcLen; $i += 3) {
-            $chunk = unpack('C*', self::safeSubstr($src, $i, 3));
+            $chunk = \unpack('C*', self::safeSubstr($src, $i, 3));
             $b0 = $chunk[1];
             $b1 = $chunk[2];
             $b2 = $chunk[3];
@@ -387,7 +391,7 @@ class Encoding
                 self::base64Encode6BitsDotSlash(  $b2                     & 63);
         }
         if ($i < $srcLen) {
-            $chunk = unpack('C*', self::safeSubstr($src, $i, 3));
+            $chunk = \unpack('C*', self::safeSubstr($src, $i, 3));
             $b0 = $chunk[1];
             if ($i + 1 < $srcLen) {
                 $b1 = $chunk[2];
@@ -411,6 +415,7 @@ class Encoding
      *
      * @param $src
      * @return bool|string
+     * @throws \RangeException
      */
     public static function base64DecodeDotSlash($src)
     {
@@ -434,13 +439,13 @@ class Encoding
         $err = 0;
         $dest = '';
         for ($i = 0; $i + 4 <= $srcLen; $i += 4) {
-            $chunk = unpack('C*', self::safeSubstr($src, $i, 4));
+            $chunk = \unpack('C*', self::safeSubstr($src, $i, 4));
             $c0 = self::base64Decode6BitsDotSlash($chunk[1]);
             $c1 = self::base64Decode6BitsDotSlash($chunk[2]);
             $c2 = self::base64Decode6BitsDotSlash($chunk[3]);
             $c3 = self::base64Decode6BitsDotSlash($chunk[4]);
 
-            $dest .= pack(
+            $dest .= \pack(
                 'CCC',
                 ((($c0 << 2) | ($c1 >> 4)) & 0xff),
                 ((($c1 << 4) | ($c2 >> 2)) & 0xff),
@@ -449,29 +454,30 @@ class Encoding
             $err |= ($c0 | $c1 | $c2 | $c3) >> 8;
         }
         if ($i < $srcLen) {
-            $chunk = unpack('C*', self::safeSubstr($src, $i, $srcLen - $i));
+            $chunk = \unpack('C*', self::safeSubstr($src, $i, $srcLen - $i));
             $c0 = self::base64Decode6BitsDotSlash($chunk[1]);
             $c1 = self::base64Decode6BitsDotSlash($chunk[2]);
+
             if ($i + 2 < $srcLen) {
                 $c2 = self::base64Decode6BitsDotSlash($chunk[3]);
-                $dest .= pack(
-                    'CCC',
-                    ((($c0 << 2) | ($c1 >> 4)) & 0xff),
-                    ((($c1 << 4) | ($c2 >> 2)) & 0xff),
-                    ((($c2 << 6)             ) & 0xff)
-                );
-                $err |= ($c0 | $c1 | $c2) >> 8;
-            } else {
-                $dest .= pack(
+                $dest .= \pack(
                     'CC',
                     ((($c0 << 2) | ($c1 >> 4)) & 0xff),
-                    ((($c1 << 4)             ) & 0xff)
+                    ((($c1 << 4) | ($c2 >> 2)) & 0xff)
+                );
+                $err |= ($c0 | $c1 | $c2) >> 8;
+            } elseif($i + 1 < $srcLen) {
+                $dest .= \pack(
+                    'C',
+                    ((($c0 << 2) | ($c1 >> 4)) & 0xff)
                 );
                 $err |= ($c0 | $c1) >> 8;
             }
         }
         if ($err !== 0) {
-            return false;
+            throw new \RangeException(
+                'base64DecodeDotSlash() only expects characters in the correct base64 alphabet'
+            );
         }
         return $dest;
     }
@@ -488,9 +494,10 @@ class Encoding
         $dest = '';
         $srcLen = self::safeStrlen($src);
         for ($i = 0; $i + 3 <= $srcLen; $i += 3) {
-            $chunk = unpack('C*', self::safeSubstr($src, $i, 3));
+            $chunk = \unpack('C*', self::safeSubstr($src, $i, 3));
             $b0 = $chunk[1];
             $b1 = $chunk[2];
+            $b2 = $chunk[3];
             $dest .=
                 self::base64Encode6BitsDotSlashOrdered(               $b0 >> 2       ) .
                 self::base64Encode6BitsDotSlashOrdered((($b0 << 4) | ($b1 >> 4)) & 63) .
@@ -498,9 +505,8 @@ class Encoding
                 self::base64Encode6BitsDotSlashOrdered(  $b2                     & 63);
         }
         if ($i < $srcLen) {
-            $chunk = unpack('C*', self::safeSubstr($src, $i, 3));
+            $chunk = \unpack('C*', self::safeSubstr($src, $i, 3));
             $b0 = $chunk[1];
-            $b0 = ord($src[$i]);
             if ($i + 1 < $srcLen) {
                 $b1 = $chunk[2];
                 $dest .=
@@ -524,6 +530,7 @@ class Encoding
      *
      * @param $src
      * @return bool|string
+     * @throws \RangeException
      */
     public static function base64DecodeDotSlashOrdered($src)
     {
@@ -547,13 +554,13 @@ class Encoding
         $err = 0;
         $dest = '';
         for ($i = 0; $i + 4 <= $srcLen; $i += 4) {
-            $chunk = unpack('C*', self::safeSubstr($src, $i, 4));
+            $chunk = \unpack('C*', self::safeSubstr($src, $i, 4));
             $c0 = self::base64Decode6BitsDotSlashOrdered($chunk[1]);
             $c1 = self::base64Decode6BitsDotSlashOrdered($chunk[2]);
             $c2 = self::base64Decode6BitsDotSlashOrdered($chunk[3]);
             $c3 = self::base64Decode6BitsDotSlashOrdered($chunk[4]);
 
-            $dest .= pack(
+            $dest .= \pack(
                 'CCC',
                 ((($c0 << 2) | ($c1 >> 4)) & 0xff),
                 ((($c1 << 4) | ($c2 >> 2)) & 0xff),
@@ -562,29 +569,29 @@ class Encoding
             $err |= ($c0 | $c1 | $c2 | $c3) >> 8;
         }
         if ($i < $srcLen) {
-            $chunk = unpack('C*', self::safeSubstr($src, $i, $srcLen - $i));
+            $chunk = \unpack('C*', self::safeSubstr($src, $i, $srcLen - $i));
             $c0 = self::base64Decode6BitsDotSlashOrdered($chunk[1]);
             $c1 = self::base64Decode6BitsDotSlashOrdered($chunk[2]);
             if ($i + 2 < $srcLen) {
                 $c2 = self::base64Decode6BitsDotSlashOrdered($chunk[3]);
-                $dest .= pack(
-                    'CCC',
-                    ((($c0 << 2) | ($c1 >> 4)) & 0xff),
-                    ((($c1 << 4) | ($c2 >> 2)) & 0xff),
-                    ((($c2 << 6)             ) & 0xff)
-                );
-                $err |= ($c0 | $c1 | $c2) >> 8;
-            } else {
-                $dest .= pack(
+                $dest .= \pack(
                     'CC',
                     ((($c0 << 2) | ($c1 >> 4)) & 0xff),
-                    ((($c1 << 4)             ) & 0xff)
+                    ((($c1 << 4) | ($c2 >> 2)) & 0xff)
+                );
+                $err |= ($c0 | $c1 | $c2) >> 8;
+            } elseif($i + 1 < $srcLen) {
+                $dest .= \pack(
+                    'C',
+                    ((($c0 << 2) | ($c1 >> 4)) & 0xff)
                 );
                 $err |= ($c0 | $c1) >> 8;
             }
         }
         if ($err !== 0) {
-            return false;
+            throw new \RangeException(
+                'base64DecodeDotSlashOrdered() only expects characters in the correct base64 alphabet'
+            );
         }
         return $dest;
     }
@@ -601,8 +608,8 @@ class Encoding
         $hex = '';
         $len = self::safeStrlen($bin_string);
         for ($i = 0; $i < $len; ++$i) {
-            $chunk = unpack('C*', self::safeSubstr($bin_string, $i, 2));
-            $c = $chunk[0] & 0xf;
+            $chunk = \unpack('C', self::safeSubstr($bin_string, $i, 2));
+            $c = $chunk[1] & 0xf;
             $b = $chunk[1] >> 4;
             $hex .= pack(
                 'CC',
@@ -619,6 +626,7 @@ class Encoding
      *
      * @param string $hex_string
      * @return string (raw binary)
+     * @throws \RangeException
      */
     public static function hexDecode($hex_string)
     {
@@ -628,8 +636,9 @@ class Encoding
         $hex_len = self::safeStrlen($hex_string);
         $state = 0;
 
-        $chunk = unpack('C*', $hex_string);
+        $chunk = \unpack('C*', $hex_string);
         while ($hex_pos < $hex_len) {
+            ++$hex_pos;
             $c = $chunk[$hex_pos];
             $c_num = $c ^ 48;
             $c_num0 = ($c_num - 10) >> 8;
@@ -646,8 +655,7 @@ class Encoding
             } else {
                 $bin .= \pack('C', $c_acc | $c_val);
             }
-            $state = $state ? 0 : 1;
-            ++$hex_pos;
+            $state ^= 1;
         }
         return $bin;
     }
