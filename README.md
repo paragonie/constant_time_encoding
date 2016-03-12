@@ -2,8 +2,9 @@
 
 [![Build Status](https://travis-ci.org/paragonie/constant_time_encoding.svg?branch=master)](https://travis-ci.org/paragonie/constant_time_encoding)
 
-Based on the work of [Steve "Sc00bz" Thomas](https://github.com/Sc00bz/ConstTimeEncoding), this library aims to offer
-character encoding functions that do not leak information about what you are encoding/decoding via processor cache 
+Based on the [constant-time base64 implementation made by Steve "Sc00bz" Thomas](https://github.com/Sc00bz/ConstTimeEncoding),
+this library aims to offer character encoding functions that do not leak
+information about what you are encoding/decoding via processor cache 
 misses. Further reading on [cache-timing attacks](http://blog.ircmaxell.com/2014/11/its-all-about-time.html).
 
 Our fork offers the following enchancements:
@@ -11,6 +12,7 @@ Our fork offers the following enchancements:
 * `mbstring.func_overload` resistance
 * Unit tests
 * Composer- and Packagist-ready
+* Base16 encoding
 * Base32 encoding
 * Uses `pack()` and `unpack()` instead of `chr()` and `ord()`
 

@@ -152,10 +152,14 @@ class EncodingTest extends PHPUnit_Framework_TestCase
     /**
      * @covers Encoding::hexDecode()
      * @covers Encoding::hexEncode()
-     * @covers Encoding::base64Decode()
-     * @covers Encoding::base64Encode()
      * @covers Encoding::base32Decode()
      * @covers Encoding::base32Encode()
+     * @covers Encoding::base64Decode()
+     * @covers Encoding::base64Encode()
+     * @covers Encoding::base64DotSlashDecode()
+     * @covers Encoding::base64DotSlashEncode()
+     * @covers Encoding::base64DotSlashOrderedDecode()
+     * @covers Encoding::base64DotSlashOrderedEncode()
      */
     public function testBasicEncoding()
     {
@@ -165,33 +169,41 @@ class EncodingTest extends PHPUnit_Framework_TestCase
                 $rand = random_bytes($i);
                 $enc = Encoding::hexEncode($rand);
                 $this->assertEquals(
+                    \bin2hex($rand),
+                    $enc,
+                    "Hex Encoding - Length: " . $i
+                );
+                $this->assertEquals(
                     $rand,
-                    Encoding::hexDecode($enc)
+                    Encoding::hexDecode($enc),
+                    "Hex Encoding - Length: " . $i
                 );
 
                 $enc = Encoding::base32Encode($rand);
                 $this->assertEquals(
                     $rand,
-                    Encoding::base32Decode($enc)
+                    Encoding::base32Decode($enc),
+                    "Base32 Encoding - Length: " . $i
                 );
 
                 $enc = Encoding::base64Encode($rand);
-
                 $this->assertEquals(
-                    bin2hex($rand),
-                    bin2hex(Encoding::base64Decode($enc)),
-                    "Length: " . $i
+                    $rand,
+                    Encoding::base64Decode($enc),
+                    "Base64 Encoding - Length: " . $i
                 );
 
                 $enc = Encoding::base64EncodeDotSlash($rand);
                 $this->assertEquals(
-                    bin2hex($rand),
-                    bin2hex(Encoding::base64DecodeDotSlash($enc))
+                    $rand,
+                    Encoding::base64DecodeDotSlash($enc),
+                    "Base64 DotSlash Encoding - Length: " . $i
                 );
                 $enc = Encoding::base64EncodeDotSlashOrdered($rand);
                 $this->assertEquals(
-                    bin2hex($rand),
-                    bin2hex(Encoding::base64DecodeDotSlashOrdered($enc))
+                    $rand,
+                    Encoding::base64DecodeDotSlashOrdered($enc),
+                    "Base64 Ordered DotSlash Encoding - Length: " . $i
                 );
             }
         }
