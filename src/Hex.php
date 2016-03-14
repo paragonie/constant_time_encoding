@@ -1,7 +1,7 @@
 <?php
 namespace ParagonIE\ConstantTime;
 
-abstract class Hex
+abstract class Hex implements EncoderInterface
 {
     /**
      * Convert a binary string into a hexadecimal string without cache-timing
@@ -13,15 +13,39 @@ abstract class Hex
     public static function encode($bin_string)
     {
         $hex = '';
-        $len = Core::safeStrlen($bin_string);
+        $len = Binary::safeStrlen($bin_string);
         for ($i = 0; $i < $len; ++$i) {
-            $chunk = \unpack('C', Core::safeSubstr($bin_string, $i, 2));
+            $chunk = \unpack('C', Binary::safeSubstr($bin_string, $i, 2));
             $c = $chunk[1] & 0xf;
             $b = $chunk[1] >> 4;
             $hex .= pack(
                 'CC',
                 (87 + $b + ((($b - 10) >> 8) & ~38)),
                 (87 + $c + ((($c - 10) >> 8) & ~38))
+            );
+        }
+        return $hex;
+    }
+
+    /**
+     * Convert a binary string into a hexadecimal string without cache-timing
+     * leaks, returning uppercase letters (as per RFC 4648)
+     *
+     * @param string $bin_string (raw binary)
+     * @return string
+     */
+    public static function encodeUpper($bin_string)
+    {
+        $hex = '';
+        $len = Binary::safeStrlen($bin_string);
+        for ($i = 0; $i < $len; ++$i) {
+            $chunk = \unpack('C', Binary::safeSubstr($bin_string, $i, 2));
+            $c = $chunk[1] & 0xf;
+            $b = $chunk[1] >> 4;
+            $hex .= pack(
+                'CC',
+                (55 + $b + ((($b - 10) >> 8) & ~6)),
+                (55 + $c + ((($c - 10) >> 8) & ~6))
             );
         }
         return $hex;
@@ -40,8 +64,13 @@ abstract class Hex
         $hex_pos = 0;
         $bin = '';
         $c_acc = 0;
-        $hex_len = Core::safeStrlen($hex_string);
+        $hex_len = Binary::safeStrlen($hex_string);
         $state = 0;
+        if (($hex_len & 1) !== 0) {
+            throw new \RangeException(
+                'Expected an even number of hexadecimal characters'
+            );
+        }
 
         $chunk = \unpack('C*', $hex_string);
         while ($hex_pos < $hex_len) {
@@ -66,6 +95,4 @@ abstract class Hex
         }
         return $bin;
     }
-
-
 }

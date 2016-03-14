@@ -7,7 +7,7 @@ namespace ParagonIE\ConstantTime;
  *
  * @package ParagonIE\ConstantTime
  */
-abstract class Base32
+abstract class Base32 implements EncoderInterface
 {
     /**
      * Decode a Base32-encoded string into raw binary
@@ -18,41 +18,29 @@ abstract class Base32
     public static function decode($src)
     {
         // Remove padding
-        $srcLen = Core::safeStrlen($src);
+        $srcLen = Binary::safeStrlen($src);
         if ($srcLen === 0) {
             return '';
         }
         if (($srcLen & 7) === 0) {
-            if ($src[$srcLen - 1] === '=') {
-                $srcLen--;
+            for ($j = 0; $j < 7; ++$j) {
                 if ($src[$srcLen - 1] === '=') {
                     $srcLen--;
-                }
-                if ($src[$srcLen - 1] === '=') {
-                    $srcLen--;
-                }
-                if ($src[$srcLen - 1] === '=') {
-                    $srcLen--;
-                }
-                if ($src[$srcLen - 1] === '=') {
-                    $srcLen--;
-                }
-                if ($src[$srcLen - 1] === '=') {
-                    $srcLen--;
-                }
-                if ($src[$srcLen - 1] === '=') {
-                    $srcLen--;
+                } else {
+                    break;
                 }
             }
         }
         if (($srcLen & 7) === 1) {
-            return false;
+            throw new \RangeException(
+                'Incorrect padding'
+            );
         }
 
         $err = 0;
         $dest = '';
         for ($i = 0; $i + 8 <= $srcLen; $i += 8) {
-            $chunk = \unpack('C*', Core::safeSubstr($src, $i, 8));
+            $chunk = \unpack('C*', Binary::safeSubstr($src, $i, 8));
             $c0 = static::decode5Bits($chunk[1]);
             $c1 = static::decode5Bits($chunk[2]);
             $c2 = static::decode5Bits($chunk[3]);
@@ -73,7 +61,7 @@ abstract class Base32
             $err |= ($c0 | $c1 | $c2 | $c3 | $c4 | $c5 | $c6 | $c7) >> 8;
         }
         if ($i < $srcLen) {
-            $chunk = \unpack('C*', Core::safeSubstr($src, $i, $srcLen - $i));
+            $chunk = \unpack('C*', Binary::safeSubstr($src, $i, $srcLen - $i));
             $c0 = static::decode5Bits($chunk[1]);
 
             if ($i + 6 < $srcLen) {
@@ -174,9 +162,9 @@ abstract class Base32
     public static function encode($src)
     {
         $dest = '';
-        $srcLen = Core::safeStrlen($src);
+        $srcLen = Binary::safeStrlen($src);
         for ($i = 0; $i + 5 <= $srcLen; $i += 5) {
-            $chunk = \unpack('C*', Core::safeSubstr($src, $i, 5));
+            $chunk = \unpack('C*', Binary::safeSubstr($src, $i, 5));
             $b0 = $chunk[1];
             $b1 = $chunk[2];
             $b2 = $chunk[3];
@@ -193,7 +181,7 @@ abstract class Base32
                 static::encode5Bits(  $b4                     & 31);
         }
         if ($i < $srcLen) {
-            $chunk = \unpack('C*', Core::safeSubstr($src, $i, $srcLen - $i));
+            $chunk = \unpack('C*', Binary::safeSubstr($src, $i, $srcLen - $i));
             $b0 = $chunk[1];
             if ($i + 3 < $srcLen) {
                 $b1 = $chunk[2];

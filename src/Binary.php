@@ -1,7 +1,7 @@
 <?php
 namespace ParagonIE\ConstantTime;
 
-abstract class Core
+abstract class Binary
 {
     /**
      * Safe string length

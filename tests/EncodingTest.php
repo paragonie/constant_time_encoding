@@ -4,14 +4,12 @@ use \ParagonIE\ConstantTime\Base32Hex;
 use \ParagonIE\ConstantTime\Base64;
 use \ParagonIE\ConstantTime\Base64DotSlash;
 use \ParagonIE\ConstantTime\Base64DotSlashOrdered;
+use \ParagonIE\ConstantTime\Base64UrlSafe;
 use \ParagonIE\ConstantTime\Encoding;
 use \ParagonIE\ConstantTime\Hex;
 
 class EncodingTest extends PHPUnit_Framework_TestCase
 {
-    /**
-     * Based on test vectors from RFC 4648
-     */
     public function testBase32Encode()
     {
         $this->assertEquals(
@@ -33,30 +31,6 @@ class EncodingTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(
             Encoding::base32Encode("\x00\x00\x00\x00\x00"),
             'AAAAAAAA'
-        );
-        $this->assertEquals(
-            Encoding::base32Encode("f"),
-            'MY======'
-        );
-        $this->assertEquals(
-            Encoding::base32Encode("fo"),
-            'MZXQ===='
-        );
-        $this->assertEquals(
-            Encoding::base32Encode("foo"),
-            'MZXW6==='
-        );
-        $this->assertEquals(
-            Encoding::base32Encode("foob"),
-            'MZXW6YQ='
-        );
-        $this->assertEquals(
-            Encoding::base32Encode("fooba"),
-            'MZXW6YTB'
-        );
-        $this->assertEquals(
-            Encoding::base32Encode("foobar"),
-            'MZXW6YTBOI======'
         );
         $this->assertEquals(
             Encoding::base32Encode("\x00\x00\x0F\xFF\xFF"),
@@ -220,6 +194,19 @@ class EncodingTest extends PHPUnit_Framework_TestCase
                     "Hex Encoding - Length: " . $i
                 );
 
+                // Uppercase variant:
+                $enc = Hex::encodeUpper($rand);
+                $this->assertEquals(
+                    \strtoupper(\bin2hex($rand)),
+                    $enc,
+                    "Hex Encoding - Length: " . $i
+                );
+                $this->assertEquals(
+                    $rand,
+                    Hex::decode($enc),
+                    "Hex Encoding - Length: " . $i
+                );
+
                 $enc = Encoding::base32Encode($rand);
                 $this->assertEquals(
                     $rand,
@@ -252,6 +239,16 @@ class EncodingTest extends PHPUnit_Framework_TestCase
                     $rand,
                     Encoding::base64DecodeDotSlashOrdered($enc),
                     "Base64 Ordered DotSlash Encoding - Length: " . $i
+                );
+
+                $enc = Base64UrlSafe::encode($rand);
+                $this->assertEquals(
+                    \strtr(\base64_encode($rand), '+/', '-_'),
+                    $enc
+                );
+                $this->assertEquals(
+                    $rand,
+                    Base64UrlSafe::decode($enc)
                 );
             }
         }

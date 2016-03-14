@@ -7,7 +7,7 @@ namespace ParagonIE\ConstantTime;
  *
  * @package ParagonIE\ConstantTime
  */
-abstract class Base64
+abstract class Base64 implements EncoderInterface
 {
     /**
      * Encode into Base64
@@ -20,9 +20,9 @@ abstract class Base64
     public static function encode($src)
     {
         $dest = '';
-        $srcLen = Core::safeStrlen($src);
+        $srcLen = Binary::safeStrlen($src);
         for ($i = 0; $i + 3 <= $srcLen; $i += 3) {
-            $chunk = \unpack('C*', Core::safeSubstr($src, $i, 3));
+            $chunk = \unpack('C*', Binary::safeSubstr($src, $i, 3));
             $b0 = $chunk[1];
             $b1 = $chunk[2];
             $b2 = $chunk[3];
@@ -34,7 +34,7 @@ abstract class Base64
                 static::encode6Bits(  $b2                     & 63);
         }
         if ($i < $srcLen) {
-            $chunk = \unpack('C*', Core::safeSubstr($src, $i, $srcLen - $i));
+            $chunk = \unpack('C*', Binary::safeSubstr($src, $i, $srcLen - $i));
             $b0 = $chunk[1];
             if ($i + 1 < $srcLen) {
                 $b1 = $chunk[2];
@@ -63,7 +63,7 @@ abstract class Base64
     public static function decode($src)
     {
         // Remove padding
-        $srcLen = Core::safeStrlen($src);
+        $srcLen = Binary::safeStrlen($src);
         if ($srcLen === 0) {
             return '';
         }
@@ -76,13 +76,15 @@ abstract class Base64
             }
         }
         if (($srcLen & 3) === 1) {
-            return false;
+            throw new \RangeException(
+                'Incorrect padding'
+            );
         }
 
         $err = 0;
         $dest = '';
         for ($i = 0; $i + 4 <= $srcLen; $i += 4) {
-            $chunk = \unpack('C*', Core::safeSubstr($src, $i, 4));
+            $chunk = \unpack('C*', Binary::safeSubstr($src, $i, 4));
             $c0 = static::decode6Bits($chunk[1]);
             $c1 = static::decode6Bits($chunk[2]);
             $c2 = static::decode6Bits($chunk[3]);
@@ -95,9 +97,12 @@ abstract class Base64
                 ((($c2 << 6) |  $c3      ) & 0xff)
             );
             $err |= ($c0 | $c1 | $c2 | $c3) >> 8;
+            if ($err !== 0) {
+                \var_dump(Binary::safeSubstr($src, $i, 4), [$c0, $c1, $c2, $c3]);
+            }
         }
         if ($i < $srcLen) {
-            $chunk = \unpack('C*', Core::safeSubstr($src, $i, $srcLen - $i));
+            $chunk = \unpack('C*', Binary::safeSubstr($src, $i, $srcLen - $i));
             $c0 = static::decode6Bits($chunk[1]);
             $c1 = static::decode6Bits($chunk[2]);
 
@@ -115,6 +120,9 @@ abstract class Base64
                     ((($c0 << 2) | ($c1 >> 4)) & 0xff)
                 );
                 $err |= ($c0 | $c1) >> 8;
+            }
+            if ($err !== 0) {
+                \var_dump(Binary::safeSubstr($src, $i, $srcLen - $i), [$c0, $c1, $c2, $c3]);
             }
         }
         if ($err !== 0) {
