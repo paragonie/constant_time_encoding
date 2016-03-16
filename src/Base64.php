@@ -97,9 +97,6 @@ abstract class Base64 implements EncoderInterface
                 ((($c2 << 6) |  $c3      ) & 0xff)
             );
             $err |= ($c0 | $c1 | $c2 | $c3) >> 8;
-            if ($err !== 0) {
-                \var_dump(Binary::safeSubstr($src, $i, 4), [$c0, $c1, $c2, $c3]);
-            }
         }
         if ($i < $srcLen) {
             $chunk = \unpack('C*', Binary::safeSubstr($src, $i, $srcLen - $i));
@@ -120,9 +117,6 @@ abstract class Base64 implements EncoderInterface
                     ((($c0 << 2) | ($c1 >> 4)) & 0xff)
                 );
                 $err |= ($c0 | $c1) >> 8;
-            }
-            if ($err !== 0) {
-                \var_dump(Binary::safeSubstr($src, $i, $srcLen - $i), [$c0, $c1, $c2, $c3]);
             }
         }
         if ($err !== 0) {
