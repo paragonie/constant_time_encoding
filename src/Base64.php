@@ -57,7 +57,7 @@ abstract class Base64 implements EncoderInterface
      * Base64 character set "./[A-Z][a-z][0-9]"
      *
      * @param string $src
-     * @return string
+     * @return string|bool
      * @throws \RangeException
      */
     public static function decode($src)
