@@ -1,6 +1,6 @@
 # Constant-Time Encoding
 
-[![Build Status](https://travis-ci.org/paragonie/constant_time_encoding.svg?branch=master)](https://travis-ci.org/paragonie/constant_time_encoding)
+[![Build Status](https://travis-ci.org/paragonie/constant_time_encoding.svg?branch=v1.x)](https://travis-ci.org/paragonie/constant_time_encoding)
 
 Based on the [constant-time base64 implementation made by Steve "Sc00bz" Thomas](https://github.com/Sc00bz/ConstTimeEncoding),
 this library aims to offer character encoding functions that do not leak
