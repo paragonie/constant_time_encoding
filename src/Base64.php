@@ -2,6 +2,29 @@
 namespace ParagonIE\ConstantTime;
 
 /**
+ *  Copyright (c) 2016 Paragon Initiative Enterprises.
+ *  Copyright (c) 2014 Steve "Sc00bz" Thomas (steve at tobtu dot com)
+ *
+ *  Permission is hereby granted, free of charge, to any person obtaining a copy
+ *  of this software and associated documentation files (the "Software"), to deal
+ *  in the Software without restriction, including without limitation the rights
+ *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ *  copies of the Software, and to permit persons to whom the Software is
+ *  furnished to do so, subject to the following conditions:
+ *
+ *  The above copyright notice and this permission notice shall be included in all
+ *  copies or substantial portions of the Software.
+ *
+ *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ *  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ *  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ *  SOFTWARE.
+ */
+
+/**
  * Class Base64
  * [A-Z][a-z][0-9]+/
  *
@@ -21,6 +44,7 @@ abstract class Base64 implements EncoderInterface
     {
         $dest = '';
         $srcLen = Binary::safeStrlen($src);
+        // Main loop (no padding):
         for ($i = 0; $i + 3 <= $srcLen; $i += 3) {
             $chunk = \unpack('C*', Binary::safeSubstr($src, $i, 3));
             $b0 = $chunk[1];
@@ -33,6 +57,7 @@ abstract class Base64 implements EncoderInterface
                 static::encode6Bits((($b1 << 2) | ($b2 >> 6)) & 63) .
                 static::encode6Bits(  $b2                     & 63);
         }
+        // The last chunk, which may have padding:
         if ($i < $srcLen) {
             $chunk = \unpack('C*', Binary::safeSubstr($src, $i, $srcLen - $i));
             $b0 = $chunk[1];
@@ -83,6 +108,7 @@ abstract class Base64 implements EncoderInterface
 
         $err = 0;
         $dest = '';
+        // Main loop (no padding):
         for ($i = 0; $i + 4 <= $srcLen; $i += 4) {
             $chunk = \unpack('C*', Binary::safeSubstr($src, $i, 4));
             $c0 = static::decode6Bits($chunk[1]);
@@ -98,6 +124,7 @@ abstract class Base64 implements EncoderInterface
             );
             $err |= ($c0 | $c1 | $c2 | $c3) >> 8;
         }
+        // The last chunk, which may have padding:
         if ($i < $srcLen) {
             $chunk = \unpack('C*', Binary::safeSubstr($src, $i, $srcLen - $i));
             $c0 = static::decode6Bits($chunk[1]);
@@ -126,6 +153,8 @@ abstract class Base64 implements EncoderInterface
     }
 
     /**
+     * Uses bitwise operators instead of table-lookups to turn 6-bit integers
+     * into 8-bit integers.
      *
      * Base64 character set:
      * [A-Z]      [a-z]      [0-9]      +     /
@@ -157,6 +186,9 @@ abstract class Base64 implements EncoderInterface
     }
 
     /**
+     * Uses bitwise operators instead of table-lookups to turn 8-bit integers
+     * into 6-bit integers.
+     *
      * @param int $src
      * @return string
      */

@@ -2,6 +2,29 @@
 namespace ParagonIE\ConstantTime;
 
 /**
+ *  Copyright (c) 2016 Paragon Initiative Enterprises.
+ *  Copyright (c) 2014 Steve "Sc00bz" Thomas (steve at tobtu dot com)
+ *
+ *  Permission is hereby granted, free of charge, to any person obtaining a copy
+ *  of this software and associated documentation files (the "Software"), to deal
+ *  in the Software without restriction, including without limitation the rights
+ *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ *  copies of the Software, and to permit persons to whom the Software is
+ *  furnished to do so, subject to the following conditions:
+ *
+ *  The above copyright notice and this permission notice shall be included in all
+ *  copies or substantial portions of the Software.
+ *
+ *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ *  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ *  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ *  SOFTWARE.
+ */
+
+/**
  * Class Base32
  * [A-Z][2-7]
  *
@@ -21,7 +44,7 @@ abstract class Base32 implements EncoderInterface
     }
 
     /**
-     * Decode a Base32-encoded string into raw binary
+     * Decode an uppercase Base32-encoded string into raw binary
      *
      * @param string $src
      * @return string
@@ -43,7 +66,7 @@ abstract class Base32 implements EncoderInterface
     }
 
     /**
-     * Encode into Base32 (RFC 4648)
+     * Encode into uppercase Base32 (RFC 4648)
      *
      * @param string $src
      * @return string
@@ -54,6 +77,8 @@ abstract class Base32 implements EncoderInterface
     }
 
     /**
+     * Uses bitwise operators instead of table-lookups to turn 5-bit integers
+     * into 8-bit integers.
      *
      * @param int $src
      * @return int
@@ -72,6 +97,10 @@ abstract class Base32 implements EncoderInterface
     }
 
     /**
+     * Uses bitwise operators instead of table-lookups to turn 5-bit integers
+     * into 8-bit integers.
+     *
+     * Uppercase variant.
      *
      * @param int $src
      * @return int
@@ -90,6 +119,9 @@ abstract class Base32 implements EncoderInterface
     }
 
     /**
+     * Uses bitwise operators instead of table-lookups to turn 8-bit integers
+     * into 5-bit integers.
+     *
      * @param $src
      * @return string
      */
@@ -104,6 +136,11 @@ abstract class Base32 implements EncoderInterface
     }
 
     /**
+     * Uses bitwise operators instead of table-lookups to turn 8-bit integers
+     * into 5-bit integers.
+     *
+     * Uppercase variant.
+     *
      * @param $src
      * @return string
      */
@@ -119,12 +156,15 @@ abstract class Base32 implements EncoderInterface
 
 
     /**
+     * Base32 decoding
+     *
      * @param $src
      * @param bool $upper
      * @return string
      */
     protected static function doDecode($src, $upper = false)
     {
+        // We do this to reduce code duplication:
         $method = $upper
             ? 'decode5BitsUpper'
             : 'decode5Bits';
@@ -151,6 +191,7 @@ abstract class Base32 implements EncoderInterface
 
         $err = 0;
         $dest = '';
+        // Main loop (no padding):
         for ($i = 0; $i + 8 <= $srcLen; $i += 8) {
             $chunk = \unpack('C*', Binary::safeSubstr($src, $i, 8));
             $c0 = static::$method($chunk[1]);
@@ -172,6 +213,7 @@ abstract class Base32 implements EncoderInterface
             );
             $err |= ($c0 | $c1 | $c2 | $c3 | $c4 | $c5 | $c6 | $c7) >> 8;
         }
+        // The last chunk, which may have padding:
         if ($i < $srcLen) {
             $chunk = \unpack('C*', Binary::safeSubstr($src, $i, $srcLen - $i));
             $c0 = static::$method($chunk[1]);
@@ -259,26 +301,30 @@ abstract class Base32 implements EncoderInterface
         }
         if ($err !== 0) {
             throw new \RangeException(
-                'base32Decode() only expects characters in the correct base32 alphabet'
+                'Base32::doDecode() only expects characters in the correct base32 alphabet'
             );
         }
         return $dest;
     }
 
     /**
-     * Encode into Base32 (RFC 4648)
+     * Base32 Decoding
      *
      * @param string $src
+     * @param bool $upper
      * @return string
      */
     protected static function doEncode($src, $upper = false)
     {
+        // We do this to reduce code duplication:
         $method = $upper
             ? 'encode5BitsUpper'
             : 'encode5Bits';
         
         $dest = '';
         $srcLen = Binary::safeStrlen($src);
+
+        // Main loop (no padding):
         for ($i = 0; $i + 5 <= $srcLen; $i += 5) {
             $chunk = \unpack('C*', Binary::safeSubstr($src, $i, 5));
             $b0 = $chunk[1];
@@ -296,6 +342,7 @@ abstract class Base32 implements EncoderInterface
                 static::$method((($b3 << 3) | ($b4 >> 5)) & 31) .
                 static::$method(  $b4                     & 31);
         }
+        // The last chunk, which may have padding:
         if ($i < $srcLen) {
             $chunk = \unpack('C*', Binary::safeSubstr($src, $i, $srcLen - $i));
             $b0 = $chunk[1];

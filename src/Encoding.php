@@ -2,6 +2,7 @@
 namespace ParagonIE\ConstantTime;
 
 /**
+ *  Copyright (c) 2016 Paragon Initiative Enterprises.
  *  Copyright (c) 2014 Steve "Sc00bz" Thomas (steve at tobtu dot com)
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,6 +22,11 @@ namespace ParagonIE\ConstantTime;
  *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
+ */
+
+/**
+ * Class Encoding
+ * @package ParagonIE\ConstantTime
  */
 abstract class Encoding
 {
