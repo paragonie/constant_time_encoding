@@ -32,8 +32,10 @@ use \ParagonIE\ConstantTime\Encoding;
 
 $data = random_bytes(32);
 echo Encoding::base64Encode($data), "\n";
+echo Encoding::base32EncodeUpper($data), "\n";
 echo Encoding::base32Encode($data), "\n";
 echo Encoding::hexEncode($data), "\n";
+echo Encoding::hexEncodeUpper($data), "\n";
 ```
 
 Example output:
@@ -41,5 +43,23 @@ Example output:
 ```
 1VilPkeVqirlPifk5scbzcTTbMT2clp+Zkyv9VFFasE=
 2VMKKPSHSWVCVZJ6E7SONRY3ZXCNG3GE6ZZFU7TGJSX7KUKFNLAQ====
+2vmkkpshswvcvzj6e7sonry3zxcng3ge6zzfu7tgjsx7kukfnlaq====
 d558a53e4795aa2ae53e27e4e6c71bcdc4d36cc4f6725a7e664caff551456ac1
+D558A53E4795AA2AE53E27E4E6C71BDCC4D36CC4F6725A7E664CAFF551456AC1
+```
+
+If you only need a particular variant, you can just reference the 
+required class like so:
+
+```php
+use \ParagonIE\ConstantTime\Base64;
+
+$data = random_bytes(32);
+echo Base64::Encode($data), "\n";
+```
+
+Example output:
+
+```
+1VilPkeVqirlPifk5scbzcTTbMT2clp+Zkyv9VFFasE=
 ```

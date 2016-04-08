@@ -36,6 +36,17 @@ abstract class Encoding
     }
 
     /**
+     * RFC 4648 Base32 encoding
+     *
+     * @param $str
+     * @return string
+     */
+    public static function base32EncodeUpper($str)
+    {
+        return Base32::encodeUpper($str);
+    }
+
+    /**
      * RFC 4648 Base32 decoding
      *
      * @param $str
@@ -45,6 +56,18 @@ abstract class Encoding
     {
         return Base32::decode($str);
     }
+
+    /**
+     * RFC 4648 Base32 decoding
+     *
+     * @param $str
+     * @return string
+     */
+    public static function base32DecodeUpper($str)
+    {
+        return Base32::decodeUpper($str);
+    }
+
     /**
      * RFC 4648 Base32 encoding
      *
@@ -56,6 +79,18 @@ abstract class Encoding
         return Base32Hex::encode($str);
     }
 
+
+    /**
+     * RFC 4648 Base32 encoding
+     *
+     * @param $str
+     * @return string
+     */
+    public static function base32HexEncodeUpper($str)
+    {
+        return Base32Hex::encodeUpper($str);
+    }
+
     /**
      * RFC 4648 Base32 decoding
      *
@@ -65,6 +100,17 @@ abstract class Encoding
     public static function base32HexDecode($str)
     {
         return Base32Hex::decode($str);
+    }
+
+    /**
+     * RFC 4648 Base32 decoding
+     *
+     * @param $str
+     * @return string
+     */
+    public static function base32HexDecodeUpper($str)
+    {
+        return Base32Hex::decodeUpper($str);
     }
 
     /**
@@ -87,31 +133,6 @@ abstract class Encoding
     public static function base64Decode($str)
     {
         return Base64::decode($str);
-    }
-
-    /**
-     * Convert a binary string into a hexadecimal string without cache-timing
-     * leaks
-     *
-     * @param string $bin_string (raw binary)
-     * @return string
-     */
-    public static function hexEncode($bin_string)
-    {
-        return Hex::encode($bin_string);
-    }
-
-    /**
-     * Convert a hexadecimal string into a binary string without cache-timing
-     * leaks
-     *
-     * @param string $hex_string
-     * @return string (raw binary)
-     * @throws \RangeException
-     */
-    public static function hexDecode($hex_string)
-    {
-        return Hex::decode($hex_string);
     }
 
     /**
@@ -164,5 +185,54 @@ abstract class Encoding
     public static function base64DecodeDotSlashOrdered($src)
     {
         return Base64DotSlashOrdered::decode($src);
+    }
+
+    /**
+     * Convert a binary string into a hexadecimal string without cache-timing
+     * leaks
+     *
+     * @param string $bin_string (raw binary)
+     * @return string
+     */
+    public static function hexEncode($bin_string)
+    {
+        return Hex::encode($bin_string);
+    }
+
+    /**
+     * Convert a hexadecimal string into a binary string without cache-timing
+     * leaks
+     *
+     * @param string $hex_string
+     * @return string (raw binary)
+     * @throws \RangeException
+     */
+    public static function hexDecode($hex_string)
+    {
+        return Hex::decode($hex_string);
+    }
+
+    /**
+     * Convert a binary string into a hexadecimal string without cache-timing
+     * leaks
+     *
+     * @param string $bin_string (raw binary)
+     * @return string
+     */
+    public static function hexEncodeUpper($bin_string)
+    {
+        return Hex::encodeUpper($bin_string);
+    }
+
+    /**
+     * Convert a binary string into a hexadecimal string without cache-timing
+     * leaks
+     *
+     * @param string $bin_string (raw binary)
+     * @return string
+     */
+    public static function hexDecodeUpper($bin_string)
+    {
+        return Hex::decode($bin_string);
     }
 }
