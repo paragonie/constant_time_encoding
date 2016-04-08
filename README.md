@@ -53,13 +53,16 @@ required class like so:
 
 ```php
 use \ParagonIE\ConstantTime\Base64;
+use \ParagonIE\ConstantTime\Base32;
 
 $data = random_bytes(32);
-echo Base64::Encode($data), "\n";
+echo Base64::encode($data), "\n";
+echo Base32::encode($data), "\n";
 ```
 
 Example output:
 
 ```
 1VilPkeVqirlPifk5scbzcTTbMT2clp+Zkyv9VFFasE=
+2vmkkpshswvcvzj6e7sonry3zxcng3ge6zzfu7tgjsx7kukfnlaq====
 ```
