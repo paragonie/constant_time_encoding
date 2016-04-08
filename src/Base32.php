@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace ParagonIE\ConstantTime;
 
 /**
@@ -38,7 +39,7 @@ abstract class Base32 implements EncoderInterface
      * @param string $src
      * @return string
      */
-    public static function decode($src)
+    public static function decode(string $src): string
     {
         return static::doDecode($src, false);
     }
@@ -49,7 +50,7 @@ abstract class Base32 implements EncoderInterface
      * @param string $src
      * @return string
      */
-    public static function decodeUpper($src)
+    public static function decodeUpper(string $src): string
     {
         return static::doDecode($src, true);
     }
@@ -60,7 +61,7 @@ abstract class Base32 implements EncoderInterface
      * @param string $src
      * @return string
      */
-    public static function encode($src)
+    public static function encode(string $src): string
     {
         return static::doEncode($src, false);
     }
@@ -71,7 +72,7 @@ abstract class Base32 implements EncoderInterface
      * @param string $src
      * @return string
      */
-    public static function encodeUpper($src)
+    public static function encodeUpper(string $src): string
     {
         return static::doEncode($src, true);
     }
@@ -83,7 +84,7 @@ abstract class Base32 implements EncoderInterface
      * @param int $src
      * @return int
      */
-    protected static function decode5Bits($src)
+    protected static function decode5Bits(int $src): int
     {
         $ret = -1;
 
@@ -105,7 +106,7 @@ abstract class Base32 implements EncoderInterface
      * @param int $src
      * @return int
      */
-    protected static function decode5BitsUpper($src)
+    protected static function decode5BitsUpper(int $src): int
     {
         $ret = -1;
 
@@ -125,7 +126,7 @@ abstract class Base32 implements EncoderInterface
      * @param $src
      * @return string
      */
-    protected static function encode5Bits($src)
+    protected static function encode5Bits(int $src): string
     {
         $diff = 0x61;
 
@@ -144,7 +145,7 @@ abstract class Base32 implements EncoderInterface
      * @param $src
      * @return string
      */
-    protected static function encode5BitsUpper($src)
+    protected static function encode5BitsUpper(int $src): string
     {
         $diff = 0x41;
 
@@ -158,11 +159,11 @@ abstract class Base32 implements EncoderInterface
     /**
      * Base32 decoding
      *
-     * @param $src
+     * @param string $src
      * @param bool $upper
      * @return string
      */
-    protected static function doDecode($src, $upper = false)
+    protected static function doDecode(string $src, bool $upper = false): string
     {
         // We do this to reduce code duplication:
         $method = $upper
@@ -314,7 +315,7 @@ abstract class Base32 implements EncoderInterface
      * @param bool $upper
      * @return string
      */
-    protected static function doEncode($src, $upper = false)
+    protected static function doEncode(string $src, bool $upper = false): string
     {
         // We do this to reduce code duplication:
         $method = $upper

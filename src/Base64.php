@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace ParagonIE\ConstantTime;
 
 /**
@@ -40,7 +41,7 @@ abstract class Base64 implements EncoderInterface
      * @param string $src
      * @return string
      */
-    public static function encode($src)
+    public static function encode(string $src): string
     {
         $dest = '';
         $srcLen = Binary::safeStrlen($src);
@@ -85,7 +86,7 @@ abstract class Base64 implements EncoderInterface
      * @return string|bool
      * @throws \RangeException
      */
-    public static function decode($src)
+    public static function decode(string $src): string
     {
         // Remove padding
         $srcLen = Binary::safeStrlen($src);
@@ -163,7 +164,7 @@ abstract class Base64 implements EncoderInterface
      * @param int $src
      * @return int
      */
-    protected static function decode6Bits($src)
+    protected static function decode6Bits(int $src): int
     {
         $ret = -1;
 
@@ -192,7 +193,7 @@ abstract class Base64 implements EncoderInterface
      * @param int $src
      * @return string
      */
-    protected static function encode6Bits($src)
+    protected static function encode6Bits(int $src): string
     {
         $diff = 0x41;
 

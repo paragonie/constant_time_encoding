@@ -18,9 +18,8 @@ Our fork offers the following enchancements:
 
 ## PHP Version Requirements
 
-This library should work on any [supported version of PHP](https://secure.php.net/supported-versions.php).
-It *may* work on earlier versions, but we **do not** guarantee it. If it
-doesn't, we **will not** fix it to work on earlier versions of PHP.
+Version 2 of this library should work on **PHP 7** or newer. For PHP 5
+support, see [the v1.x branch](https://github.com/paragonie/constant_time_encoding/tree/v1.x).
 
 ## How to Install
 

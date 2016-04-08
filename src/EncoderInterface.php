@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace ParagonIE\ConstantTime;
 
 /**
@@ -37,7 +38,7 @@ interface EncoderInterface
      * @param string $bin_string (raw binary)
      * @return string
      */
-    public static function encode($bin_string);
+    public static function encode(string $bin_string): string;
 
     /**
      * Convert a binary string into a hexadecimal string without cache-timing
@@ -46,5 +47,5 @@ interface EncoderInterface
      * @param string $encoded_string
      * @return string (raw binary)
      */
-    public static function decode($encoded_string);
+    public static function decode(string $encoded_string): string;
 }

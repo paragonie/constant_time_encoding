@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace ParagonIE\ConstantTime;
 
 /**
@@ -37,7 +38,7 @@ abstract class Hex implements EncoderInterface
      * @param string $bin_string (raw binary)
      * @return string
      */
-    public static function encode($bin_string)
+    public static function encode(string $bin_string): string
     {
         $hex = '';
         $len = Binary::safeStrlen($bin_string);
@@ -61,7 +62,7 @@ abstract class Hex implements EncoderInterface
      * @param string $bin_string (raw binary)
      * @return string
      */
-    public static function encodeUpper($bin_string)
+    public static function encodeUpper(string $bin_string): string
     {
         $hex = '';
         $len = Binary::safeStrlen($bin_string);
@@ -86,7 +87,7 @@ abstract class Hex implements EncoderInterface
      * @return string (raw binary)
      * @throws \RangeException
      */
-    public static function decode($hex_string)
+    public static function decode(string $hex_string): string
     {
         $hex_pos = 0;
         $bin = '';
