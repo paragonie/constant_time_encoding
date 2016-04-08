@@ -28,23 +28,39 @@ class RFC4648Test extends PHPUnit_Framework_TestCase
     public function testVectorBase32()
     {
         $this->assertEquals(Base32::encode(''), '');
-        $this->assertEquals(Base32::encode('f'), 'MY======');
-        $this->assertEquals(Base32::encode('fo'), 'MZXQ====');
-        $this->assertEquals(Base32::encode('foo'), 'MZXW6===');
-        $this->assertEquals(Base32::encode('foob'), 'MZXW6YQ=');
-        $this->assertEquals(Base32::encode('fooba'), 'MZXW6YTB');
-        $this->assertEquals(Base32::encode('foobar'), 'MZXW6YTBOI======');
+        $this->assertEquals(Base32::encode('f'), 'my======');
+        $this->assertEquals(Base32::encode('fo'), 'mzxq====');
+        $this->assertEquals(Base32::encode('foo'), 'mzxw6===');
+        $this->assertEquals(Base32::encode('foob'), 'mzxw6yq=');
+        $this->assertEquals(Base32::encode('fooba'), 'mzxw6ytb');
+        $this->assertEquals(Base32::encode('foobar'), 'mzxw6ytboi======');
+
+        $this->assertEquals(Base32::encodeUpper(''), '');
+        $this->assertEquals(Base32::encodeUpper('f'), 'MY======');
+        $this->assertEquals(Base32::encodeUpper('fo'), 'MZXQ====');
+        $this->assertEquals(Base32::encodeUpper('foo'), 'MZXW6===');
+        $this->assertEquals(Base32::encodeUpper('foob'), 'MZXW6YQ=');
+        $this->assertEquals(Base32::encodeUpper('fooba'), 'MZXW6YTB');
+        $this->assertEquals(Base32::encodeUpper('foobar'), 'MZXW6YTBOI======');
     }
 
     public function testVectorBase32Hex()
     {
         $this->assertEquals(Base32Hex::encode(''), '');
-        $this->assertEquals(Base32Hex::encode('f'), 'CO======');
-        $this->assertEquals(Base32Hex::encode('fo'), 'CPNG====');
-        $this->assertEquals(Base32Hex::encode('foo'), 'CPNMU===');
-        $this->assertEquals(Base32Hex::encode('foob'), 'CPNMUOG=');
-        $this->assertEquals(Base32Hex::encode('fooba'), 'CPNMUOJ1');
-        $this->assertEquals(Base32Hex::encode('foobar'), 'CPNMUOJ1E8======');
+        $this->assertEquals(Base32Hex::encode('f'), 'co======');
+        $this->assertEquals(Base32Hex::encode('fo'), 'cpng====');
+        $this->assertEquals(Base32Hex::encode('foo'), 'cpnmu===');
+        $this->assertEquals(Base32Hex::encode('foob'), 'cpnmuog=');
+        $this->assertEquals(Base32Hex::encode('fooba'), 'cpnmuoj1');
+        $this->assertEquals(Base32Hex::encode('foobar'), 'cpnmuoj1e8======');
+
+        $this->assertEquals(Base32Hex::encodeUpper(''), '');
+        $this->assertEquals(Base32Hex::encodeUpper('f'), 'CO======');
+        $this->assertEquals(Base32Hex::encodeUpper('fo'), 'CPNG====');
+        $this->assertEquals(Base32Hex::encodeUpper('foo'), 'CPNMU===');
+        $this->assertEquals(Base32Hex::encodeUpper('foob'), 'CPNMUOG=');
+        $this->assertEquals(Base32Hex::encodeUpper('fooba'), 'CPNMUOJ1');
+        $this->assertEquals(Base32Hex::encodeUpper('foobar'), 'CPNMUOJ1E8======');
     }
 
     public function testVectorBase16()
@@ -56,6 +72,7 @@ class RFC4648Test extends PHPUnit_Framework_TestCase
         $this->assertEquals(Hex::encode('foob'), '666f6f62');
         $this->assertEquals(Hex::encode('fooba'), '666f6f6261');
         $this->assertEquals(Hex::encode('foobar'), '666f6f626172');
+
         $this->assertEquals(Hex::encodeUpper(''), '');
         $this->assertEquals(Hex::encodeUpper('f'), '66');
         $this->assertEquals(Hex::encodeUpper('fo'), '666F');

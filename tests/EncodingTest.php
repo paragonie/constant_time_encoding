@@ -14,39 +14,76 @@ class EncodingTest extends PHPUnit_Framework_TestCase
     {
         $this->assertEquals(
             Encoding::base32Encode("\x00"),
-            'AA======'
+            'aa======'
         );
         $this->assertEquals(
             Encoding::base32Encode("\x00\x00"),
-            'AAAA===='
+            'aaaa===='
         );
         $this->assertEquals(
             Encoding::base32Encode("\x00\x00\x00"),
-            'AAAAA==='
+            'aaaaa==='
         );
         $this->assertEquals(
             Encoding::base32Encode("\x00\x00\x00\x00"),
-            'AAAAAAA='
+            'aaaaaaa='
         );
         $this->assertEquals(
             Encoding::base32Encode("\x00\x00\x00\x00\x00"),
-            'AAAAAAAA'
+            'aaaaaaaa'
         );
         $this->assertEquals(
             Encoding::base32Encode("\x00\x00\x0F\xFF\xFF"),
-            'AAAA7777'
+            'aaaa7777'
         );
         $this->assertEquals(
             Encoding::base32Encode("\xFF\xFF\xF0\x00\x00"),
-            '7777AAAA'
+            '7777aaaa'
         );
 
         $this->assertEquals(
             Encoding::base32Encode("\xce\x73\x9c\xe7\x39"),
-            'ZZZZZZZZ'
+            'zzzzzzzz'
         );
         $this->assertEquals(
             Encoding::base32Encode("\xd6\xb5\xad\x6b\x5a"),
+            '22222222'
+        );
+        $this->assertEquals(
+            Base32::encodeUpper("\x00"),
+            'AA======'
+        );
+        $this->assertEquals(
+            Base32::encodeUpper("\x00\x00"),
+            'AAAA===='
+        );
+        $this->assertEquals(
+            Base32::encodeUpper("\x00\x00\x00"),
+            'AAAAA==='
+        );
+        $this->assertEquals(
+            Base32::encodeUpper("\x00\x00\x00\x00"),
+            'AAAAAAA='
+        );
+        $this->assertEquals(
+            Base32::encodeUpper("\x00\x00\x00\x00\x00"),
+            'AAAAAAAA'
+        );
+        $this->assertEquals(
+            Base32::encodeUpper("\x00\x00\x0F\xFF\xFF"),
+            'AAAA7777'
+        );
+        $this->assertEquals(
+            Base32::encodeUpper("\xFF\xFF\xF0\x00\x00"),
+            '7777AAAA'
+        );
+
+        $this->assertEquals(
+            Base32::encodeUpper("\xce\x73\x9c\xe7\x39"),
+            'ZZZZZZZZ'
+        );
+        $this->assertEquals(
+            Base32::encodeUpper("\xd6\xb5\xad\x6b\x5a"),
             '22222222'
         );
     }
@@ -75,11 +112,11 @@ class EncodingTest extends PHPUnit_Framework_TestCase
         );
         $this->assertEquals(
             Base32Hex::encode("\x00\x00\x0F\xFF\xFF"),
-            '0000VVVV'
+            '0000vvvv'
         );
         $this->assertEquals(
             Base32Hex::encode("\xFF\xFF\xF0\x00\x00"),
-            'VVVV0000'
+            'vvvv0000'
         );
 
 
@@ -92,55 +129,55 @@ class EncodingTest extends PHPUnit_Framework_TestCase
     {
         $this->assertEquals(
             "\x00\x00\x00\x00\x00\x00",
-            Encoding::base32Decode('AAAAAAAAAA======')
+            Encoding::base32Decode('aaaaaaaaaa======')
         );
         $this->assertEquals(
             "\x00\x00\x00\x00\x00\x00\x00",
-            Encoding::base32Decode('AAAAAAAAAAAA====')
+            Encoding::base32Decode('aaaaaaaaaaaa====')
         );
         $this->assertEquals(
             "\x00\x00\x00\x00\x00\x00\x00\x00",
-            Encoding::base32Decode('AAAAAAAAAAAAA===')
+            Encoding::base32Decode('aaaaaaaaaaaaa===')
         );
         $this->assertEquals(
             "\x00\x00\x00\x00\x00\x00\x00\x00\x00",
-            Encoding::base32Decode('AAAAAAAAAAAAAAA=')
+            Encoding::base32Decode('aaaaaaaaaaaaaaa=')
         );
         $this->assertEquals(
             "\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00",
-            Encoding::base32Decode('AAAAAAAAAAAAAAAA')
+            Encoding::base32Decode('aaaaaaaaaaaaaaaa')
         );
         $this->assertEquals(
             "\x00",
-            Encoding::base32Decode('AA======')
+            Encoding::base32Decode('aa======')
         );
         $this->assertEquals(
             "\x00\x00",
-            Encoding::base32Decode('AAAA====')
+            Encoding::base32Decode('aaaa====')
         );
         $this->assertEquals(
             "\x00\x00\x00",
-            Encoding::base32Decode('AAAAA===')
+            Encoding::base32Decode('aaaaa===')
         );
         $this->assertEquals(
             "\x00\x00\x00\x00",
-            Encoding::base32Decode('AAAAAAA=')
+            Encoding::base32Decode('aaaaaaa=')
         );
         $this->assertEquals(
             "\x00\x00\x00\x00\x00",
-            Encoding::base32Decode('AAAAAAAA')
+            Encoding::base32Decode('aaaaaaaa')
         );
         $this->assertEquals(
             "\x00\x00\x0F\xFF\xFF",
-            Encoding::base32Decode('AAAA7777')
+            Encoding::base32Decode('aaaa7777')
         );
         $this->assertEquals(
             "\xFF\xFF\xF0\x00\x00",
-            Encoding::base32Decode('7777AAAA')
+            Encoding::base32Decode('7777aaaa')
         );
         $this->assertEquals(
             "\xce\x73\x9c\xe7\x39",
-            Encoding::base32Decode('ZZZZZZZZ')
+            Encoding::base32Decode('zzzzzzzz')
         );
         $this->assertEquals(
             "\xd6\xb5\xad\x6b\x5a",
@@ -148,7 +185,7 @@ class EncodingTest extends PHPUnit_Framework_TestCase
         );
         $this->assertEquals(
             'foobar',
-            Encoding::base32Decode('MZXW6YTBOI======')
+            Encoding::base32Decode('mzxw6ytboi======')
         );
 
         $rand = random_bytes(9);
@@ -204,7 +241,7 @@ class EncodingTest extends PHPUnit_Framework_TestCase
                 $this->assertEquals(
                     $rand,
                     Hex::decode($enc),
-                    "Hex Encoding - Length: " . $i
+                    "HexUpper Encoding - Length: " . $i
                 );
 
                 $enc = Encoding::base32Encode($rand);
@@ -214,11 +251,25 @@ class EncodingTest extends PHPUnit_Framework_TestCase
                     "Base32 Encoding - Length: " . $i
                 );
 
+                $enc = Base32::encodeUpper($rand);
+                $this->assertEquals(
+                    $rand,
+                    Base32::decodeUpper($enc),
+                    "Base32Upper Encoding - Length: " . $i
+                );
+
                 $enc = Encoding::base32HexEncode($rand);
                 $this->assertEquals(
                     bin2hex($rand),
                     bin2hex(Encoding::base32HexDecode($enc)),
-                    "Base32 Encoding - Length: " . $i
+                    "Base32Hex Encoding - Length: " . $i
+                );
+
+                $enc = Base32Hex::encodeUpper($rand);
+                $this->assertEquals(
+                    bin2hex($rand),
+                    bin2hex(Base32Hex::decodeUpper($enc)),
+                    "Base32HexUpper Encoding - Length: " . $i
                 );
 
                 $enc = Encoding::base64Encode($rand);
