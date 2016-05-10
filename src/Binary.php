@@ -43,7 +43,7 @@ abstract class Binary
      * @param string $str
      * @return int
      */
-    public static function safeStrlen($str)
+    public static function safeStrlen(string $str): int
     {
         if (\function_exists('mb_strlen')) {
             return \mb_strlen($str, '8bit');
@@ -65,10 +65,10 @@ abstract class Binary
      * @throws \TypeError
      */
     public static function safeSubstr(
-        $str,
-        $start = 0,
+        string $str,
+        int $start = 0,
         $length = null
-    ) {
+    ): string {
         if (\function_exists('mb_substr')) {
             // mb_substr($str, 0, NULL, '8bit') returns an empty string on PHP
             // 5.3, so we have to find the length ourselves.
