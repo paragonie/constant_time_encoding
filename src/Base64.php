@@ -85,25 +85,30 @@ abstract class Base64 implements EncoderInterface
      * @return string|bool
      * @throws \RangeException
      */
-    public static function decode($src)
+    public static function decode($src, $strictPadding = false)
     {
         // Remove padding
         $srcLen = Binary::safeStrlen($src);
         if ($srcLen === 0) {
             return '';
         }
-        if (($srcLen & 3) === 0) {
-            if ($src[$srcLen - 1] === '=') {
-                $srcLen--;
+        if ($strictPadding) {
+            if (($srcLen & 3) === 0) {
                 if ($src[$srcLen - 1] === '=') {
                     $srcLen--;
+                    if ($src[$srcLen - 1] === '=') {
+                        $srcLen--;
+                    }
                 }
             }
-        }
-        if (($srcLen & 3) === 1) {
-            throw new \RangeException(
-                'Incorrect padding'
-            );
+            if (($srcLen & 3) === 1) {
+                throw new \RangeException(
+                    'Incorrect padding'
+                );
+            }
+        } else {
+            $src = \rtrim($src, '=');
+            $srcLen = Binary::safeStrlen($src);
         }
 
         $err = 0;
@@ -128,9 +133,8 @@ abstract class Base64 implements EncoderInterface
         if ($i < $srcLen) {
             $chunk = \unpack('C*', Binary::safeSubstr($src, $i, $srcLen - $i));
             $c0 = static::decode6Bits($chunk[1]);
-            $c1 = static::decode6Bits($chunk[2]);
-
             if ($i + 2 < $srcLen) {
+                $c1 = static::decode6Bits($chunk[2]);
                 $c2 = static::decode6Bits($chunk[3]);
                 $dest .= \pack(
                     'CC',
@@ -139,11 +143,14 @@ abstract class Base64 implements EncoderInterface
                 );
                 $err |= ($c0 | $c1 | $c2) >> 8;
             } elseif($i + 1 < $srcLen) {
+                $c1 = static::decode6Bits($chunk[2]);
                 $dest .= \pack(
                     'C',
                     ((($c0 << 2) | ($c1 >> 4)) & 0xff)
                 );
                 $err |= ($c0 | $c1) >> 8;
+            } elseif ($i < $srcLen && $strictPadding) {
+                $err |= 1;
             }
         }
         if ($err !== 0) {
