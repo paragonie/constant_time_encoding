@@ -84,23 +84,29 @@ abstract class Hex implements EncoderInterface
      * leaks
      *
      * @param string $hex_string
+     * @param bool $strictPadding
      * @return string (raw binary)
      * @throws \RangeException
      */
-    public static function decode(string $hex_string): string
+    public static function decode(string $hexString, bool $strictPadding = false): string
     {
         $hex_pos = 0;
         $bin = '';
         $c_acc = 0;
-        $hex_len = Binary::safeStrlen($hex_string);
+        $hex_len = Binary::safeStrlen($hexString);
         $state = 0;
         if (($hex_len & 1) !== 0) {
-            throw new \RangeException(
-                'Expected an even number of hexadecimal characters'
-            );
+            if ($strictPadding) {
+                throw new \RangeException(
+                    'Expected an even number of hexadecimal characters'
+                );
+            } else {
+                $hexString = '0' . $hexString;
+                ++$hex_len;
+            }
         }
 
-        $chunk = \unpack('C*', $hex_string);
+        $chunk = \unpack('C*', $hexString);
         while ($hex_pos < $hex_len) {
             ++$hex_pos;
             $c = $chunk[$hex_pos];

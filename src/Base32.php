@@ -39,9 +39,9 @@ abstract class Base32 implements EncoderInterface
      * @param string $src
      * @return string
      */
-    public static function decode(string $src): string
+    public static function decode(string $src, bool $strictPadding = false): string
     {
-        return static::doDecode($src, false);
+        return static::doDecode($src, false, $strictPadding);
     }
 
     /**
@@ -50,9 +50,9 @@ abstract class Base32 implements EncoderInterface
      * @param string $src
      * @return string
      */
-    public static function decodeUpper(string $src): string
+    public static function decodeUpper(string $src, bool $strictPadding = false): string
     {
-        return static::doDecode($src, true);
+        return static::doDecode($src, true, $strictPadding);
     }
 
     /**
@@ -161,9 +161,10 @@ abstract class Base32 implements EncoderInterface
      *
      * @param string $src
      * @param bool $upper
+     * @param bool $strictPadding
      * @return string
      */
-    protected static function doDecode(string $src, bool $upper = false): string
+    protected static function doDecode(string $src, bool $upper = false, bool $strictPadding = false): string
     {
         // We do this to reduce code duplication:
         $method = $upper
@@ -185,9 +186,14 @@ abstract class Base32 implements EncoderInterface
             }
         }
         if (($srcLen & 7) === 1) {
-            throw new \RangeException(
-                'Incorrect padding'
-            );
+            if ($strictPadding) {
+                throw new \RangeException(
+                    'Incorrect padding'
+                );
+            } else {
+                $src = \rtrim($src, '=');
+                $srcLen = Binary::safeStrlen($src);
+            }
         }
 
         $err = 0;

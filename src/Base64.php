@@ -83,10 +83,11 @@ abstract class Base64 implements EncoderInterface
      * Base64 character set "./[A-Z][a-z][0-9]"
      *
      * @param string $src
+     * @param bool $strictPadding
      * @return string|bool
      * @throws \RangeException
      */
-    public static function decode(string $src): string
+    public static function decode(string $src, bool $strictPadding = false): string
     {
         // Remove padding
         $srcLen = Binary::safeStrlen($src);
@@ -102,9 +103,14 @@ abstract class Base64 implements EncoderInterface
             }
         }
         if (($srcLen & 3) === 1) {
-            throw new \RangeException(
-                'Incorrect padding'
-            );
+            if ($strictPadding) {
+                throw new \RangeException(
+                    'Incorrect padding'
+                );
+            } else {
+                $src = \rtrim($src, '=');
+                $srcLen = Binary::safeStrlen($src);
+            }
         }
 
         $err = 0;

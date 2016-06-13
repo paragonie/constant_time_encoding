@@ -22,6 +22,12 @@ class Base64Test extends PHPUnit_Framework_TestCase
                     \base64_encode($random),
                     $enc
                 );
+
+                $unpadded = \rtrim($enc, '=');
+                $this->assertSame(
+                    $random,
+                    Base64::decode($unpadded, true)
+                );
             }
         }
     }

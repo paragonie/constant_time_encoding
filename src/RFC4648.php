@@ -57,7 +57,7 @@ abstract class RFC4648
      */
     public function base64Decode(string $str): string
     {
-        return Base64::decode($str);
+        return Base64::decode($str, true);
     }
 
     /**
@@ -83,7 +83,7 @@ abstract class RFC4648
      */
     public function base64UrlSafeDecode(string $str): string
     {
-        return Base64UrlSafe::decode($str);
+        return Base64UrlSafe::decode($str, true);
     }
 
     /**
@@ -109,7 +109,7 @@ abstract class RFC4648
      */
     public function base32Decode(string $str): string
     {
-        return Base32::decodeUpper($str);
+        return Base32::decodeUpper($str, true);
     }
 
     /**
@@ -135,7 +135,7 @@ abstract class RFC4648
      */
     public function base32HexDecode(string $str): string
     {
-        return Base32::decodeUpper($str);
+        return Base32::decodeUpper($str, true);
     }
 
     /**
@@ -161,6 +161,6 @@ abstract class RFC4648
      */
     public function base16Decode(string $str): string
     {
-        return Hex::decode($str);
+        return Hex::decode($str, true);
     }
 }

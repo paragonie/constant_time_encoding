@@ -35,17 +35,18 @@ interface EncoderInterface
      * Convert a binary string into a hexadecimal string without cache-timing
      * leaks
      *
-     * @param string $bin_string (raw binary)
+     * @param string $binString (raw binary)
      * @return string
      */
-    public static function encode(string $bin_string): string;
+    public static function encode(string $binString): string;
 
     /**
      * Convert a binary string into a hexadecimal string without cache-timing
      * leaks
      *
-     * @param string $encoded_string
+     * @param string $encodedString
+     * @param bool $strictPadding Error on invalid padding
      * @return string (raw binary)
      */
-    public static function decode(string $encoded_string): string;
+    public static function decode(string $encodedString, bool $strictPadding = false): string;
 }
