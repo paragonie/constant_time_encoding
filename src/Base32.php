@@ -176,24 +176,24 @@ abstract class Base32 implements EncoderInterface
         if ($srcLen === 0) {
             return '';
         }
-        if (($srcLen & 7) === 0) {
-            for ($j = 0; $j < 7; ++$j) {
-                if ($src[$srcLen - 1] === '=') {
-                    $srcLen--;
-                } else {
-                    break;
+        if ($strictPadding) {
+            if (($srcLen & 7) === 0) {
+                for ($j = 0; $j < 7; ++$j) {
+                    if ($src[$srcLen - 1] === '=') {
+                        $srcLen--;
+                    } else {
+                        break;
+                    }
                 }
             }
-        }
-        if (($srcLen & 7) === 1) {
-            if ($strictPadding) {
+            if (($srcLen & 7) === 1) {
                 throw new \RangeException(
                     'Incorrect padding'
                 );
-            } else {
-                $src = \rtrim($src, '=');
-                $srcLen = Binary::safeStrlen($src);
             }
+        } else {
+            $src = \rtrim($src, '=');
+            $srcLen = Binary::safeStrlen($src);
         }
 
         $err = 0;
