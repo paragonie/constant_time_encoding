@@ -163,7 +163,9 @@ abstract class Base64 implements EncoderInterface
             }
         }
         if ($err !== 0) {
-            return false;
+            throw new \RangeException(
+                'Base64::decode() only expects characters in the correct base64 alphabet'
+            );
         }
         return $dest;
     }
