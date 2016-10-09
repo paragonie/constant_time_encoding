@@ -146,7 +146,7 @@ abstract class Encoding
      * Encode into Base64
      *
      * Base64 character set "./[A-Z][a-z][0-9]"
-     * @param $src
+     * @param string $str
      * @return string
      */
     public static function base64EncodeDotSlash(string $str): string
@@ -159,7 +159,7 @@ abstract class Encoding
      *
      * Base64 character set "./[A-Z][a-z][0-9]"
      *
-     * @param $src
+     * @param string $str
      * @return bool|string
      * @throws \RangeException
      */
@@ -172,7 +172,7 @@ abstract class Encoding
      * Encode into Base64
      *
      * Base64 character set "[.-9][A-Z][a-z]" or "./[0-9][A-Z][a-z]"
-     * @param $src
+     * @param string $str
      * @return string
      */
     public static function base64EncodeDotSlashOrdered(string $str): string
@@ -185,7 +185,7 @@ abstract class Encoding
      *
      * Base64 character set "[.-9][A-Z][a-z]" or "./[0-9][A-Z][a-z]"
      *
-     * @param $src
+     * @param string $str
      * @return bool|string
      * @throws \RangeException
      */
