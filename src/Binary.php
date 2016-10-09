@@ -70,15 +70,6 @@ abstract class Binary
         $length = null
     ): string {
         if (\function_exists('mb_substr')) {
-            // mb_substr($str, 0, NULL, '8bit') returns an empty string on PHP
-            // 5.3, so we have to find the length ourselves.
-            if ($length === null) {
-                if ($start >= 0) {
-                    $length = self::safeStrlen($str) - $start;
-                } else {
-                    $length = -$start;
-                }
-            }
             // $length calculation above might result in a 0-length string
             if ($length === 0) {
                 return '';
