@@ -84,7 +84,7 @@ abstract class Base64 implements EncoderInterface
      *
      * @param string $src
      * @param bool $strictPadding
-     * @return string|bool
+     * @return string
      * @throws \RangeException
      */
     public static function decode(string $src, bool $strictPadding = false): string
