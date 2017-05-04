@@ -69,15 +69,11 @@ abstract class Binary
         int $start = 0,
         $length = null
     ): string {
-        if (\function_exists('mb_substr')) {
-            // $length calculation above might result in a 0-length string
-            if ($length === 0) {
-                return '';
-            }
-            return \mb_substr($str, $start, $length, '8bit');
-        }
         if ($length === 0) {
             return '';
+        }
+        if (\function_exists('mb_substr')) {
+            return \mb_substr($str, $start, $length, '8bit');
         }
         // Unlike mb_substr(), substr() doesn't accept NULL for length
         if ($length !== null) {
