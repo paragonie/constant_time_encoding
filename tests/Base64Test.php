@@ -73,5 +73,11 @@ class Base64Test extends PHPUnit_Framework_TestCase
             Base64::decode($str),
             \base64_decode($str)
         );
+
+        $str = 'zbhle48rXrbJUdodb6FAQvkj0W/vDhBzt/mZiCTpaJ/zumnG1wCDuEQBoh9P';
+        $this->assertSame(
+            Base64::decode($str),
+            \base64_decode($str)
+        );
     }
 }

@@ -2,7 +2,7 @@
 namespace ParagonIE\ConstantTime;
 
 /**
- *  Copyright (c) 2016 Paragon Initiative Enterprises.
+ *  Copyright (c) 2016 - 2017 Paragon Initiative Enterprises.
  *  Copyright (c) 2014 Steve "Sc00bz" Thomas (steve at tobtu dot com)
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -122,7 +122,7 @@ abstract class Base32 implements EncoderInterface
      * Uses bitwise operators instead of table-lookups to turn 8-bit integers
      * into 5-bit integers.
      *
-     * @param $src
+     * @param int $src
      * @return string
      */
     protected static function encode5Bits($src)
@@ -141,7 +141,7 @@ abstract class Base32 implements EncoderInterface
      *
      * Uppercase variant.
      *
-     * @param $src
+     * @param int $src
      * @return string
      */
     protected static function encode5BitsUpper($src)
@@ -158,7 +158,7 @@ abstract class Base32 implements EncoderInterface
     /**
      * Base32 decoding
      *
-     * @param $src
+     * @param string $src
      * @param bool $upper
      * @return string
      */

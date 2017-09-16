@@ -2,7 +2,7 @@
 namespace ParagonIE\ConstantTime;
 
 /**
- *  Copyright (c) 2016 Paragon Initiative Enterprises.
+ *  Copyright (c) 2016 - 2017 Paragon Initiative Enterprises.
  *  Copyright (c) 2014 Steve "Sc00bz" Thomas (steve at tobtu dot com)
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -82,7 +82,8 @@ abstract class Base64 implements EncoderInterface
      * Base64 character set "./[A-Z][a-z][0-9]"
      *
      * @param string $src
-     * @return string|bool
+     * @param bool $strictPadding
+     * @return string
      * @throws \RangeException
      */
     public static function decode($src, $strictPadding = false)
@@ -154,7 +155,9 @@ abstract class Base64 implements EncoderInterface
             }
         }
         if ($err !== 0) {
-            return false;
+            throw new \RangeException(
+                'Base64::decode() only expects characters in the correct base64 alphabet'
+            );
         }
         return $dest;
     }

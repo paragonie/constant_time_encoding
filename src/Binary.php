@@ -2,7 +2,7 @@
 namespace ParagonIE\ConstantTime;
 
 /**
- *  Copyright (c) 2016 Paragon Initiative Enterprises.
+ *  Copyright (c) 2016 - 2017 Paragon Initiative Enterprises.
  *  Copyright (c) 2014 Steve "Sc00bz" Thomas (steve at tobtu dot com)
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -45,9 +45,9 @@ abstract class Binary
     public static function safeStrlen($str)
     {
         if (\function_exists('mb_strlen')) {
-            return \mb_strlen($str, '8bit');
+            return (int) \mb_strlen($str, '8bit');
         } else {
-            return \strlen($str);
+            return (int) \strlen($str);
         }
     }
 

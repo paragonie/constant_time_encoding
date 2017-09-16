@@ -11,19 +11,14 @@
          stopOnFailure="false"
          syntaxCheck="true"
 >
-    <testsuites>
-        <testsuite name="Unit">
-            <directory>tests</directory>
-        </testsuite>
-    </testsuites>
-    <testsuites>
-        <testsuite name="Constant Time Encoding Test Suite">
-            <directory suffix="Test.php">./tests</directory>
-        </testsuite>
-    </testsuites>
-    <filter>
-        <whitelist processUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">./src</directory>
-        </whitelist>
-    </filter>
+<testsuites>
+    <testsuite name="Constant Time Encoding Test Suite">
+        <directory suffix="Test.php">./tests</directory>
+    </testsuite>
+</testsuites>
+<filter>
+    <whitelist processUncoveredFilesFromWhitelist="true">
+        <directory suffix=".php">./src</directory>
+    </whitelist>
+</filter>
 </phpunit>
