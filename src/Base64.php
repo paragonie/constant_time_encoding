@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace ParagonIE\ConstantTime;
 
 /**
- *  Copyright (c) 2016 Paragon Initiative Enterprises.
+ *  Copyright (c) 2016 - 2017 Paragon Initiative Enterprises.
  *  Copyright (c) 2014 Steve "Sc00bz" Thomas (steve at tobtu dot com)
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -84,7 +84,7 @@ abstract class Base64 implements EncoderInterface
      *
      * @param string $src
      * @param bool $strictPadding
-     * @return string|bool
+     * @return string
      * @throws \RangeException
      */
     public static function decode(string $src, bool $strictPadding = false): string

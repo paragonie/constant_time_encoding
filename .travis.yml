@@ -3,6 +3,8 @@ sudo: false
 
 php:
     - "7.0"
+    - "7.1"
+    - "7.2"
 
 matrix:
     fast_finish: true
@@ -13,3 +15,4 @@ install:
 
 script:
     - vendor/bin/phpunit
+    - vendor/bin/psalm
