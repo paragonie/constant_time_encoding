@@ -160,7 +160,7 @@ abstract class Encoding
      * Base64 character set "./[A-Z][a-z][0-9]"
      *
      * @param $src
-     * @return bool|string
+     * @return string
      * @throws \RangeException
      */
     public static function base64DecodeDotSlash(string $str): string
@@ -186,7 +186,7 @@ abstract class Encoding
      * Base64 character set "[.-9][A-Z][a-z]" or "./[0-9][A-Z][a-z]"
      *
      * @param $src
-     * @return bool|string
+     * @return string
      * @throws \RangeException
      */
     public static function base64DecodeDotSlashOrdered(string $str): string
