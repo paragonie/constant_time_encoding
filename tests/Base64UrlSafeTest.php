@@ -1,7 +1,7 @@
 <?php
 use \ParagonIE\ConstantTime\Base64UrlSafe;
 
-class Base64UrlSafeTest extends PHPUnit_Framework_TestCase
+class Base64UrlSafeTest extends PHPUnit\Framework\TestCase
 {
     /**
      * @covers Base64UrlSafe::encode()

@@ -1,7 +1,7 @@
 <?php
 use \ParagonIE\ConstantTime\Base64DotSlashOrdered;
 
-class Base64DotSlashOrderedTest extends PHPUnit_Framework_TestCase
+class Base64DotSlashOrderedTest extends PHPUnit\Framework\TestCase
 {
     /**
      * @covers Base64DotSlashOrdered::encode()

@@ -1,7 +1,7 @@
 <?php
 use \ParagonIE\ConstantTime\Base32;
 
-class Base32Test extends PHPUnit_Framework_TestCase
+class Base32Test extends PHPUnit\Framework\TestCase
 {
     /**
      * @covers Base32::encode()

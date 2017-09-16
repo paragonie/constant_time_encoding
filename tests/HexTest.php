@@ -1,7 +1,7 @@
 <?php
 use \ParagonIE\ConstantTime\Hex;
 
-class HexTest extends PHPUnit_Framework_TestCase
+class HexTest extends PHPUnit\Framework\TestCase
 {
     /**
      * @covers Hex::encode()

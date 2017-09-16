@@ -1,7 +1,7 @@
 <?php
 use \ParagonIE\ConstantTime\Base64;
 
-class Base64Test extends PHPUnit_Framework_TestCase
+class Base64Test extends PHPUnit\Framework\TestCase
 {
     /**
      * @covers Base64::encode()

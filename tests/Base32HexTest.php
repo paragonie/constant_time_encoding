@@ -1,7 +1,7 @@
 <?php
 use \ParagonIE\ConstantTime\Base32Hex;
 
-class Base32HexTest extends PHPUnit_Framework_TestCase
+class Base32HexTest extends PHPUnit\Framework\TestCase
 {
     /**
      * @covers Base32Hex::encode()

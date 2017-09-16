@@ -12,7 +12,7 @@ use \ParagonIE\ConstantTime\Hex;
  *
  * @ref https://tools.ietf.org/html/rfc4648#section-10
  */
-class RFC4648Test extends PHPUnit_Framework_TestCase
+class RFC4648Test extends PHPUnit\Framework\TestCase
 {
     public function testVectorBase64()
     {

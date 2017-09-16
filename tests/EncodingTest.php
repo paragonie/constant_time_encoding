@@ -8,7 +8,7 @@ use \ParagonIE\ConstantTime\Base64UrlSafe;
 use \ParagonIE\ConstantTime\Encoding;
 use \ParagonIE\ConstantTime\Hex;
 
-class EncodingTest extends PHPUnit_Framework_TestCase
+class EncodingTest extends PHPUnit\Framework\TestCase
 {
     public function testBase32Encode()
     {
