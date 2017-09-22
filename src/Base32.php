@@ -63,7 +63,17 @@ abstract class Base32 implements EncoderInterface
      */
     public static function encode(string $src): string
     {
-        return static::doEncode($src, false);
+        return static::doEncode($src, false, true);
+    }
+    /**
+     * Encode into Base32 (RFC 4648)
+     *
+     * @param string $src
+     * @return string
+     */
+    public static function encodeUnpadded(string $src): string
+    {
+        return static::doEncode($src, false, false);
     }
 
     /**
@@ -74,7 +84,18 @@ abstract class Base32 implements EncoderInterface
      */
     public static function encodeUpper(string $src): string
     {
-        return static::doEncode($src, true);
+        return static::doEncode($src, true, true);
+    }
+
+    /**
+     * Encode into uppercase Base32 (RFC 4648)
+     *
+     * @param string $src
+     * @return string
+     */
+    public static function encodeUpperUnpadded(string $src): string
+    {
+        return static::doEncode($src, true, false);
     }
 
     /**
@@ -319,9 +340,10 @@ abstract class Base32 implements EncoderInterface
      *
      * @param string $src
      * @param bool $upper
+     * @param bool $pad
      * @return string
      */
-    protected static function doEncode(string $src, bool $upper = false): string
+    protected static function doEncode(string $src, bool $upper = false, $pad = true): string
     {
         // We do this to reduce code duplication:
         $method = $upper
@@ -364,8 +386,10 @@ abstract class Base32 implements EncoderInterface
                     static::$method((($b1 << 4) | ($b2 >> 4)) & 31) .
                     static::$method((($b2 << 1) | ($b3 >> 7)) & 31) .
                     static::$method((($b3 >> 2)             ) & 31) .
-                    static::$method((($b3 << 3)             ) & 31) .
-                    '=';
+                    static::$method((($b3 << 3)             ) & 31);
+                if ($pad) {
+                    $dest .= '=';
+                }
             } elseif ($i + 2 < $srcLen) {
                 $b1 = $chunk[2];
                 $b2 = $chunk[3];
@@ -374,21 +398,27 @@ abstract class Base32 implements EncoderInterface
                     static::$method((($b0 << 2) | ($b1 >> 6)) & 31) .
                     static::$method((($b1 >> 1)             ) & 31) .
                     static::$method((($b1 << 4) | ($b2 >> 4)) & 31) .
-                    static::$method((($b2 << 1)             ) & 31) .
-                    '===';
+                    static::$method((($b2 << 1)             ) & 31);
+                if ($pad) {
+                    $dest .= '===';
+                }
             } elseif ($i + 1 < $srcLen) {
                 $b1 = $chunk[2];
                 $dest .=
                     static::$method(              ($b0 >> 3)  & 31) .
                     static::$method((($b0 << 2) | ($b1 >> 6)) & 31) .
                     static::$method((($b1 >> 1)             ) & 31) .
-                    static::$method((($b1 << 4)             ) & 31) .
-                    '====';
+                    static::$method((($b1 << 4)             ) & 31);
+                if ($pad) {
+                    $dest .= '====';
+                }
             } else {
                 $dest .=
                     static::$method(              ($b0 >> 3)  & 31) .
-                    static::$method( ($b0 << 2)               & 31) .
-                    '======';
+                    static::$method( ($b0 << 2)               & 31);
+                if ($pad) {
+                    $dest .= '======';
+                }
             }
         }
         return $dest;

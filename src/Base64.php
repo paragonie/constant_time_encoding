@@ -43,6 +43,29 @@ abstract class Base64 implements EncoderInterface
      */
     public static function encode(string $src): string
     {
+        return static::doEncode($src, true);
+    }
+
+    /**
+     * Encode into Base64, no = padding
+     *
+     * Base64 character set "[A-Z][a-z][0-9]+/"
+     *
+     * @param string $src
+     * @return string
+     */
+    public static function encodeUnpadded(string $src): string
+    {
+        return static::doEncode($src, false);
+    }
+
+    /**
+     * @param string $src
+     * @param bool $pad   Include = padding?
+     * @return string
+     */
+    protected static function doEncode(string $src, bool $pad = true): string
+    {
         $dest = '';
         $srcLen = Binary::safeStrlen($src);
         // Main loop (no padding):
@@ -65,13 +88,19 @@ abstract class Base64 implements EncoderInterface
             if ($i + 1 < $srcLen) {
                 $b1 = $chunk[2];
                 $dest .=
-                    static::encode6Bits(               $b0 >> 2       ) .
+                    static::encode6Bits($b0 >> 2) .
                     static::encode6Bits((($b0 << 4) | ($b1 >> 4)) & 63) .
-                    static::encode6Bits( ($b1 << 2)               & 63) . '=';
+                    static::encode6Bits(($b1 << 2) & 63);
+                if ($pad) {
+                    $dest .= '=';
+                }
             } else {
                 $dest .=
                     static::encode6Bits( $b0 >> 2) .
-                    static::encode6Bits(($b0 << 4) & 63) . '==';
+                    static::encode6Bits(($b0 << 4) & 63);
+                if ($pad) {
+                    $dest .= '==';
+                }
             }
         }
         return $dest;

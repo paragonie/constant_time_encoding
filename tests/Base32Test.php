@@ -20,11 +20,22 @@ class Base32Test extends PHPUnit\Framework\TestCase
                     $random,
                     Base32::decode($enc)
                 );
+                $unpadded = \rtrim($enc, '=');
+                $this->assertSame(
+                    $unpadded,
+                    Base32::encodeUnpadded($random)
+                );
 
                 $enc = Base32::encodeUpper($random);
                 $this->assertSame(
                     $random,
                     Base32::decodeUpper($enc)
+                );
+
+                $unpadded = \rtrim($enc, '=');
+                $this->assertSame(
+                    $unpadded,
+                    Base32::encodeUpperUnpadded($random)
                 );
             }
         }

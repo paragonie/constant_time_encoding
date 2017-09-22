@@ -26,8 +26,8 @@ namespace ParagonIE\ConstantTime;
  */
 
 /**
- * Class Base64DotSlash
- * ./[A-Z][a-z][0-9]
+ * Class Base64UrlSafe
+ * [A-Z][a-z][0-9]\-_
  *
  * @package ParagonIE\ConstantTime
  */
