@@ -28,6 +28,10 @@ class Base64UrlSafeTest extends PHPUnit\Framework\TestCase
                     $unpadded,
                     Base64UrlSafe::encodeUnpadded($random)
                 );
+                $this->assertSame(
+                    $random,
+                    Base64UrlSafe::decode($unpadded)
+                );
             }
         }
     }

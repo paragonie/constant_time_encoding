@@ -28,6 +28,10 @@ class Base64Test extends PHPUnit\Framework\TestCase
                     $random,
                     Base64::decode($unpadded)
                 );
+                $this->assertSame(
+                    $random,
+                    Base64::decode($unpadded)
+                );
             }
         }
         $str = 'MIIFzzCCBLegAwIBAgIDAfdlMA0GCSqGSIb3DQEBBQUAMHMxCzAJBgNVBAYTAlBM' .

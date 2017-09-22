@@ -20,11 +20,28 @@ class Base32HexTest extends PHPUnit\Framework\TestCase
                     $random,
                     Base32Hex::decode($enc)
                 );
+                $unpadded = \rtrim($enc, '=');
+                $this->assertSame(
+                    $unpadded,
+                    Base32Hex::encodeUnpadded($random)
+                );
+                $this->assertSame(
+                    $random,
+                    Base32Hex::decode($unpadded)
+                );
 
                 $enc = Base32Hex::encodeUpper($random);
                 $this->assertSame(
                     $random,
                     Base32Hex::decodeUpper($enc)
+                );                $unpadded = \rtrim($enc, '=');
+                $this->assertSame(
+                    $unpadded,
+                    Base32Hex::encodeUpperUnpadded($random)
+                );
+                $this->assertSame(
+                    $random,
+                    Base32Hex::decodeUpper($unpadded)
                 );
             }
         }

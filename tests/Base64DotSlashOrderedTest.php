@@ -18,6 +18,16 @@ class Base64DotSlashOrderedTest extends PHPUnit\Framework\TestCase
                     $random,
                     Base64DotSlashOrdered::decode($enc)
                 );
+
+                $unpadded = \rtrim($enc, '=');
+                $this->assertSame(
+                    $random,
+                    Base64DotSlashOrdered::decode($unpadded)
+                );
+                $this->assertSame(
+                    $random,
+                    Base64DotSlashOrdered::decode($unpadded)
+                );
             }
         }
     }
