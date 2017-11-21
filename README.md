@@ -1,6 +1,10 @@
 # Constant-Time Encoding
 
 [![Build Status](https://travis-ci.org/paragonie/constant_time_encoding.svg?branch=master)](https://travis-ci.org/paragonie/constant_time_encoding)
+[![Latest Stable Version](https://poser.pugx.org/paragonie/constant_time_encoding/v/stable)](https://packagist.org/packages/paragonie/constant_time_encoding)
+[![Latest Unstable Version](https://poser.pugx.org/paragonie/constant_time_encoding/v/unstable)](https://packagist.org/packages/paragonie/constant_time_encoding)
+[![License](https://poser.pugx.org/paragonie/constant_time_encoding/license)](https://packagist.org/packages/paragonie/constant_time_encoding)
+[![Downloads](https://img.shields.io/packagist/dt/paragonie/constant_time_encoding.svg)](https://packagist.org/packages/paragonie/constant_time_encoding)
 
 Based on the [constant-time base64 implementation made by Steve "Sc00bz" Thomas](https://github.com/Sc00bz/ConstTimeEncoding),
 this library aims to offer character encoding functions that do not leak
