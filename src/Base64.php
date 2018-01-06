@@ -86,7 +86,7 @@ abstract class Base64 implements EncoderInterface
      * @return string
      * @throws \RangeException
      */
-    public static function decode($src, $strictPadding = false)
+    public static function decode($src, $strictPadding = \false)
     {
         // Remove padding
         $srcLen = Binary::safeStrlen($src);
