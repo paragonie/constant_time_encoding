@@ -40,7 +40,7 @@ abstract class Base32 implements EncoderInterface
      */
     public static function decode($src)
     {
-        return static::doDecode($src, false);
+        return static::doDecode($src, \false);
     }
 
     /**
@@ -51,7 +51,7 @@ abstract class Base32 implements EncoderInterface
      */
     public static function decodeUpper($src)
     {
-        return static::doDecode($src, true);
+        return static::doDecode($src, \true);
     }
 
     /**
@@ -62,7 +62,7 @@ abstract class Base32 implements EncoderInterface
      */
     public static function encode($src)
     {
-        return static::doEncode($src, false);
+        return static::doEncode($src, \false);
     }
 
     /**
@@ -73,7 +73,7 @@ abstract class Base32 implements EncoderInterface
      */
     public static function encodeUpper($src)
     {
-        return static::doEncode($src, true);
+        return static::doEncode($src, \true);
     }
 
     /**
@@ -162,7 +162,7 @@ abstract class Base32 implements EncoderInterface
      * @param bool $upper
      * @return string
      */
-    protected static function doDecode($src, $upper = false)
+    protected static function doDecode($src, $upper = \false)
     {
         // We do this to reduce code duplication:
         $method = $upper
@@ -314,7 +314,7 @@ abstract class Base32 implements EncoderInterface
      * @param bool $upper
      * @return string
      */
-    protected static function doEncode($src, $upper = false)
+    protected static function doEncode($src, $upper = \false)
     {
         // We do this to reduce code duplication:
         $method = $upper
