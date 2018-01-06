@@ -1,9 +1,6 @@
 <?php
-declare(strict_types=1);
-namespace ParagonIE\ConstantTime;
-
 /**
- *  Copyright (c) 2016 - 2017 Paragon Initiative Enterprises.
+ *  Copyright (c) 2016 - 2018 Paragon Initiative Enterprises.
  *  Copyright (c) 2014 Steve "Sc00bz" Thomas (steve at tobtu dot com)
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -25,6 +22,10 @@ namespace ParagonIE\ConstantTime;
  *  SOFTWARE.
  */
 
+namespace ParagonIE\ConstantTime;
+
+declare(strict_types = 1);
+
 /**
  * Class Binary
  *
@@ -35,6 +36,7 @@ namespace ParagonIE\ConstantTime;
  */
 abstract class Binary
 {
+    
     /**
      * Safe string length
      *
@@ -45,10 +47,10 @@ abstract class Binary
      */
     public static function safeStrlen(string $str): int
     {
-        if (\function_exists('mb_strlen')) {
-            return (int) \mb_strlen($str, '8bit');
+        if (function_exists('mb_strlen')) {
+            return (int) mb_strlen($str, '8bit');
         } else {
-            return (int) \strlen($str);
+            return (int) strlen($str);
         }
     }
 
@@ -82,4 +84,5 @@ abstract class Binary
             return \substr($str, $start);
         }
     }
+    
 }
