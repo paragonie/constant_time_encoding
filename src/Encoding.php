@@ -34,8 +34,9 @@ abstract class Encoding
     /**
      * RFC 4648 Base32 encoding
      *
-     * @param $str
+     * @param string $str
      * @return string
+     * @throws \TypeError
      */
     public static function base32Encode(string $str): string
     {
@@ -45,8 +46,9 @@ abstract class Encoding
     /**
      * RFC 4648 Base32 encoding
      *
-     * @param $str
+     * @param string $str
      * @return string
+     * @throws \TypeError
      */
     public static function base32EncodeUpper(string $str): string
     {
@@ -56,8 +58,9 @@ abstract class Encoding
     /**
      * RFC 4648 Base32 decoding
      *
-     * @param $str
+     * @param string $str
      * @return string
+     * @throws \TypeError
      */
     public static function base32Decode(string $str): string
     {
@@ -67,8 +70,9 @@ abstract class Encoding
     /**
      * RFC 4648 Base32 decoding
      *
-     * @param $str
+     * @param string $str
      * @return string
+     * @throws \TypeError
      */
     public static function base32DecodeUpper(string $str): string
     {
@@ -78,20 +82,21 @@ abstract class Encoding
     /**
      * RFC 4648 Base32 encoding
      *
-     * @param $str
+     * @param string $str
      * @return string
+     * @throws \TypeError
      */
     public static function base32HexEncode(string $str): string
     {
         return Base32Hex::encode($str);
     }
 
-
     /**
-     * RFC 4648 Base32 encoding
+     * RFC 4648 Base32Hex encoding
      *
-     * @param $str
+     * @param string $str
      * @return string
+     * @throws \TypeError
      */
     public static function base32HexEncodeUpper(string $str): string
     {
@@ -99,10 +104,11 @@ abstract class Encoding
     }
 
     /**
-     * RFC 4648 Base32 decoding
+     * RFC 4648 Base32Hex decoding
      *
-     * @param $str
+     * @param string $str
      * @return string
+     * @throws \TypeError
      */
     public static function base32HexDecode(string $str): string
     {
@@ -110,10 +116,11 @@ abstract class Encoding
     }
 
     /**
-     * RFC 4648 Base32 decoding
+     * RFC 4648 Base32Hex decoding
      *
-     * @param $str
+     * @param string $str
      * @return string
+     * @throws \TypeError
      */
     public static function base32HexDecodeUpper(string $str): string
     {
@@ -123,7 +130,7 @@ abstract class Encoding
     /**
      * RFC 4648 Base64 encoding
      *
-     * @param $str
+     * @param string $str
      * @return string
      */
     public static function base64Encode(string $str): string
@@ -132,10 +139,11 @@ abstract class Encoding
     }
 
     /**
-     * RFC 4648 Base32 decoding
+     * RFC 4648 Base64 decoding
      *
-     * @param $str
+     * @param string $str
      * @return string
+     * @throws \TypeError
      */
     public static function base64Decode(string $str): string
     {
@@ -146,7 +154,7 @@ abstract class Encoding
      * Encode into Base64
      *
      * Base64 character set "./[A-Z][a-z][0-9]"
-     * @param $src
+     * @param string $str
      * @return string
      */
     public static function base64EncodeDotSlash(string $str): string
@@ -159,9 +167,10 @@ abstract class Encoding
      *
      * Base64 character set "./[A-Z][a-z][0-9]"
      *
-     * @param $src
+     * @param string $str
      * @return string
      * @throws \RangeException
+     * @throws \TypeError
      */
     public static function base64DecodeDotSlash(string $str): string
     {
@@ -172,7 +181,7 @@ abstract class Encoding
      * Encode into Base64
      *
      * Base64 character set "[.-9][A-Z][a-z]" or "./[0-9][A-Z][a-z]"
-     * @param $src
+     * @param string $str
      * @return string
      */
     public static function base64EncodeDotSlashOrdered(string $str): string
@@ -185,9 +194,10 @@ abstract class Encoding
      *
      * Base64 character set "[.-9][A-Z][a-z]" or "./[0-9][A-Z][a-z]"
      *
-     * @param $src
+     * @param string $str
      * @return string
      * @throws \RangeException
+     * @throws \TypeError
      */
     public static function base64DecodeDotSlashOrdered(string $str): string
     {
@@ -200,6 +210,7 @@ abstract class Encoding
      *
      * @param string $bin_string (raw binary)
      * @return string
+     * @throws \TypeError
      */
     public static function hexEncode(string $bin_string): string
     {
@@ -225,6 +236,7 @@ abstract class Encoding
      *
      * @param string $bin_string (raw binary)
      * @return string
+     * @throws \TypeError
      */
     public static function hexEncodeUpper(string $bin_string): string
     {

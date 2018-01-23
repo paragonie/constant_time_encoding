@@ -54,6 +54,7 @@ abstract class RFC4648
      *
      * @param string $str
      * @return string
+     * @throws \TypeError
      */
     public function base64Decode(string $str): string
     {
@@ -80,6 +81,7 @@ abstract class RFC4648
      *
      * @param string $str
      * @return string
+     * @throws \TypeError
      */
     public function base64UrlSafeDecode(string $str): string
     {
@@ -93,6 +95,7 @@ abstract class RFC4648
      *
      * @param string $str
      * @return string
+     * @throws \TypeError
      */
     public function base32Encode(string $str): string
     {
@@ -106,6 +109,7 @@ abstract class RFC4648
      *
      * @param string $str
      * @return string
+     * @throws \TypeError
      */
     public function base32Decode(string $str): string
     {
@@ -119,6 +123,7 @@ abstract class RFC4648
      *
      * @param string $str
      * @return string
+     * @throws \TypeError
      */
     public function base32HexEncode(string $str): string
     {
@@ -132,6 +137,7 @@ abstract class RFC4648
      *
      * @param string $str
      * @return string
+     * @throws \TypeError
      */
     public function base32HexDecode(string $str): string
     {
@@ -145,6 +151,7 @@ abstract class RFC4648
      *
      * @param string $str
      * @return string
+     * @throws \TypeError
      */
     public function base16Encode(string $str): string
     {

@@ -35,15 +35,16 @@ abstract class Hex implements EncoderInterface
      * Convert a binary string into a hexadecimal string without cache-timing
      * leaks
      *
-     * @param string $bin_string (raw binary)
+     * @param string $binString (raw binary)
      * @return string
+     * @throws \TypeError
      */
-    public static function encode(string $bin_string): string
+    public static function encode(string $binString): string
     {
         $hex = '';
-        $len = Binary::safeStrlen($bin_string);
+        $len = Binary::safeStrlen($binString);
         for ($i = 0; $i < $len; ++$i) {
-            $chunk = \unpack('C', Binary::safeSubstr($bin_string, $i, 2));
+            $chunk = \unpack('C', Binary::safeSubstr($binString, $i, 1));
             $c = $chunk[1] & 0xf;
             $b = $chunk[1] >> 4;
             $hex .= pack(
@@ -59,15 +60,16 @@ abstract class Hex implements EncoderInterface
      * Convert a binary string into a hexadecimal string without cache-timing
      * leaks, returning uppercase letters (as per RFC 4648)
      *
-     * @param string $bin_string (raw binary)
+     * @param string $binString (raw binary)
      * @return string
+     * @throws \TypeError
      */
-    public static function encodeUpper(string $bin_string): string
+    public static function encodeUpper(string $binString): string
     {
         $hex = '';
-        $len = Binary::safeStrlen($bin_string);
+        $len = Binary::safeStrlen($binString);
         for ($i = 0; $i < $len; ++$i) {
-            $chunk = \unpack('C', Binary::safeSubstr($bin_string, $i, 2));
+            $chunk = \unpack('C', Binary::safeSubstr($binString, $i, 2));
             $c = $chunk[1] & 0xf;
             $b = $chunk[1] >> 4;
             $hex .= pack(
@@ -83,7 +85,7 @@ abstract class Hex implements EncoderInterface
      * Convert a hexadecimal string into a binary string without cache-timing
      * leaks
      *
-     * @param string $hex_string
+     * @param string $hexString
      * @param bool $strictPadding
      * @return string (raw binary)
      * @throws \RangeException

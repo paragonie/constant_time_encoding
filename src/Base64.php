@@ -53,6 +53,7 @@ abstract class Base64 implements EncoderInterface
      *
      * @param string $src
      * @return string
+     * @throws \TypeError
      */
     public static function encodeUnpadded(string $src): string
     {
@@ -63,6 +64,7 @@ abstract class Base64 implements EncoderInterface
      * @param string $src
      * @param bool $pad   Include = padding?
      * @return string
+     * @throws \TypeError
      */
     protected static function doEncode(string $src, bool $pad = true): string
     {
@@ -115,6 +117,7 @@ abstract class Base64 implements EncoderInterface
      * @param bool $strictPadding
      * @return string
      * @throws \RangeException
+     * @throws \TypeError
      */
     public static function decode(string $src, bool $strictPadding = false): string
     {

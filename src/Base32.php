@@ -38,6 +38,7 @@ abstract class Base32 implements EncoderInterface
      *
      * @param string $src
      * @return string
+     * @throws \TypeError
      */
     public static function decode(string $src, bool $strictPadding = false): string
     {
@@ -49,6 +50,7 @@ abstract class Base32 implements EncoderInterface
      *
      * @param string $src
      * @return string
+     * @throws \TypeError
      */
     public static function decodeUpper(string $src, bool $strictPadding = false): string
     {
@@ -60,6 +62,7 @@ abstract class Base32 implements EncoderInterface
      *
      * @param string $src
      * @return string
+     * @throws \TypeError
      */
     public static function encode(string $src): string
     {
@@ -70,6 +73,7 @@ abstract class Base32 implements EncoderInterface
      *
      * @param string $src
      * @return string
+     * @throws \TypeError
      */
     public static function encodeUnpadded(string $src): string
     {
@@ -81,6 +85,7 @@ abstract class Base32 implements EncoderInterface
      *
      * @param string $src
      * @return string
+     * @throws \TypeError
      */
     public static function encodeUpper(string $src): string
     {
@@ -92,6 +97,7 @@ abstract class Base32 implements EncoderInterface
      *
      * @param string $src
      * @return string
+     * @throws \TypeError
      */
     public static function encodeUpperUnpadded(string $src): string
     {
@@ -184,6 +190,7 @@ abstract class Base32 implements EncoderInterface
      * @param bool $upper
      * @param bool $strictPadding
      * @return string
+     * @throws \TypeError
      */
     protected static function doDecode(string $src, bool $upper = false, bool $strictPadding = false): string
     {
@@ -342,6 +349,7 @@ abstract class Base32 implements EncoderInterface
      * @param bool $upper
      * @param bool $pad
      * @return string
+     * @throws \TypeError
      */
     protected static function doEncode(string $src, bool $upper = false, $pad = true): string
     {
