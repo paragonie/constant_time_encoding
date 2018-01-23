@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace ParagonIE\ConstantTime;
 
 /**
- *  Copyright (c) 2016 Paragon Initiative Enterprises.
+ *  Copyright (c) 2016 - 2018 Paragon Initiative Enterprises.
  *  Copyright (c) 2014 Steve "Sc00bz" Thomas (steve at tobtu dot com)
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -132,6 +132,7 @@ abstract class Encoding
      *
      * @param string $str
      * @return string
+     * @throws \TypeError
      */
     public static function base64Encode(string $str): string
     {
@@ -156,6 +157,7 @@ abstract class Encoding
      * Base64 character set "./[A-Z][a-z][0-9]"
      * @param string $str
      * @return string
+     * @throws \TypeError
      */
     public static function base64EncodeDotSlash(string $str): string
     {
@@ -183,6 +185,7 @@ abstract class Encoding
      * Base64 character set "[.-9][A-Z][a-z]" or "./[0-9][A-Z][a-z]"
      * @param string $str
      * @return string
+     * @throws \TypeError
      */
     public static function base64EncodeDotSlashOrdered(string $str): string
     {

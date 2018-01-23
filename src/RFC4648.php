@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace ParagonIE\ConstantTime;
 
 /**
- *  Copyright (c) 2016 - 2017 Paragon Initiative Enterprises.
+ *  Copyright (c) 2016 - 2018 Paragon Initiative Enterprises.
  *  Copyright (c) 2014 Steve "Sc00bz" Thomas (steve at tobtu dot com)
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -41,6 +41,7 @@ abstract class RFC4648
      *
      * @param string $str
      * @return string
+     * @throws \TypeError
      */
     public function base64Encode(string $str): string
     {
@@ -68,6 +69,7 @@ abstract class RFC4648
      *
      * @param string $str
      * @return string
+     * @throws \TypeError
      */
     public function base64UrlSafeEncode(string $str): string
     {

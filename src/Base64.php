@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace ParagonIE\ConstantTime;
 
 /**
- *  Copyright (c) 2016 - 2017 Paragon Initiative Enterprises.
+ *  Copyright (c) 2016 - 2018 Paragon Initiative Enterprises.
  *  Copyright (c) 2014 Steve "Sc00bz" Thomas (steve at tobtu dot com)
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -40,6 +40,7 @@ abstract class Base64 implements EncoderInterface
      *
      * @param string $src
      * @return string
+     * @throws \TypeError
      */
     public static function encode(string $src): string
     {
@@ -72,6 +73,7 @@ abstract class Base64 implements EncoderInterface
         $srcLen = Binary::safeStrlen($src);
         // Main loop (no padding):
         for ($i = 0; $i + 3 <= $srcLen; $i += 3) {
+            /** @var array<int, int> $chunk */
             $chunk = \unpack('C*', Binary::safeSubstr($src, $i, 3));
             $b0 = $chunk[1];
             $b1 = $chunk[2];
@@ -85,6 +87,7 @@ abstract class Base64 implements EncoderInterface
         }
         // The last chunk, which may have padding:
         if ($i < $srcLen) {
+            /** @var array<int, int> $chunk */
             $chunk = \unpack('C*', Binary::safeSubstr($src, $i, $srcLen - $i));
             $b0 = $chunk[1];
             if ($i + 1 < $srcLen) {
@@ -155,6 +158,7 @@ abstract class Base64 implements EncoderInterface
         $dest = '';
         // Main loop (no padding):
         for ($i = 0; $i + 4 <= $srcLen; $i += 4) {
+            /** @var array<int, int> $chunk */
             $chunk = \unpack('C*', Binary::safeSubstr($src, $i, 4));
             $c0 = static::decode6Bits($chunk[1]);
             $c1 = static::decode6Bits($chunk[2]);
@@ -171,6 +175,7 @@ abstract class Base64 implements EncoderInterface
         }
         // The last chunk, which may have padding:
         if ($i < $srcLen) {
+            /** @var array<int, int> $chunk */
             $chunk = \unpack('C*', Binary::safeSubstr($src, $i, $srcLen - $i));
             $c0 = static::decode6Bits($chunk[1]);
 
