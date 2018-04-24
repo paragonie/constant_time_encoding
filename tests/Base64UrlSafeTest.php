@@ -1,4 +1,4 @@
-<?php
+ <?php
 use \ParagonIE\ConstantTime\Base64UrlSafe;
 
 class Base64UrlSafeTest extends PHPUnit_Framework_TestCase
@@ -22,7 +22,11 @@ class Base64UrlSafeTest extends PHPUnit_Framework_TestCase
                     \strtr(\base64_encode($random), '+/', '-_'),
                     $enc
                 );
-
+                $unpadded = \rtrim($enc, '=');
+                $this->assertSame(
+                    $unpadded,
+                    Base64UrlSafe::encodeUnpadded($random)
+                );
             }
         }
     }
