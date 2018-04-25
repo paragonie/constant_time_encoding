@@ -42,7 +42,7 @@ abstract class Base64 implements EncoderInterface
      */
     public static function encode($src)
     {
-        return static::doEncode($src, true);
+        return static::doEncode($src, \true);
     }
 
     /**
@@ -55,7 +55,7 @@ abstract class Base64 implements EncoderInterface
      */
     public static function encodeUnpadded($src)
     {
-        return static::doEncode($src, false);
+        return static::doEncode($src, \false);
     }
 
     /**
@@ -63,7 +63,7 @@ abstract class Base64 implements EncoderInterface
      * @param bool $pad   Include = padding?
      * @return string
      */
-    protected static function doEncode($src, $pad = true)
+    protected static function doEncode($src, $pad = \true)
     {
         $dest = '';
         $srcLen = Binary::safeStrlen($src);
