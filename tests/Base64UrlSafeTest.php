@@ -22,7 +22,15 @@ class Base64UrlSafeTest extends PHPUnit_Framework_TestCase
                     \strtr(\base64_encode($random), '+/', '-_'),
                     $enc
                 );
-
+                $unpadded = \rtrim($enc, '=');
+                $this->assertSame(
+                    $unpadded,
+                    Base64UrlSafe::encodeUnpadded($random)
+                );
+                $this->assertSame(
+                    $random,
+                    Base64UrlSafe::decode($unpadded)
+                );
             }
         }
     }
