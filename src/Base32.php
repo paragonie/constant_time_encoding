@@ -76,7 +76,7 @@ abstract class Base32 implements EncoderInterface
      */
     public static function encodeUnpadded($src)
     {
-        return static::doEncode($src, false, false);
+        return static::doEncode($src, \false, \false);
     }
 
     /**
@@ -99,7 +99,7 @@ abstract class Base32 implements EncoderInterface
      */
     public static function encodeUpperUnpadded($src)
     {
-        return static::doEncode($src, true, false);
+        return static::doEncode($src, \true, \false);
     }
 
     /**
