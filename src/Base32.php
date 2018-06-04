@@ -191,6 +191,7 @@ abstract class Base32 implements EncoderInterface
      * @param bool $strictPadding
      * @return string
      * @throws \TypeError
+     * @psalm-suppress RedundantCondition
      */
     protected static function doDecode(string $src, bool $upper = false, bool $strictPadding = false): string
     {
