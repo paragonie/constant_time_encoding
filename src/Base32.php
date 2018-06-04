@@ -375,7 +375,7 @@ abstract class Base32 implements EncoderInterface
     }
 
     /**
-     * Base32 Decoding
+     * Base32 Encoding
      *
      * @param string $src
      * @param bool $upper
