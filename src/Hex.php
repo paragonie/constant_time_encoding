@@ -104,16 +104,7 @@ abstract class Hex implements EncoderInterface
      */
     public static function decode(string $hexString, bool $strictPadding = false): string
     {
-        /** @var int $hex_pos */
-        $hex_pos = 0;
-        /** @var string $bin */
-        $bin = '';
-        /** @var int $c_acc */
-        $c_acc = 0;
-        /** @var int $hex_len */
         $hex_len = Binary::safeStrlen($hexString);
-        /** @var int $state */
-        $state = 0;
         if (($hex_len & 1) !== 0) {
             if ($strictPadding) {
                 throw new \RangeException(
@@ -125,35 +116,30 @@ abstract class Hex implements EncoderInterface
             }
         }
 
-        /** @var array<int, ing> $chunk */
-        $chunk = \unpack('C*', $hexString);
-        while ($hex_pos < $hex_len) {
-            ++$hex_pos;
-            /** @var int $c */
-            $c = $chunk[$hex_pos];
-            /** @var int $c_num */
-            $c_num = $c ^ 48;
-            /** @var int $c_num0 */
-            $c_num0 = ($c_num - 10) >> 8;
-            /** @var int $c_alpha */
-            $c_alpha = ($c & ~32) - 55;
-            /** @var int $c_alpha0 */
-            $c_alpha0 = (($c_alpha - 10) ^ ($c_alpha - 16)) >> 8;
+        $block_size = PHP_INT_SIZE << 1;
 
-            if (($c_num0 | $c_alpha0) === 0) {
-                throw new \RangeException(
-                    'hexEncode() only expects hexadecimal characters'
+        $pad = $block_size - ($hex_len % $block_size);
+        $offset = $pad != $block_size ? $pad : 0;
+
+        $hexString = str_repeat('0', $offset) . $hexString;
+
+        $str = preg_replace_callback(
+            '#[0-9a-fA-F]{' . $block_size . '}#',
+            function ($matches) {
+                $msb = ord($matches[0][0]);
+                $xor = $msb >= 56 ? PHP_INT_MIN : 0;
+                $msb|= 0x20;
+                $matches[0][0] = $msb <= 57 ?
+                    chr($msb & 0xF7) : 
+                    chr($msb - 47);
+                return pack(
+                    PHP_INT_SIZE == 4 ? 'N' : 'J',
+                    $xor ^ eval('return 0x' . $matches[0] . ';')
                 );
-            }
-            /** @var int $c_val */
-            $c_val = ($c_num0 & $c_num) | ($c_alpha & $c_alpha0);
-            if ($state === 0) {
-                $c_acc = $c_val * 16;
-            } else {
-                $bin .= \pack('C', $c_acc | $c_val);
-            }
-            $state ^= 1;
-        }
-        return $bin;
+            },
+            $hexString
+        );
+
+        return substr($str, $offset >> 1);
     }
 }
