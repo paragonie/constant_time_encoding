@@ -367,7 +367,9 @@ abstract class Base32 implements EncoderInterface
                 $err |= ($c0) >> 8;
             }
         }
-        if ($err !== 0) {
+        /** @var bool $check */
+        $check = ($err === 0);
+        if (!$check) {
             throw new \RangeException(
                 'Base32::doDecode() only expects characters in the correct base32 alphabet'
             );
