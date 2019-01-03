@@ -77,3 +77,8 @@ Example output:
 1VilPkeVqirlPifk5scbzcTTbMT2clp+Zkyv9VFFasE=
 2vmkkpshswvcvzj6e7sonry3zxcng3ge6zzfu7tgjsx7kukfnlaq====
 ```
+
+## Support Contracts
+
+If your company uses this library in their products or services, you may be
+interested in [purchasing a support contract from Paragon Initiative Enterprises](https://paragonie.com/enterprise).
