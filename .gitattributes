@@ -1,0 +1,5 @@
+# Exclude non-essential files from dist.
+/.* export-ignore
+/tests export-ignore
+/phpunit.xml.dist export-ignore
+/psalm.xml export-ignore
