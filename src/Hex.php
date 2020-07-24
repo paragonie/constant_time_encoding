@@ -142,7 +142,7 @@ abstract class Hex implements EncoderInterface
 
             if (($c_num0 | $c_alpha0) === 0) {
                 throw new \RangeException(
-                    'hexEncode() only expects hexadecimal characters'
+                    'Expected hexadecimal character'
                 );
             }
             /** @var int $c_val */
