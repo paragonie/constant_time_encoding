@@ -97,12 +97,12 @@ abstract class Hex implements EncoderInterface
      * Convert a hexadecimal string into a binary string without cache-timing
      * leaks
      *
-     * @param string $hexString
+     * @param string $encodedString
      * @param bool $strictPadding
      * @return string (raw binary)
      * @throws \RangeException
      */
-    public static function decode(string $hexString, bool $strictPadding = false): string
+    public static function decode(string $encodedString, bool $strictPadding = false): string
     {
         /** @var int $hex_pos */
         $hex_pos = 0;
@@ -111,7 +111,7 @@ abstract class Hex implements EncoderInterface
         /** @var int $c_acc */
         $c_acc = 0;
         /** @var int $hex_len */
-        $hex_len = Binary::safeStrlen($hexString);
+        $hex_len = Binary::safeStrlen($encodedString);
         /** @var int $state */
         $state = 0;
         if (($hex_len & 1) !== 0) {
@@ -120,13 +120,13 @@ abstract class Hex implements EncoderInterface
                     'Expected an even number of hexadecimal characters'
                 );
             } else {
-                $hexString = '0' . $hexString;
+                $encodedString = '0' . $encodedString;
                 ++$hex_len;
             }
         }
 
         /** @var array<int, int> $chunk */
-        $chunk = \unpack('C*', $hexString);
+        $chunk = \unpack('C*', $encodedString);
         while ($hex_pos < $hex_len) {
             ++$hex_pos;
             /** @var int $c */

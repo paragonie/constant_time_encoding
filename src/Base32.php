@@ -36,21 +36,21 @@ abstract class Base32 implements EncoderInterface
     /**
      * Decode a Base32-encoded string into raw binary
      *
-     * @param string $src
+     * @param string $encodedString
+     * @param bool $strictPadding
      * @return string
-     * @throws \TypeError
      */
-    public static function decode(string $src, bool $strictPadding = false): string
+    public static function decode(string $encodedString, bool $strictPadding = false): string
     {
-        return static::doDecode($src, false, $strictPadding);
+        return static::doDecode($encodedString, false, $strictPadding);
     }
 
     /**
      * Decode an uppercase Base32-encoded string into raw binary
      *
      * @param string $src
+     * @param bool $strictPadding
      * @return string
-     * @throws \TypeError
      */
     public static function decodeUpper(string $src, bool $strictPadding = false): string
     {
