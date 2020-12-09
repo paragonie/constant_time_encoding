@@ -10,6 +10,19 @@ matrix:
     - php: "7.4"
     - php: "8.0"
     - php: "nightly"
+#Added power jobs
+    - php: "7.1"
+      arch: ppc64le
+    - php: "7.2"
+      arch: ppc64le
+    - php: "7.3"
+      arch: ppc64le
+    - php: "7.4"
+      arch: ppc64le
+    - php: "8.0"
+      arch: ppc64le
+    - php: "nightly"
+      arch: ppc64le  
   allow_failures:
     - php: "nightly"
     - php: "7.4"
