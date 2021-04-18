@@ -36,7 +36,7 @@ composer require paragonie/constant_time_encoding
 ## How to Use
 
 ```php
-use \ParagonIE\ConstantTime\Encoding;
+use ParagonIE\ConstantTime\Encoding;
 
 // possibly (if applicable): 
 // require 'vendor/autoload.php';
@@ -63,8 +63,8 @@ If you only need a particular variant, you can just reference the
 required class like so:
 
 ```php
-use \ParagonIE\ConstantTime\Base64;
-use \ParagonIE\ConstantTime\Base32;
+use ParagonIE\ConstantTime\Base64;
+use ParagonIE\ConstantTime\Base32;
 
 $data = random_bytes(32);
 echo Base64::encode($data), "\n";
