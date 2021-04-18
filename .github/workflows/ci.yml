@@ -31,9 +31,6 @@ jobs:
         with:
           memory_limit: 256M
 
-      - name: Static Analysis
-        run: vendor/bin/psalm
-
   moderate:
     name: PHP ${{ matrix.php-versions }} Test on ${{ matrix.operating-system }}
     runs-on: ${{ matrix.operating-system }}
