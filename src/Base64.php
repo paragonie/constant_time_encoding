@@ -38,13 +38,13 @@ abstract class Base64 implements EncoderInterface
      *
      * Base64 character set "[A-Z][a-z][0-9]+/"
      *
-     * @param string $src
+     * @param string $binString
      * @return string
      * @throws \TypeError
      */
-    public static function encode(string $src): string
+    public static function encode(string $binString): string
     {
-        return static::doEncode($src, true);
+        return static::doEncode($binString, true);
     }
 
     /**
