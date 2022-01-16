@@ -64,9 +64,9 @@ abstract class Base32 implements EncoderInterface
      * @return string
      * @throws \TypeError
      */
-    public static function encode(string $src): string
+    public static function encode(string $binString): string
     {
-        return static::doEncode($src, false, true);
+        return static::doEncode($binString, false, true);
     }
     /**
      * Encode into Base32 (RFC 4648)
