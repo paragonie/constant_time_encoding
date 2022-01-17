@@ -62,14 +62,14 @@ abstract class Binary
      * @staticvar boolean $exists
      * @param string $str
      * @param int $start
-     * @param int $length
+     * @param ?int $length
      * @return string
      * @throws \TypeError
      */
     public static function safeSubstr(
         string $str,
         int $start = 0,
-        $length = null
+        int $length = null
     ): string {
         if ($length === 0) {
             return '';

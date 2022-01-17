@@ -367,7 +367,6 @@ abstract class Base32 implements EncoderInterface
                 $err |= ($c0) >> 8;
             }
         }
-        /** @var bool $check */
         $check = ($err === 0);
         if (!$check) {
             throw new \RangeException(

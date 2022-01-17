@@ -196,11 +196,10 @@ abstract class Base64 implements EncoderInterface
                     ((($c0 << 2) | ($c1 >> 4)) & 0xff)
                 );
                 $err |= ($c0 | $c1) >> 8;
-            } elseif ($i < $srcLen && $strictPadding) {
+            } elseif ($strictPadding) {
                 $err |= 1;
             }
         }
-        /** @var bool $check */
         $check = ($err === 0);
         if (!$check) {
             throw new \RangeException(
