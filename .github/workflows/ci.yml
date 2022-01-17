@@ -1,6 +1,6 @@
 name: CI
 
-on: [push]
+on: [push, pull_request]
 
 jobs:
   old:
@@ -8,7 +8,7 @@ jobs:
     runs-on: ${{ matrix.operating-system }}
     strategy:
       matrix:
-        operating-system: ['ubuntu-16.04']
+        operating-system: ['ubuntu-latest']
         php-versions: ['7.0']
         phpunit-versions: ['6.5.14']
     steps:
@@ -21,15 +21,13 @@ jobs:
           php-version: ${{ matrix.php-versions }}
           extensions: mbstring, intl
           ini-values: post_max_size=256M, max_execution_time=180
-          tools: psalm, phpunit:${{ matrix.phpunit-versions }}
+          tools: phpunit:${{ matrix.phpunit-versions }}
 
       - name: Install dependencies
         run: composer self-update --1; composer install
 
       - name: PHPUnit tests
-        uses: php-actions/phpunit@v2
-        with:
-          memory_limit: 256M
+        run: phpunit
 
   moderate:
     name: PHP ${{ matrix.php-versions }} Test on ${{ matrix.operating-system }}
@@ -38,7 +36,7 @@ jobs:
       matrix:
         operating-system: ['ubuntu-latest']
         php-versions: ['7.1', '7.2', '7.3']
-        phpunit-versions: ['latest']
+        phpunit-versions: ['7.5.20']
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -49,22 +47,16 @@ jobs:
           php-version: ${{ matrix.php-versions }}
           extensions: mbstring, intl, sodium
           ini-values: post_max_size=256M, max_execution_time=180
-          tools: psalm, phpunit:${{ matrix.phpunit-versions }}
+          tools: psalm:4, phpunit:${{ matrix.phpunit-versions }}
 
       - name: Install dependencies
         run: composer install
 
-      - name: Modernize dependencies
-        run: composer require --dev "phpunit/phpunit:>=4"
-
       - name: PHPUnit tests
-        uses: php-actions/phpunit@v2
-        timeout-minutes: 30
-        with:
-          memory_limit: 256M
+        run: phpunit
 
       - name: Static Analysis
-        run: vendor/bin/psalm
+        run: psalm --output-format=github
 
   modern:
     name: PHP ${{ matrix.php-versions }} Test on ${{ matrix.operating-system }}
@@ -72,7 +64,7 @@ jobs:
     strategy:
       matrix:
         operating-system: ['ubuntu-latest']
-        php-versions: ['7.4', '8.0']
+        php-versions: ['7.4', '8.0', '8.1']
         phpunit-versions: ['latest']
     steps:
       - name: Checkout
@@ -84,15 +76,13 @@ jobs:
           php-version: ${{ matrix.php-versions }}
           extensions: mbstring, intl, sodium
           ini-values: post_max_size=256M, max_execution_time=180
-          tools: psalm, phpunit:${{ matrix.phpunit-versions }}
+          tools: psalm:4, phpunit:${{ matrix.phpunit-versions }}
 
       - name: Install dependencies
         run: composer install
+
       - name: PHPUnit tests
-        uses: php-actions/phpunit@v2
-        timeout-minutes: 30
-        with:
-          memory_limit: 256M
+        run: phpunit
 
       - name: Static Analysis
-        run: vendor/bin/psalm
+        run: psalm --output-format=github
