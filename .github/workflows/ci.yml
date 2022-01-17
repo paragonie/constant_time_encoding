@@ -52,7 +52,7 @@ jobs:
           tools: psalm, phpunit:${{ matrix.phpunit-versions }}
 
       - name: Install dependencies
-        run: composer self-update --1; composer install; composer require vimeo/psalm
+        run: composer self-update --1; composer require vimeo/psalm; composer install
 
       - name: PHPUnit tests
         uses: php-actions/phpunit@v2
@@ -80,10 +80,10 @@ jobs:
           tools: psalm, phpunit:${{ matrix.phpunit-versions }}
 
       - name: Install dependencies
-        run: composer install
+        run: composer require vimeo/psalm; composer install
 
       - name: Modernize dependencies
-        run: composer require --dev "phpunit/phpunit:>=4"; composer require vimeo/psalm
+        run: composer require --dev "phpunit/phpunit:>=4"
 
       - name: PHPUnit tests
         uses: php-actions/phpunit@v2
@@ -115,7 +115,7 @@ jobs:
           tools: psalm, phpunit:${{ matrix.phpunit-versions }}
 
       - name: Install dependencies
-        run: composer install; composer require vimeo/psalm
+        run: composer require vimeo/psalm; composer install
       - name: PHPUnit tests
         uses: php-actions/phpunit@v2
         timeout-minutes: 30
