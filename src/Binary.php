@@ -69,7 +69,7 @@ abstract class Binary
     public static function safeSubstr(
         string $str,
         int $start = 0,
-        int $length = null
+        $length = null
     ): string {
         if ($length === 0) {
             return '';
