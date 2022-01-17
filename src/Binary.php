@@ -45,9 +45,9 @@ abstract class Binary
     public static function safeStrlen($str)
     {
         if (\function_exists('mb_strlen')) {
-            return (int) \mb_strlen($str, '8bit');
+            return \mb_strlen($str, '8bit');
         } else {
-            return (int) \strlen($str);
+            return \strlen($str);
         }
     }
 

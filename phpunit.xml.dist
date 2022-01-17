@@ -9,16 +9,10 @@
          processIsolation="false"
          stopOnError="false"
          stopOnFailure="false"
-         syntaxCheck="true"
 >
 <testsuites>
     <testsuite name="Constant Time Encoding Test Suite">
         <directory suffix="Test.php">./tests</directory>
     </testsuite>
 </testsuites>
-<filter>
-    <whitelist processUncoveredFilesFromWhitelist="true">
-        <directory suffix=".php">./src</directory>
-    </whitelist>
-</filter>
 </phpunit>
