@@ -29,9 +29,9 @@
     "php": "^5.3|^7|^8"
   },
   "require-dev": {
-    "phpunit/phpunit": "4.*|5.*",
+    "phpunit/phpunit": ">= 4",
     "paragonie/random_compat": "^1.4|^2",
-    "vimeo/psalm": "^0.3|^1"
+    "vimeo/psalm": "*"
   },
   "autoload": {
     "psr-4": {
