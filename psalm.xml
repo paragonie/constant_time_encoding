@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <psalm
     useDocblockTypes="true"
-    totallyTyped="true"
+    errorLevel="1"
 >
     <projectFiles>
         <directory name="src" />
