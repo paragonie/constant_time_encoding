@@ -84,6 +84,16 @@ class Base64Test extends TestCase
         }
     }
 
+    public function testIssue22()
+    {
+        // Non-strict: ok
+        Base64::decode('00==');
+
+        // Strict: not ok
+        $this->expectException(RangeException::class);
+        Base64::decode('00==', true);
+    }
+
     /**
      * @dataProvider canonicalDataProvider
      */
