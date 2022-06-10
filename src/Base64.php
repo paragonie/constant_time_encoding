@@ -189,6 +189,9 @@ abstract class Base64 implements EncoderInterface
                     ((($c1 << 4) | ($c2 >> 2)) & 0xff)
                 );
                 $err |= ($c0 | $c1 | $c2) >> 8;
+                if ($strictPadding) {
+                    $err |= ($c2 << 6) & 0xff;
+                }
             } elseif ($i + 1 < $srcLen) {
                 $c1 = static::decode6Bits($chunk[2]);
                 $dest .= \pack(
@@ -196,6 +199,9 @@ abstract class Base64 implements EncoderInterface
                     ((($c0 << 2) | ($c1 >> 4)) & 0xff)
                 );
                 $err |= ($c0 | $c1) >> 8;
+                if ($strictPadding) {
+                    $err |= ($c1 << 4) & 0xff;
+                }
             } elseif ($strictPadding) {
                 $err |= 1;
             }
