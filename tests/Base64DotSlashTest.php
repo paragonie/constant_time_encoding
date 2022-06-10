@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace ParagonIE\ConstantTime\Tests;
 
+use InvalidArgumentException;
 use ParagonIE\ConstantTime\Base64DotSlash;
 use PHPUnit\Framework\TestCase;
 use RangeException;
@@ -39,6 +40,13 @@ class Base64DotSlashTest extends TestCase
         }
     }
 
+    public function testDecodeNoPadding()
+    {
+        Base64DotSlash::decodeNoPadding('..');
+        $this->expectException(InvalidArgumentException::class);
+        Base64DotSlash::decodeNoPadding('..==');
+    }
+
     /**
      * @dataProvider canonicalDataProvider
      */
@@ -56,6 +64,7 @@ class Base64DotSlashTest extends TestCase
         $this->expectException(RangeException::class);
         Base64DotSlash::decode($x, true);
     }
+
     protected function getNextChar(string $c): string
     {
         return strtr(

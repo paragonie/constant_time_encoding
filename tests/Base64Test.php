@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace ParagonIE\ConstantTime\Tests;
 
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use ParagonIE\ConstantTime\Base64;
 use RangeException;
@@ -92,6 +93,13 @@ class Base64Test extends TestCase
         // Strict: not ok
         $this->expectException(RangeException::class);
         Base64::decode('00==', true);
+    }
+
+    public function testDecodeNoPadding()
+    {
+        Base64::decodeNoPadding('0w');
+        $this->expectException(InvalidArgumentException::class);
+        Base64::decodeNoPadding('0w==');
     }
 
     /**

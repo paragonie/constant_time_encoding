@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace ParagonIE\ConstantTime\Tests;
 
 use Exception;
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use ParagonIE\ConstantTime\Base64UrlSafe;
 use ParagonIE\ConstantTime\Binary;
@@ -62,6 +63,13 @@ class Base64UrlSafeTest extends TestCase
             \strtr(\base64_encode($random), '+/', '-_'),
             $enc
         );
+    }
+
+    public function testDecodeNoPadding()
+    {
+        Base64UrlSafe::decodeNoPadding('0w');
+        $this->expectException(InvalidArgumentException::class);
+        Base64UrlSafe::decodeNoPadding('0w==');
     }
 
     /**

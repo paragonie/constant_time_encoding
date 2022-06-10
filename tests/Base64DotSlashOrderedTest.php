@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace ParagonIE\ConstantTime\Tests;
 
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use ParagonIE\ConstantTime\Base64DotSlashOrdered;
 use RangeException;
@@ -38,6 +39,14 @@ class Base64DotSlashOrderedTest extends TestCase
             }
         }
     }
+
+    public function testDecodeNoPadding()
+    {
+        Base64DotSlashOrdered::decodeNoPadding('..');
+        $this->expectException(InvalidArgumentException::class);
+        Base64DotSlashOrdered::decodeNoPadding('..==');
+    }
+
     /**
      * @dataProvider canonicalDataProvider
      */
