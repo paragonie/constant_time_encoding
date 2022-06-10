@@ -1,18 +1,19 @@
 <?php
-use \ParagonIE\ConstantTime\Base32;
-use \ParagonIE\ConstantTime\Base32Hex;
-use \ParagonIE\ConstantTime\Base64;
-use \ParagonIE\ConstantTime\Base64DotSlash;
-use \ParagonIE\ConstantTime\Base64DotSlashOrdered;
-use \ParagonIE\ConstantTime\Encoding;
-use \ParagonIE\ConstantTime\Hex;
+declare(strict_types=1);
+namespace ParagonIE\ConstantTime\Tests;
+
+use ParagonIE\ConstantTime\Base32;
+use ParagonIE\ConstantTime\Base32Hex;
+use ParagonIE\ConstantTime\Base64;
+use ParagonIE\ConstantTime\Hex;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class RFC4648Test
  *
  * @ref https://tools.ietf.org/html/rfc4648#section-10
  */
-class RFC4648Test extends PHPUnit\Framework\TestCase
+class RFC4648Test extends TestCase
 {
     public function testVectorBase64()
     {

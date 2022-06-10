@@ -1,13 +1,21 @@
 <?php
+declare(strict_types=1);
+namespace ParagonIE\ConstantTime\Tests;
 
+use Exception;
+use PHPUnit\Framework\TestCase;
 use ParagonIE\ConstantTime\Base64UrlSafe;
 use ParagonIE\ConstantTime\Binary;
+use RangeException;
+use TypeError;
 
 /**
  * Class Base64UrlSafeTest
  */
-class Base64UrlSafeTest extends PHPUnit\Framework\TestCase
+class Base64UrlSafeTest extends TestCase
 {
+    use CanonicalTrait;
+
     /**
      * @covers Base64UrlSafe::encode()
      * @covers Base64UrlSafe::decode()
@@ -53,6 +61,33 @@ class Base64UrlSafeTest extends PHPUnit\Framework\TestCase
         $this->assertSame(
             \strtr(\base64_encode($random), '+/', '-_'),
             $enc
+        );
+    }
+
+    /**
+     * @dataProvider canonicalDataProvider
+     */
+    public function testNonCanonical(string $input)
+    {
+        $w = Base64UrlSafe::encodeUnpadded($input);
+        Base64UrlSafe::decode($w);
+        Base64UrlSafe::decode($w, true);
+
+        // Mess with padding:
+        $x = $this->increment($w);
+        Base64UrlSafe::decode($x);
+
+        // Should throw in strict mode:
+        $this->expectException(RangeException::class);
+        Base64UrlSafe::decode($x, true);
+    }
+
+    protected function getNextChar(string $c): string
+    {
+        return strtr(
+            $c,
+            'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_',
+            'BCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_A'
         );
     }
 }

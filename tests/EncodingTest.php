@@ -1,14 +1,15 @@
 <?php
-use \ParagonIE\ConstantTime\Base32;
-use \ParagonIE\ConstantTime\Base32Hex;
-use \ParagonIE\ConstantTime\Base64;
-use \ParagonIE\ConstantTime\Base64DotSlash;
-use \ParagonIE\ConstantTime\Base64DotSlashOrdered;
-use \ParagonIE\ConstantTime\Base64UrlSafe;
-use \ParagonIE\ConstantTime\Encoding;
-use \ParagonIE\ConstantTime\Hex;
+declare(strict_types=1);
+namespace ParagonIE\ConstantTime\Tests;
+use PHPUnit\Framework\TestCase;
 
-class EncodingTest extends PHPUnit\Framework\TestCase
+use ParagonIE\ConstantTime\Base32;
+use ParagonIE\ConstantTime\Base32Hex;
+use ParagonIE\ConstantTime\Base64UrlSafe;
+use ParagonIE\ConstantTime\Encoding;
+use ParagonIE\ConstantTime\Hex;
+
+class EncodingTest extends TestCase
 {
     public function testBase32Encode()
     {
