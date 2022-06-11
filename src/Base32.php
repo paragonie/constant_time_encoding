@@ -197,7 +197,7 @@ abstract class Base32 implements EncoderInterface
         }
         if (($srcLen & 7) === 0) {
             for ($j = 0; $j < 7; ++$j) {
-                if ($encodedString[$srcLen - 1] === '=') {
+                if ($encodedString[$srcLen - $j] === '=') {
                     throw new InvalidArgumentException(
                         "decodeNoPadding() doesn't tolerate padding"
                     );
