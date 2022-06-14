@@ -4,6 +4,7 @@ namespace ParagonIE\ConstantTime;
 
 use InvalidArgumentException;
 use RangeException;
+use TypeError;
 
 /**
  *  Copyright (c) 2016 - 2022 Paragon Initiative Enterprises.
@@ -43,7 +44,8 @@ abstract class Base64 implements EncoderInterface
      *
      * @param string $binString
      * @return string
-     * @throws \TypeError
+     *
+     * @throws TypeError
      */
     public static function encode(string $binString): string
     {
@@ -57,7 +59,8 @@ abstract class Base64 implements EncoderInterface
      *
      * @param string $src
      * @return string
-     * @throws \TypeError
+     *
+     * @throws TypeError
      */
     public static function encodeUnpadded(string $src): string
     {
@@ -68,7 +71,8 @@ abstract class Base64 implements EncoderInterface
      * @param string $src
      * @param bool $pad   Include = padding?
      * @return string
-     * @throws \TypeError
+     *
+     * @throws TypeError
      */
     protected static function doEncode(string $src, bool $pad = true): string
     {
@@ -122,8 +126,9 @@ abstract class Base64 implements EncoderInterface
      * @param string $encodedString
      * @param bool $strictPadding
      * @return string
-     * @throws \RangeException
-     * @throws \TypeError
+     *
+     * @throws RangeException
+     * @throws TypeError
      * @psalm-suppress RedundantCondition
      */
     public static function decode(string $encodedString, bool $strictPadding = false): string

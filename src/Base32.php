@@ -4,6 +4,7 @@ namespace ParagonIE\ConstantTime;
 
 use InvalidArgumentException;
 use RangeException;
+use TypeError;
 
 /**
  *  Copyright (c) 2016 - 2022 Paragon Initiative Enterprises.
@@ -65,7 +66,7 @@ abstract class Base32 implements EncoderInterface
      *
      * @param string $binString
      * @return string
-     * @throws \TypeError
+     * @throws TypeError
      */
     public static function encode(string $binString): string
     {
@@ -76,7 +77,7 @@ abstract class Base32 implements EncoderInterface
      *
      * @param string $src
      * @return string
-     * @throws \TypeError
+     * @throws TypeError
      */
     public static function encodeUnpadded(string $src): string
     {
@@ -88,7 +89,7 @@ abstract class Base32 implements EncoderInterface
      *
      * @param string $src
      * @return string
-     * @throws \TypeError
+     * @throws TypeError
      */
     public static function encodeUpper(string $src): string
     {
@@ -100,7 +101,7 @@ abstract class Base32 implements EncoderInterface
      *
      * @param string $src
      * @return string
-     * @throws \TypeError
+     * @throws TypeError
      */
     public static function encodeUpperUnpadded(string $src): string
     {
@@ -187,6 +188,7 @@ abstract class Base32 implements EncoderInterface
 
     /**
      * @param string $encodedString
+     * @param bool $upper
      * @return string
      */
     public static function decodeNoPadding(string $encodedString, bool $upper = false): string
@@ -218,11 +220,15 @@ abstract class Base32 implements EncoderInterface
      * @param bool $upper
      * @param bool $strictPadding
      * @return string
-     * @throws \TypeError
+     *
+     * @throws TypeError
      * @psalm-suppress RedundantCondition
      */
-    protected static function doDecode(string $src, bool $upper = false, bool $strictPadding = false): string
-    {
+    protected static function doDecode(
+        string $src,
+        bool $upper = false,
+        bool $strictPadding = false
+    ): string {
         // We do this to reduce code duplication:
         $method = $upper
             ? 'decode5BitsUpper'
@@ -244,7 +250,7 @@ abstract class Base32 implements EncoderInterface
                 }
             }
             if (($srcLen & 7) === 1) {
-                throw new \RangeException(
+                throw new RangeException(
                     'Incorrect padding'
                 );
             }
@@ -426,7 +432,7 @@ abstract class Base32 implements EncoderInterface
      * @param bool $upper
      * @param bool $pad
      * @return string
-     * @throws \TypeError
+     * @throws TypeError
      */
     protected static function doEncode(string $src, bool $upper = false, $pad = true): string
     {
