@@ -49,7 +49,7 @@ abstract class Hex implements EncoderInterface
             $c = $chunk[1] & 0xf;
             $b = $chunk[1] >> 4;
 
-            $hex .= pack(
+            $hex .= \pack(
                 'CC',
                 (87 + $b + ((($b - 10) >> 8) & ~38)),
                 (87 + $c + ((($c - 10) >> 8) & ~38))
@@ -77,7 +77,7 @@ abstract class Hex implements EncoderInterface
             $c = $chunk[1] & 0xf;
             $b = $chunk[1] >> 4;
 
-            $hex .= pack(
+            $hex .= \pack(
                 'CC',
                 (55 + $b + ((($b - 10) >> 8) & ~6)),
                 (55 + $c + ((($c - 10) >> 8) & ~6))
