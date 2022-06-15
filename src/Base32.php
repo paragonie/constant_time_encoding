@@ -222,7 +222,6 @@ abstract class Base32 implements EncoderInterface
      * @return string
      *
      * @throws TypeError
-     * @psalm-suppress RedundantCondition
      */
     protected static function doDecode(
         string $src,

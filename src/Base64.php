@@ -129,7 +129,6 @@ abstract class Base64 implements EncoderInterface
      *
      * @throws RangeException
      * @throws TypeError
-     * @psalm-suppress RedundantCondition
      */
     public static function decode(string $encodedString, bool $strictPadding = false): string
     {
