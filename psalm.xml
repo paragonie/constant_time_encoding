@@ -11,15 +11,5 @@
     </projectFiles>
     <issueHandlers>
         <UnnecessaryVarAnnotation errorLevel="info" />
-        <UndefinedAttributeClass>
-            <errorLevel type="suppress">
-                <!--
-                    The SensitiveParameter attribute was introduced in PHP 8.2. It is fully backwards compatible
-                    and non-essential for correct functionality of this library. It protects any passed strings
-                    from ending up in error logs.
-                -->
-                <referencedClass name="SensitiveParameter" />
-            </errorLevel>
-         </UndefinedAttributeClass>
     </issueHandlers>
 </psalm>
