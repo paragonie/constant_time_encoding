@@ -9,7 +9,7 @@ use ParagonIE\ConstantTime\Binary;
  */
 trait CanonicalTrait
 {
-    public function canonicalDataProvider(): array
+    public static function canonicalDataProvider(): array
     {
         return [
             ['a'],
