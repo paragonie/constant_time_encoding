@@ -4,9 +4,6 @@ namespace ParagonIE\ConstantTime\Tests;
 
 use ParagonIE\ConstantTime\Binary;
 
-/**
- * @method getNextChar(string $c): string
- */
 trait CanonicalTrait
 {
     public function canonicalDataProvider(): array
@@ -20,6 +17,8 @@ trait CanonicalTrait
             ["\xff\xff\xff\xff"]
         ];
     }
+
+    abstract protected function getNextChar(string $c): string;
 
     protected function increment(string $str): string
     {
