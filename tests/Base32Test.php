@@ -53,7 +53,7 @@ class Base32Test extends TestCase
         }
     }
 
-    public function canonProvider()
+    public static function canonProvider()
     {
         return [
             ['me', 'mf'],
