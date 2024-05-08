@@ -22,8 +22,11 @@ Our fork offers the following enhancements:
 
 ## PHP Version Requirements
 
-Version 2 of this library should work on **PHP 7** or newer. For PHP 5
-support, see [the v1.x branch](https://github.com/paragonie/constant_time_encoding/tree/v1.x).
+Version 3 of this library should work on **PHP 8** or newer.
+
+Version 2 of this library should work on **PHP 7** or newer. See [the v2.x branch](https://github.com/paragonie/constant_time_encoding/tree/v2.x).
+
+For PHP 5 support, see [the v1.x branch](https://github.com/paragonie/constant_time_encoding/tree/v1.x).
 
 If you are adding this as a dependency to a project intended to work on both PHP 5 and PHP 7, please set the required version to `^1|^2` instead of just `^1` or `^2`.
 
