@@ -115,11 +115,11 @@ abstract class Base64 implements EncoderInterface
         bool $pad = true
     ): string {
         $dest = '';
-        $srcLen = Binary::safeStrlen($src);
+        $srcLen = \strlen($src);
         // Main loop (no padding):
         for ($i = 0; $i + 3 <= $srcLen; $i += 3) {
             /** @var array<int, int> $chunk */
-            $chunk = \unpack('C*', Binary::safeSubstr($src, $i, 3));
+            $chunk = \unpack('C*', \substr($src, $i, 3));
             $b0 = $chunk[1];
             $b1 = $chunk[2];
             $b2 = $chunk[3];
@@ -133,7 +133,7 @@ abstract class Base64 implements EncoderInterface
         // The last chunk, which may have padding:
         if ($i < $srcLen) {
             /** @var array<int, int> $chunk */
-            $chunk = \unpack('C*', Binary::safeSubstr($src, $i, $srcLen - $i));
+            $chunk = \unpack('C*', \substr($src, $i, $srcLen - $i));
             $b0 = $chunk[1];
             if ($i + 1 < $srcLen) {
                 $b1 = $chunk[2];
@@ -175,7 +175,7 @@ abstract class Base64 implements EncoderInterface
         bool $strictPadding = false
     ): string {
         // Remove padding
-        $srcLen = Binary::safeStrlen($encodedString);
+        $srcLen = \strlen($encodedString);
         if ($srcLen === 0) {
             return '';
         }
@@ -215,7 +215,7 @@ abstract class Base64 implements EncoderInterface
             }
         } else {
             $encodedString = \rtrim($encodedString, '=');
-            $srcLen = Binary::safeStrlen($encodedString);
+            $srcLen = \strlen($encodedString);
         }
 
         $err = 0;
@@ -223,7 +223,7 @@ abstract class Base64 implements EncoderInterface
         // Main loop (no padding):
         for ($i = 0; $i + 4 <= $srcLen; $i += 4) {
             /** @var array<int, int> $chunk */
-            $chunk = \unpack('C*', Binary::safeSubstr($encodedString, $i, 4));
+            $chunk = \unpack('C*', \substr($encodedString, $i, 4));
             $c0 = static::decode6Bits($chunk[1]);
             $c1 = static::decode6Bits($chunk[2]);
             $c2 = static::decode6Bits($chunk[3]);
@@ -240,7 +240,7 @@ abstract class Base64 implements EncoderInterface
         // The last chunk, which may have padding:
         if ($i < $srcLen) {
             /** @var array<int, int> $chunk */
-            $chunk = \unpack('C*', Binary::safeSubstr($encodedString, $i, $srcLen - $i));
+            $chunk = \unpack('C*', \substr($encodedString, $i, $srcLen - $i));
             $c0 = static::decode6Bits($chunk[1]);
 
             if ($i + 2 < $srcLen) {
@@ -287,7 +287,7 @@ abstract class Base64 implements EncoderInterface
         #[\SensitiveParameter]
         string $encodedString
     ): string {
-        $srcLen = Binary::safeStrlen($encodedString);
+        $srcLen = \strlen($encodedString);
         if ($srcLen === 0) {
             return '';
         }
