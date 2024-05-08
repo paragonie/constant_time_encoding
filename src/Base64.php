@@ -245,7 +245,7 @@ abstract class Base64 implements EncoderInterface
             return '';
         }
         if (($srcLen & 3) === 0) {
-            // If $strLen is not zero and it is divisible by 4, then its at least 4.
+            // If $strLen is not zero, and it is divisible by 4, then it's at least 4.
             if ($encodedString[$srcLen - 1] === '=' || $encodedString[$srcLen - 2] === '=') {
                 throw new InvalidArgumentException(
                     "decodeNoPadding() doesn't tolerate padding"
