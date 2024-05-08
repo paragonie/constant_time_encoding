@@ -1,6 +1,7 @@
 # Constant-Time Encoding
 
 [![Build Status](https://github.com/paragonie/constant_time_encoding/actions/workflows/ci.yml/badge.svg)](https://github.com/paragonie/constant_time_encoding/actions)
+[![Static Analysis](https://github.com/paragonie/constant_time_encoding/actions/workflows/psalm.yml/badge.svg)](https://github.com/paragonie/constant_time_encoding/actions)
 [![Latest Stable Version](https://poser.pugx.org/paragonie/constant_time_encoding/v/stable)](https://packagist.org/packages/paragonie/constant_time_encoding)
 [![Latest Unstable Version](https://poser.pugx.org/paragonie/constant_time_encoding/v/unstable)](https://packagist.org/packages/paragonie/constant_time_encoding)
 [![License](https://poser.pugx.org/paragonie/constant_time_encoding/license)](https://packagist.org/packages/paragonie/constant_time_encoding)
