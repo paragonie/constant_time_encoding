@@ -30,17 +30,13 @@ use TypeError;
 /**
  * Class Binary
  *
- * Binary string operators that don't choke on
- * mbstring.func_overload
- *
+ * @deprecated Directly call strlen() / substr(), since mbstring.func_overload no longer exits with PHP 8.
  * @package ParagonIE\ConstantTime
  */
 abstract class Binary
 {
     /**
      * Safe string length
-     *
-     * @ref mbstring.func_overload
      *
      * @param string $str
      * @return int
@@ -55,9 +51,6 @@ abstract class Binary
     /**
      * Safe substring
      *
-     * @ref mbstring.func_overload
-     *
-     * @staticvar boolean $exists
      * @param string $str
      * @param int $start
      * @param ?int $length
