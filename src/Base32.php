@@ -456,7 +456,7 @@ abstract class Base32 implements EncoderInterface
         #[\SensitiveParameter]
         string $src,
         bool $upper = false,
-        $pad = true
+        bool $pad = true
     ): string {
         // We do this to reduce code duplication:
         $method = $upper
