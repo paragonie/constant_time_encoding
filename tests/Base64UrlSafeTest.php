@@ -6,7 +6,6 @@ use Exception;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use ParagonIE\ConstantTime\Base64UrlSafe;
-use ParagonIE\ConstantTime\Binary;
 use RangeException;
 use TypeError;
 
@@ -54,7 +53,7 @@ class Base64UrlSafeTest extends TestCase
 
         $random = \random_bytes(1 << 20);
         $enc = Base64UrlSafe::encode($random);
-        $this->assertTrue(Binary::safeStrlen($enc) > 65536);
+        $this->assertTrue(\strlen($enc) > 65536);
         $this->assertSame(
             $random,
             Base64UrlSafe::decode($enc)
