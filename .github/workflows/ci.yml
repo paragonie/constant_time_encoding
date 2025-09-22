@@ -24,7 +24,7 @@ jobs:
           tools: phpunit:${{ matrix.phpunit-versions }}
 
       - name: Install dependencies
-        run: composer self-update --1; composer install
+        run: composer self-update; composer remove --dev vimeo/psalm; composer install
 
       - name: PHPUnit tests
         run: phpunit

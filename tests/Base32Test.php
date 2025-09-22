@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace ParagonIE\ConstantTime\Tests;
 
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use ParagonIE\ConstantTime\Base32;
 
@@ -66,6 +67,7 @@ class Base32Test extends TestCase
     /**
      * @dataProvider canonProvider
      */
+    #[DataProvider("canonProvider")]
     public function testCanonicalBase32(string $canonical, string $munged)
     {
         Base32::decode($canonical);
