@@ -78,7 +78,8 @@ class Base64UrlSafeTest extends TestCase
     public function testNonCanonical(string $input)
     {
         $w = Base64UrlSafe::encodeUnpadded($input);
-        Base64UrlSafe::decode($w);
+        $decoded = Base64UrlSafe::decode($w);
+        $this->assertSame($input, $decoded);
         Base64UrlSafe::decode($w, true);
 
         // Mess with padding:
