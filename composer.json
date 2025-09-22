@@ -40,6 +40,8 @@
     "php": "^8"
   },
   "require-dev": {
+    "infection/infection": "^0",
+    "nikic/php-fuzzer": "^0",
     "phpunit/phpunit": "^9|^10|^11",
     "vimeo/psalm": "^4|^5|^6"
   },
@@ -51,6 +53,12 @@
   "autoload-dev": {
     "psr-4": {
       "ParagonIE\\ConstantTime\\Tests\\": "tests/"
+    }
+  },
+  "config": {
+    "process-timeout": 0,
+    "allow-plugins": {
+      "infection/extension-installer": true
     }
   }
 }
