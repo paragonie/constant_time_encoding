@@ -105,10 +105,11 @@ class Base64Test extends TestCase
     /**
      * @dataProvider canonicalDataProvider
      */
-    public function testNonCanonical(string $input)
+    public function testNonCanonical(string $input): void
     {
         $w = Base64::encodeUnpadded($input);
-        Base64::decode($w);
+        $decoded = Base64::decode($w);
+        $this->assertSame($input, $decoded);
         Base64::decode($w, true);
 
         // Mess with padding:

@@ -46,6 +46,9 @@ abstract class Hex implements EncoderInterface
         #[\SensitiveParameter]
         string $binString
     ): string {
+        if (extension_loaded('sodium')) {
+            return sodium_bin2hex($binString);
+        }
         $hex = '';
         $len = Binary::safeStrlen($binString);
         for ($i = 0; $i < $len; ++$i) {
@@ -107,6 +110,9 @@ abstract class Hex implements EncoderInterface
         string $encodedString,
         bool $strictPadding = false
     ): string {
+        if (extension_loaded('sodium')) {
+            return sodium_hex2bin($encodedString);
+        }
         $hex_pos = 0;
         $bin = '';
         $c_acc = 0;
