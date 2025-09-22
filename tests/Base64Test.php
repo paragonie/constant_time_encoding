@@ -35,7 +35,7 @@ class Base64Test extends TestCase
                 );
                 $this->assertSame(
                     $random,
-                    Base64::decode($unpadded)
+                    Base64::decode($unpadded, true)
                 );
             }
         }
