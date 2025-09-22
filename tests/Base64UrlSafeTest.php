@@ -4,6 +4,7 @@ namespace ParagonIE\ConstantTime\Tests;
 
 use Exception;
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use ParagonIE\ConstantTime\Base64UrlSafe;
 use ParagonIE\ConstantTime\Binary;
@@ -75,6 +76,7 @@ class Base64UrlSafeTest extends TestCase
     /**
      * @dataProvider canonicalDataProvider
      */
+    #[DataProvider("canonicalDataProvider")]
     public function testNonCanonical(string $input)
     {
         $w = Base64UrlSafe::encodeUnpadded($input);
