@@ -44,6 +44,10 @@ class Base64DotSlashTest extends TestCase
         Base64DotSlash::decodeNoPadding('..==');
     }
 
+    /**
+     * We need this for PHP before attributes
+     * @dataProvider canonicalDataProvider
+     */
     #[DataProvider("canonicalDataProvider")]
     public function testNonCanonical(string $input)
     {

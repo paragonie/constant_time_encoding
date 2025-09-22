@@ -100,6 +100,10 @@ class Base64Test extends TestCase
     }
 
     #[DataProvider("canonicalDataProvider")]
+    /**
+     * We need this for PHP before attributes
+     * @dataProvider canonicalDataProvider
+     */
     public function testNonCanonical(string $input): void
     {
         $w = Base64::encodeUnpadded($input);

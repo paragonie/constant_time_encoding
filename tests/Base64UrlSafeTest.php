@@ -68,6 +68,10 @@ class Base64UrlSafeTest extends TestCase
     }
 
     #[DataProvider("canonicalDataProvider")]
+    /**
+     * We need this for PHP before attributes
+     * @dataProvider canonicalDataProvider
+     */
     public function testNonCanonical(string $input)
     {
         $w = Base64UrlSafe::encodeUnpadded($input);

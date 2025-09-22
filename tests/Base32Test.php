@@ -58,6 +58,10 @@ class Base32Test extends TestCase
         ];
     }
 
+    /**
+     * We need this for PHP before attributes
+     * @dataProvider canonProvider
+     */
     #[DataProvider("canonProvider")]
     public function testCanonicalBase32(string $canonical, string $munged)
     {
