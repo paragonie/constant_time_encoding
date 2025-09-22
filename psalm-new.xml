@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <psalm
-    useDocblockTypes="true"
+        useDocblockTypes="true"
 >
     <projectFiles>
         <directory name="src" />
@@ -11,6 +11,9 @@
     </projectFiles>
     <issueHandlers>
         <InvalidAttribute errorLevel="info" />
+        <PossiblyUnusedMethod errorLevel="info" />
+        <PossiblyUnusedReturnValue errorLevel="info" />
+        <UnusedClass errorLevel="info" />
         <UnnecessaryVarAnnotation errorLevel="info" />
     </issueHandlers>
 </psalm>

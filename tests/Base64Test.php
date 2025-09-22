@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace ParagonIE\ConstantTime\Tests;
 
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use ParagonIE\ConstantTime\Base64;
 use RangeException;
@@ -11,10 +12,6 @@ class Base64Test extends TestCase
 {
     use CanonicalTrait;
 
-    /**
-     * @covers Base64::encode()
-     * @covers Base64::decode()
-     */
     public function testRandom()
     {
         for ($i = 1; $i < 32; ++$i) {
@@ -103,8 +100,10 @@ class Base64Test extends TestCase
     }
 
     /**
+     * We need this for PHP before attributes
      * @dataProvider canonicalDataProvider
      */
+    #[DataProvider("canonicalDataProvider")]
     public function testNonCanonical(string $input): void
     {
         $w = Base64::encodeUnpadded($input);
@@ -128,5 +127,38 @@ class Base64Test extends TestCase
             'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/',
             'BCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/A'
         );
+    }
+
+    public function testUnpadded()
+    {
+        for ($i = 1; $i < 32; ++$i) {
+            $random = \random_bytes($i);
+            $encoded = Base64::encodeUnpadded($random);
+            $decoded = Base64::decodeNoPadding($encoded);
+            $this->assertSame(
+                \bin2hex($random),
+                \bin2hex($decoded)
+            );
+        }
+    }
+
+    public static function invalidCharactersProvider(): array
+    {
+        return [
+            ['ab.d'],
+            ['ab:d'],
+            ['ab[d'],
+            ['ab]d'],
+        ];
+    }
+
+    /**
+     * @dataProvider invalidCharactersProvider
+     */
+    #[DataProvider("invalidCharactersProvider")]
+    public function testInvalidCharacters(string $encoded)
+    {
+        $this->expectException(\RangeException::class);
+        Base64::decode($encoded);
     }
 }

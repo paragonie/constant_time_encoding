@@ -3,13 +3,13 @@ name: CI
 on: [push, pull_request]
 
 jobs:
-  moderate-modern:
-    name: PHP ${{ matrix.php-versions }} Test on ${{ matrix.operating-system }}
+  with-sodium:
+    name: PHP ${{ matrix.php-versions }} Test on ${{ matrix.operating-system }} with ext-sodium
     runs-on: ${{ matrix.operating-system }}
     strategy:
       matrix:
         operating-system: ['ubuntu-latest']
-        php-versions: ['8.0', '8.1', '8.2', '8.3', '8.4']
+        php-versions: ['8.0', '8.1', '8.2', '8.3', '8.4', '8.5']
 
     steps:
       - name: Checkout
@@ -20,6 +20,32 @@ jobs:
         with:
           php-version: ${{ matrix.php-versions }}
           extensions: mbstring, intl, sodium
+          ini-values: error_reporting=-1, display_errors=On
+          coverage: none
+
+      - name: Install Composer dependencies
+        uses: "ramsey/composer-install@v3"
+
+      - name: PHPUnit tests
+        run: vendor/bin/phpunit
+
+  without-sodium:
+    name: PHP ${{ matrix.php-versions }} Test on ${{ matrix.operating-system }} without ext-sodium
+    runs-on: ${{ matrix.operating-system }}
+    strategy:
+      matrix:
+        operating-system: ['ubuntu-latest']
+        php-versions: ['8.0', '8.1', '8.2', '8.3', '8.4', '8.5']
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+          extensions: mbstring, intl
           ini-values: error_reporting=-1, display_errors=On
           coverage: none
 

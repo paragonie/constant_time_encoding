@@ -4,16 +4,12 @@ namespace ParagonIE\ConstantTime\Tests;
 
 use InvalidArgumentException;
 use ParagonIE\ConstantTime\Base32Hex;
+use ParagonIE\ConstantTime\Binary;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class Base32HexTest extends TestCase
 {
-    /**
-     * @covers Base32Hex::encode()
-     * @covers Base32Hex::decode()
-     * @covers Base32Hex::encodeUpper()
-     * @covers Base32Hex::decodeUpper()
-     */
     public function testRandom()
     {
         for ($i = 1; $i < 32; ++$i) {
@@ -52,10 +48,56 @@ class Base32HexTest extends TestCase
         }
     }
 
-    public function testDecodeNoPadding()
+    public function testUnpadded()
     {
-        Base32Hex::decodeNoPadding('aaaqe');
-        $this->expectException(InvalidArgumentException::class);
-        Base32Hex::decodeNoPadding('aaaqe===');
+        for ($i = 1; $i < 32; ++$i) {
+            $random = \random_bytes($i);
+            $encoded = Base32Hex::encodeUnpadded($random);
+            $decoded = Base32Hex::decodeNoPadding($encoded);
+            $this->assertSame(
+                Binary::safeStrlen($random),
+                Binary::safeStrlen($decoded),
+                'decoded strlen mismatch'
+            );
+            $this->assertSame(
+                bin2hex($random),
+                bin2hex($decoded),
+                'decoded hex mismatch'
+            );
+        }
+    }
+
+    public static function invalidCharactersProvider(): array
+    {
+        return [
+            ['a/a'],
+            ['a:a'],
+            ['a`a'],
+            ['awa'],
+            ['A/A'],
+            ['A:A'],
+            ['A@A'],
+            ['AWA'],
+        ];
+    }
+
+    /**
+     * @dataProvider invalidCharactersProvider
+     */
+    #[DataProvider("invalidCharactersProvider")]
+    public function testInvalidCharacters(string $encoded)
+    {
+        $this->expectException(\RangeException::class);
+        Base32Hex::decode($encoded);
+    }
+
+    /**
+     * @dataProvider invalidCharactersProvider
+     */
+    #[DataProvider("invalidCharactersProvider")]
+    public function testInvalidCharactersUpper(string $encoded)
+    {
+        $this->expectException(\RangeException::class);
+        Base32Hex::decodeUpper(strtoupper($encoded));
     }
 }

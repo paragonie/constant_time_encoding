@@ -4,23 +4,18 @@ namespace ParagonIE\ConstantTime\Tests;
 
 use Exception;
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use ParagonIE\ConstantTime\Base64UrlSafe;
 use ParagonIE\ConstantTime\Binary;
 use RangeException;
 use TypeError;
 
-/**
- * Class Base64UrlSafeTest
- */
 class Base64UrlSafeTest extends TestCase
 {
     use CanonicalTrait;
 
     /**
-     * @covers Base64UrlSafe::encode()
-     * @covers Base64UrlSafe::decode()
-     *
      * @throws Exception
      * @throws TypeError
      */
@@ -65,14 +60,22 @@ class Base64UrlSafeTest extends TestCase
         );
     }
 
-    public function testDecodeNoPadding()
+    public function testUnpadded(): void
     {
-        Base64UrlSafe::decodeNoPadding('0w');
-        $this->expectException(InvalidArgumentException::class);
-        Base64UrlSafe::decodeNoPadding('0w==');
+        for ($i = 1; $i < 32; ++$i) {
+            $random = \random_bytes($i);
+            $encoded = Base64UrlSafe::encodeUnpadded($random);
+            $decoded = Base64UrlSafe::decodeNoPadding($encoded);
+            $this->assertSame(
+                \bin2hex($random),
+                \bin2hex($decoded)
+            );
+        }
     }
 
+    #[DataProvider("canonicalDataProvider")]
     /**
+     * We need this for PHP before attributes
      * @dataProvider canonicalDataProvider
      */
     public function testNonCanonical(string $input)
@@ -97,5 +100,26 @@ class Base64UrlSafeTest extends TestCase
             'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_',
             'BCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_A'
         );
+    }
+
+    public static function invalidCharactersProvider(): array
+    {
+        return [
+            ['ab+d'],
+            ['ab/d'],
+            ['ab.d'],
+            ['ab:d'],
+            ['ab[d'],
+        ];
+    }
+
+    /**
+     * @dataProvider invalidCharactersProvider
+     */
+    #[DataProvider("invalidCharactersProvider")]
+    public function testInvalidCharacters(string $encoded)
+    {
+        $this->expectException(\RangeException::class);
+        Base64UrlSafe::decode($encoded);
     }
 }

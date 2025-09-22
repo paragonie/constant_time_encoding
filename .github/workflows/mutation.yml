@@ -1,15 +1,18 @@
-name: Psalm
+name: Mutation Testing
 
-on: [push, pull_request]
+on:
+  create:
+    tags:
+      - v*
 
 jobs:
   psalm:
-    name: Psalm on PHP ${{ matrix.php-versions }}
+    name: Infection on PHP ${{ matrix.php-versions }}
     runs-on: ${{ matrix.operating-system }}
     strategy:
       matrix:
         operating-system: ['ubuntu-latest']
-        php-versions: ['8.4']
+        php-versions: ['8.3']
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -18,16 +21,10 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-versions }}
-          tools: psalm:6
-          coverage: none
+          coverage: pcov
 
       - name: Install Composer dependencies
         uses: "ramsey/composer-install@v3"
-        with:
-          composer-options: --no-dev
 
-      - name: Use New psalm.xml
-        run: mv psalm.xml psalm-old.xml && mv psalm-new.xml psalm.xml
-
-      - name: Static Analysis
-        run: psalm
+      - name: Mutation Tests
+        run: composer mutation-test

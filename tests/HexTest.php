@@ -1,14 +1,13 @@
 <?php
-use \ParagonIE\ConstantTime\Hex;
+namespace ParagonIE\ConstantTime\Tests;
 
-class HexTest extends PHPUnit\Framework\TestCase
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
+use ParagonIE\ConstantTime\Hex;
+
+class HexTest extends TestCase
 {
-    /**
-     * @covers Hex::encode()
-     * @covers Hex::decode()
-     * @covers Hex::encodeUpper()
-     */
-    public function testRandom()
+    public function testRandom(): void
     {
         for ($i = 1; $i < 32; ++$i) {
             for ($j = 0; $j < 50; ++$j) {
@@ -35,5 +34,48 @@ class HexTest extends PHPUnit\Framework\TestCase
                 );
             }
         }
+    }
+
+    public static function invalidCharactersProvider(): array
+    {
+        return [
+            ['gg'],
+            ['GG'],
+            ['zz'],
+            ['ZZ'],
+            ['  '],
+            ['ab de'],
+        ];
+    }
+
+    /**
+     * @dataProvider invalidCharactersProvider
+     */
+    #[DataProvider("invalidCharactersProvider")]
+    public function testInvalidCharacters(string $encoded)
+    {
+        $this->expectException(\RangeException::class);
+        Hex::decode($encoded);
+    }
+
+    public function testStrictPaddingSuccess(): void
+    {
+        Hex::decode('0a', true);
+        $this->assertTrue(true); // To avoid risky test warning
+    }
+
+    public function testStrictPaddingFailure(): void
+    {
+        $this->expectException(\RangeException::class);
+        Hex::decode('a', true);
+    }
+
+    public function testNonStrictPadding(): void
+    {
+        // Odd-length string with non-strict padding should be prepended with 0
+        $this->assertSame(
+            Hex::decode('0a'),
+            Hex::decode('a')
+        );
     }
 }

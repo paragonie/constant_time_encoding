@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace ParagonIE\ConstantTime;
 
 use RangeException;
+use SodiumException;
 use TypeError;
 
 /**
@@ -42,12 +43,17 @@ abstract class Hex implements EncoderInterface
      * @return string
      * @throws TypeError
      */
+    #[\Override]
     public static function encode(
         #[\SensitiveParameter]
         string $binString
     ): string {
         if (extension_loaded('sodium')) {
-            return sodium_bin2hex($binString);
+            try {
+                return sodium_bin2hex($binString);
+            } catch (SodiumException $ex) {
+                throw new RangeException($ex->getMessage(), $ex->getCode(), $ex);
+            }
         }
         $hex = '';
         $len = Binary::safeStrlen($binString);
@@ -105,13 +111,18 @@ abstract class Hex implements EncoderInterface
      * @return string (raw binary)
      * @throws RangeException
      */
+    #[\Override]
     public static function decode(
         #[\SensitiveParameter]
         string $encodedString,
         bool $strictPadding = false
     ): string {
-        if (extension_loaded('sodium')) {
-            return sodium_hex2bin($encodedString);
+        if (extension_loaded('sodium') && $strictPadding) {
+            try {
+                return sodium_hex2bin($encodedString);
+            } catch (SodiumException $ex) {
+                throw new RangeException($ex->getMessage(), $ex->getCode(), $ex);
+            }
         }
         $hex_pos = 0;
         $bin = '';
