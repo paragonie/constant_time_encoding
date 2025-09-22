@@ -55,6 +55,9 @@
       "ParagonIE\\ConstantTime\\Tests\\": "tests/"
     }
   },
+  "scripts": {
+    "mutation-test": "infection"
+  },
   "config": {
     "process-timeout": 0,
     "allow-plugins": {
