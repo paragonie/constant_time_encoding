@@ -89,6 +89,7 @@ abstract class Base32 implements EncoderInterface
      * @param string $src
      * @return string
      * @throws TypeError
+     * @api
      */
     public static function encodeUnpadded(
         #[\SensitiveParameter]
@@ -103,6 +104,7 @@ abstract class Base32 implements EncoderInterface
      * @param string $src
      * @return string
      * @throws TypeError
+     * @api
      */
     public static function encodeUpper(
         #[\SensitiveParameter]
@@ -117,6 +119,7 @@ abstract class Base32 implements EncoderInterface
      * @param string $src
      * @return string
      * @throws TypeError
+     * @api
      */
     public static function encodeUpperUnpadded(
         #[\SensitiveParameter]

@@ -4,6 +4,7 @@ namespace ParagonIE\ConstantTime;
 
 use InvalidArgumentException;
 use RangeException;
+use SodiumException;
 use TypeError;
 
 /**
@@ -59,7 +60,11 @@ abstract class Base64 implements EncoderInterface
                 default => 0,
             };
             if ($variant > 0) {
-                return sodium_bin2base64($binString, $variant);
+                try {
+                    return sodium_bin2base64($binString, $variant);
+                } catch (SodiumException $ex) {
+                    throw new RangeException($ex->getMessage(), $ex->getCode(), $ex);
+                }
             }
         }
         return static::doEncode($binString, true);
@@ -74,6 +79,7 @@ abstract class Base64 implements EncoderInterface
      * @return string
      *
      * @throws TypeError
+     * @api
      */
     public static function encodeUnpadded(
         #[\SensitiveParameter]
@@ -86,7 +92,11 @@ abstract class Base64 implements EncoderInterface
                 default => 0,
             };
             if ($variant > 0) {
-                return sodium_bin2base64($src, $variant);
+                try {
+                    return sodium_bin2base64($src, $variant);
+                } catch (SodiumException $ex) {
+                    throw new RangeException($ex->getMessage(), $ex->getCode(), $ex);
+                }
             }
         }
         return static::doEncode($src, false);
@@ -198,7 +208,7 @@ abstract class Base64 implements EncoderInterface
                 if ($variant > 0) {
                     try {
                         return sodium_base642bin($encodedString, $variant);
-                    } catch (\SodiumException $ex) {
+                    } catch (SodiumException $ex) {
                         throw new RangeException($ex->getMessage(), $ex->getCode(), $ex);
                     }
                 }

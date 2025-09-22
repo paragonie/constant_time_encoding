@@ -30,6 +30,7 @@ use TypeError;
 /**
  * Class Encoding
  * @package ParagonIE\ConstantTime
+ * @api
  */
 abstract class Encoding
 {

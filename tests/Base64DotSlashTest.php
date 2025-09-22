@@ -4,6 +4,7 @@ namespace ParagonIE\ConstantTime\Tests;
 
 use InvalidArgumentException;
 use ParagonIE\ConstantTime\Base64DotSlash;
+use ParagonIE\ConstantTime\Binary;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use RangeException;
@@ -37,11 +38,17 @@ class Base64DotSlashTest extends TestCase
         }
     }
 
-    public function testDecodeNoPadding()
+    public function testUnpadded()
     {
-        Base64DotSlash::decodeNoPadding('..');
-        $this->expectException(InvalidArgumentException::class);
-        Base64DotSlash::decodeNoPadding('..==');
+        for ($i = 1; $i < 32; ++$i) {
+            $random = \random_bytes($i);
+            $encoded = Base64DotSlash::encodeUnpadded($random);
+            $decoded = Base64DotSlash::decodeNoPadding($encoded);
+            $this->assertSame(
+                \bin2hex($random),
+                \bin2hex($decoded)
+            );
+        }
     }
 
     /**
@@ -71,5 +78,24 @@ class Base64DotSlashTest extends TestCase
             'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789./',
             'BCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789./A'
         );
+    }
+
+    public static function invalidCharactersProvider(): array
+    {
+        return [
+            ['ab-d'],
+            ['ab d'],
+            ['ab[d'],
+        ];
+    }
+
+    /**
+     * @dataProvider invalidCharactersProvider
+     */
+    #[DataProvider("invalidCharactersProvider")]
+    public function testInvalidCharacters(string $encoded)
+    {
+        $this->expectException(\RangeException::class);
+        Base64DotSlash::decode($encoded);
     }
 }
