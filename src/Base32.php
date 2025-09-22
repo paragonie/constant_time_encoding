@@ -44,6 +44,7 @@ abstract class Base32 implements EncoderInterface
      * @param bool $strictPadding
      * @return string
      */
+    #[\Override]
     public static function decode(
         #[\SensitiveParameter]
         string $encodedString,
@@ -74,6 +75,7 @@ abstract class Base32 implements EncoderInterface
      * @return string
      * @throws TypeError
      */
+    #[\Override]
     public static function encode(
         #[\SensitiveParameter]
         string $binString
@@ -129,6 +131,7 @@ abstract class Base32 implements EncoderInterface
      *
      * @param int $src
      * @return int
+     * @api
      */
     protected static function decode5Bits(int $src): int
     {
@@ -151,6 +154,7 @@ abstract class Base32 implements EncoderInterface
      *
      * @param int $src
      * @return int
+     * @api
      */
     protected static function decode5BitsUpper(int $src): int
     {
@@ -171,6 +175,7 @@ abstract class Base32 implements EncoderInterface
      *
      * @param int $src
      * @return string
+     * @api
      */
     protected static function encode5Bits(int $src): string
     {
@@ -190,6 +195,7 @@ abstract class Base32 implements EncoderInterface
      *
      * @param int $src
      * @return string
+     * @api
      */
     protected static function encode5BitsUpper(int $src): string
     {
@@ -205,6 +211,7 @@ abstract class Base32 implements EncoderInterface
      * @param string $encodedString
      * @param bool $upper
      * @return string
+     * @api
      */
     public static function decodeNoPadding(
         #[\SensitiveParameter]

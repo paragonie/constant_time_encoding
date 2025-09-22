@@ -44,6 +44,7 @@ abstract class Base64DotSlash extends Base64
      * @param int $src
      * @return int
      */
+    #[\Override]
     protected static function decode6Bits(int $src): int
     {
         $ret = -1;
@@ -70,6 +71,7 @@ abstract class Base64DotSlash extends Base64
      * @param int $src
      * @return string
      */
+    #[\Override]
     protected static function encode6Bits(int $src): string
     {
         $src += 0x2e;

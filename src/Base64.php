@@ -47,6 +47,7 @@ abstract class Base64 implements EncoderInterface
      *
      * @throws TypeError
      */
+    #[\Override]
     public static function encode(
         #[\SensitiveParameter]
         string $binString
@@ -157,6 +158,7 @@ abstract class Base64 implements EncoderInterface
      * @throws RangeException
      * @throws TypeError
      */
+    #[\Override]
     public static function decode(
         #[\SensitiveParameter]
         string $encodedString,
@@ -269,6 +271,7 @@ abstract class Base64 implements EncoderInterface
     /**
      * @param string $encodedString
      * @return string
+     * @api
      */
     public static function decodeNoPadding(
         #[\SensitiveParameter]

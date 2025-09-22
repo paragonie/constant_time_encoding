@@ -202,18 +202,6 @@ class EncodingTest extends TestCase
         );
     }
 
-    /**
-     * @covers Encoding::hexDecode()
-     * @covers Encoding::hexEncode()
-     * @covers Encoding::base32Decode()
-     * @covers Encoding::base32Encode()
-     * @covers Encoding::base64Decode()
-     * @covers Encoding::base64Encode()
-     * @covers Encoding::base64DotSlashDecode()
-     * @covers Encoding::base64DotSlashEncode()
-     * @covers Encoding::base64DotSlashOrderedDecode()
-     * @covers Encoding::base64DotSlashOrderedEncode()
-     */
     public function testBasicEncoding()
     {
         // Re-run the test at least 3 times for each length
@@ -304,5 +292,20 @@ class EncodingTest extends TestCase
                 );
             }
         }
+    }
+
+    public function testHex(): void
+    {
+        for ($i = 1; $i < 32; ++$i) {
+            $rand = random_bytes($i);
+            $encoded = Encoding::hexEncode($rand);
+            $decoded = Encoding::hexDecode($encoded);
+            $this->assertSame($rand, $decoded);
+
+            $encoded = Encoding::hexEncodeUpper($rand);
+            $decoded = Encoding::hexDecodeUpper($encoded);
+            $this->assertSame($rand, $decoded);
+        }
+
     }
 }

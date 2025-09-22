@@ -4,6 +4,7 @@ namespace ParagonIE\ConstantTime\Tests;
 
 use InvalidArgumentException;
 use ParagonIE\ConstantTime\Base64DotSlash;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use RangeException;
 
@@ -11,10 +12,6 @@ class Base64DotSlashTest extends TestCase
 {
     use CanonicalTrait;
 
-    /**
-     * @covers Base64DotSlash::encode()
-     * @covers Base64DotSlash::decode()
-     */
     public function testRandom()
     {
         for ($i = 1; $i < 32; ++$i) {
@@ -47,9 +44,7 @@ class Base64DotSlashTest extends TestCase
         Base64DotSlash::decodeNoPadding('..==');
     }
 
-    /**
-     * @dataProvider canonicalDataProvider
-     */
+    #[DataProvider("canonicalDataProvider")]
     public function testNonCanonical(string $input)
     {
         $w = Base64DotSlash::encodeUnpadded($input);

@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace ParagonIE\ConstantTime\Tests;
 
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use ParagonIE\ConstantTime\Base64DotSlashOrdered;
 use RangeException;
@@ -11,10 +12,6 @@ class Base64DotSlashOrderedTest extends TestCase
 {
     use CanonicalTrait;
 
-    /**
-     * @covers Base64DotSlashOrdered::encode()
-     * @covers Base64DotSlashOrdered::decode()
-     */
     public function testRandom()
     {
         for ($i = 1; $i < 32; ++$i) {
@@ -47,9 +44,7 @@ class Base64DotSlashOrderedTest extends TestCase
         Base64DotSlashOrdered::decodeNoPadding('..==');
     }
 
-    /**
-     * @dataProvider canonicalDataProvider
-     */
+    #[DataProvider("canonicalDataProvider")]
     public function testNonCanonical(string $input)
     {
         $w = Base64DotSlashOrdered::encodeUnpadded($input);

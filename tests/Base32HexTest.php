@@ -8,12 +8,6 @@ use PHPUnit\Framework\TestCase;
 
 class Base32HexTest extends TestCase
 {
-    /**
-     * @covers Base32Hex::encode()
-     * @covers Base32Hex::decode()
-     * @covers Base32Hex::encodeUpper()
-     * @covers Base32Hex::decodeUpper()
-     */
     public function testRandom()
     {
         for ($i = 1; $i < 32; ++$i) {

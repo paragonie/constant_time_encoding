@@ -33,6 +33,7 @@ use TypeError;
  * This class conforms strictly to the RFC
  *
  * @package ParagonIE\ConstantTime
+ * @api
  */
 abstract class RFC4648
 {

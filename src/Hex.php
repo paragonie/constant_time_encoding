@@ -42,6 +42,7 @@ abstract class Hex implements EncoderInterface
      * @return string
      * @throws TypeError
      */
+    #[\Override]
     public static function encode(
         #[\SensitiveParameter]
         string $binString
@@ -105,6 +106,7 @@ abstract class Hex implements EncoderInterface
      * @return string (raw binary)
      * @throws RangeException
      */
+    #[\Override]
     public static function decode(
         #[\SensitiveParameter]
         string $encodedString,

@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<psalm
+        useDocblockTypes="true"
+>
+    <projectFiles>
+        <directory name="src" />
+        <ignoreFiles>
+            <directory name="tests" />
+            <directory name="vendor" />
+        </ignoreFiles>
+    </projectFiles>
+    <issueHandlers>
+        <PossiblyUnusedMethod errorLevel="info" />
+        <PossiblyUnusedReturnValue errorLevel="info" />
+        <UnusedClass errorLevel="info" />
+        <UnnecessaryVarAnnotation errorLevel="info" />
+    </issueHandlers>
+</psalm>

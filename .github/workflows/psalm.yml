@@ -26,5 +26,8 @@ jobs:
         with:
           composer-options: --no-dev
 
+      - name: Use New psalm.xml
+        run: mv psalm.xml psalm-old.xml && mv psalm-new.xml psalm.xml
+
       - name: Static Analysis
         run: psalm

@@ -3,18 +3,13 @@ declare(strict_types=1);
 namespace ParagonIE\ConstantTime\Tests;
 
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use ParagonIE\ConstantTime\Base32;
 
 class Base32Test extends TestCase
 {
-    /**
-     * @covers Base32::encode()
-     * @covers Base32::decode()
-     * @covers Base32::encodeUpper()
-     * @covers Base32::decodeUpper()
-     */
-    public function testRandom()
+    public function testRandom(): void
     {
         for ($i = 1; $i < 32; ++$i) {
             for ($j = 0; $j < 50; ++$j) {
@@ -53,7 +48,7 @@ class Base32Test extends TestCase
         }
     }
 
-    public static function canonProvider()
+    public static function canonProvider(): array
     {
         return [
             ['me', 'mf'],
@@ -63,9 +58,7 @@ class Base32Test extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider canonProvider
-     */
+    #[DataProvider("canonProvider")]
     public function testCanonicalBase32(string $canonical, string $munged)
     {
         Base32::decode($canonical);

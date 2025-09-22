@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace ParagonIE\ConstantTime\Tests;
 
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use ParagonIE\ConstantTime\Base64;
 use RangeException;
@@ -11,10 +12,6 @@ class Base64Test extends TestCase
 {
     use CanonicalTrait;
 
-    /**
-     * @covers Base64::encode()
-     * @covers Base64::decode()
-     */
     public function testRandom()
     {
         for ($i = 1; $i < 32; ++$i) {
@@ -102,9 +99,7 @@ class Base64Test extends TestCase
         Base64::decodeNoPadding('0w==');
     }
 
-    /**
-     * @dataProvider canonicalDataProvider
-     */
+    #[DataProvider("canonicalDataProvider")]
     public function testNonCanonical(string $input): void
     {
         $w = Base64::encodeUnpadded($input);

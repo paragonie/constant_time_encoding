@@ -2,9 +2,11 @@
 # https://www.kernel.org/pub/software/scm/git/docs/gitattributes.html
 
 # This way, the files would be available in the repository but it would not be downloaded when the package is required by another project.
-/.github            export-ignore
-/.gitignore         export-ignore
-/.gitattributes     export-ignore
-/tests              export-ignore
-/phpunit.xml.dist   export-ignore
-/psalm.xml          export-ignore
+/.github             export-ignore
+/.gitignore          export-ignore
+/.gitattributes      export-ignore
+/fuzzing             export-ignore
+/tests               export-ignore
+/infection.json.dist export-ignore
+/phpunit.xml.dist    export-ignore
+/psalm.xml           export-ignore

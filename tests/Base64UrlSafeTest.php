@@ -4,23 +4,18 @@ namespace ParagonIE\ConstantTime\Tests;
 
 use Exception;
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use ParagonIE\ConstantTime\Base64UrlSafe;
 use ParagonIE\ConstantTime\Binary;
 use RangeException;
 use TypeError;
 
-/**
- * Class Base64UrlSafeTest
- */
 class Base64UrlSafeTest extends TestCase
 {
     use CanonicalTrait;
 
     /**
-     * @covers Base64UrlSafe::encode()
-     * @covers Base64UrlSafe::decode()
-     *
      * @throws Exception
      * @throws TypeError
      */
@@ -72,9 +67,7 @@ class Base64UrlSafeTest extends TestCase
         Base64UrlSafe::decodeNoPadding('0w==');
     }
 
-    /**
-     * @dataProvider canonicalDataProvider
-     */
+    #[DataProvider("canonicalDataProvider")]
     public function testNonCanonical(string $input)
     {
         $w = Base64UrlSafe::encodeUnpadded($input);
