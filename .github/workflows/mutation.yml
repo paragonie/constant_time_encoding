@@ -12,7 +12,7 @@ jobs:
     strategy:
       matrix:
         operating-system: ['ubuntu-latest']
-        php-versions: ['8.4']
+        php-versions: ['8.3']
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -21,7 +21,6 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-versions }}
-          tools: psalm:4
           coverage: pcov
 
       - name: Install Composer dependencies

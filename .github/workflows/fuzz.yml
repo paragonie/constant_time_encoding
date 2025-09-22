@@ -18,7 +18,6 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-versions }}
-          tools: psalm:4
           coverage: none
 
       - name: Install Composer dependencies
