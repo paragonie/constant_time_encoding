@@ -4,7 +4,7 @@ on: [push, pull_request]
 
 jobs:
   with-sodium:
-    name: PHP ${{ matrix.php-versions }} Test on ${{ matrix.operating-system }}
+    name: PHP ${{ matrix.php-versions }} Test on ${{ matrix.operating-system }} with ext-sodium
     runs-on: ${{ matrix.operating-system }}
     strategy:
       matrix:
@@ -30,7 +30,7 @@ jobs:
         run: vendor/bin/phpunit
 
   without-sodium:
-    name: PHP ${{ matrix.php-versions }} Test on ${{ matrix.operating-system }}
+    name: PHP ${{ matrix.php-versions }} Test on ${{ matrix.operating-system }} without ext-sodium
     runs-on: ${{ matrix.operating-system }}
     strategy:
       matrix:
