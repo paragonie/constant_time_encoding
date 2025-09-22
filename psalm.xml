@@ -10,6 +10,7 @@
         </ignoreFiles>
     </projectFiles>
     <issueHandlers>
+        <InvalidAttribute errorLevel="info" />
         <UnnecessaryVarAnnotation errorLevel="info" />
     </issueHandlers>
 </psalm>

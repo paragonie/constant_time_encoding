@@ -10,6 +10,7 @@
         </ignoreFiles>
     </projectFiles>
     <issueHandlers>
+        <InvalidAttribute errorLevel="info" />
         <PossiblyUnusedMethod errorLevel="info" />
         <PossiblyUnusedReturnValue errorLevel="info" />
         <UnusedClass errorLevel="info" />
