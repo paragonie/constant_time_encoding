@@ -61,7 +61,7 @@ abstract class Base64 implements EncoderInterface
             };
             if ($variant > 0) {
                 try {
-                    return sodium_bin2base64($binString, $variant);
+                    return \sodium_bin2base64($binString, $variant);
                 } catch (SodiumException $ex) {
                     throw new RangeException($ex->getMessage(), $ex->getCode(), $ex);
                 }
@@ -93,7 +93,7 @@ abstract class Base64 implements EncoderInterface
             };
             if ($variant > 0) {
                 try {
-                    return sodium_bin2base64($src, $variant);
+                    return \sodium_bin2base64($src, $variant);
                 } catch (SodiumException $ex) {
                     throw new RangeException($ex->getMessage(), $ex->getCode(), $ex);
                 }
@@ -207,7 +207,7 @@ abstract class Base64 implements EncoderInterface
                 };
                 if ($variant > 0) {
                     try {
-                        return sodium_base642bin($encodedString, $variant);
+                        return \sodium_base642bin($encodedString, $variant);
                     } catch (SodiumException $ex) {
                         throw new RangeException($ex->getMessage(), $ex->getCode(), $ex);
                     }

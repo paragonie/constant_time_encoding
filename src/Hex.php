@@ -50,7 +50,7 @@ abstract class Hex implements EncoderInterface
     ): string {
         if (\extension_loaded('sodium')) {
             try {
-                return sodium_bin2hex($binString);
+                return \sodium_bin2hex($binString);
             } catch (SodiumException $ex) {
                 throw new RangeException($ex->getMessage(), $ex->getCode(), $ex);
             }
@@ -119,7 +119,7 @@ abstract class Hex implements EncoderInterface
     ): string {
         if (\extension_loaded('sodium') && $strictPadding) {
             try {
-                return sodium_hex2bin($encodedString);
+                return \sodium_hex2bin($encodedString);
             } catch (SodiumException $ex) {
                 throw new RangeException($ex->getMessage(), $ex->getCode(), $ex);
             }
