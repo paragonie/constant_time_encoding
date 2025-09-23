@@ -55,8 +55,8 @@ abstract class Base64 implements EncoderInterface
     ): string {
         if (\extension_loaded('sodium')) {
             $variant = match(static::class) {
-                Base64::class => SODIUM_BASE64_VARIANT_ORIGINAL,
-                Base64UrlSafe::class => SODIUM_BASE64_VARIANT_URLSAFE,
+                Base64::class => \SODIUM_BASE64_VARIANT_ORIGINAL,
+                Base64UrlSafe::class => \SODIUM_BASE64_VARIANT_URLSAFE,
                 default => 0,
             };
             if ($variant > 0) {
@@ -87,8 +87,8 @@ abstract class Base64 implements EncoderInterface
     ): string {
         if (\extension_loaded('sodium')) {
             $variant = match(static::class) {
-                Base64::class => SODIUM_BASE64_VARIANT_ORIGINAL_NO_PADDING,
-                Base64UrlSafe::class => SODIUM_BASE64_VARIANT_URLSAFE_NO_PADDING,
+                Base64::class => \SODIUM_BASE64_VARIANT_ORIGINAL_NO_PADDING,
+                Base64UrlSafe::class => \SODIUM_BASE64_VARIANT_URLSAFE_NO_PADDING,
                 default => 0,
             };
             if ($variant > 0) {
@@ -201,8 +201,8 @@ abstract class Base64 implements EncoderInterface
             }
             if (\extension_loaded('sodium')) {
                 $variant = match(static::class) {
-                    Base64::class => SODIUM_BASE64_VARIANT_ORIGINAL_NO_PADDING,
-                    Base64UrlSafe::class => SODIUM_BASE64_VARIANT_URLSAFE_NO_PADDING,
+                    Base64::class => \SODIUM_BASE64_VARIANT_ORIGINAL_NO_PADDING,
+                    Base64UrlSafe::class => \SODIUM_BASE64_VARIANT_URLSAFE_NO_PADDING,
                     default => 0,
                 };
                 if ($variant > 0) {
