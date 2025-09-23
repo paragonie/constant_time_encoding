@@ -48,7 +48,7 @@ abstract class Hex implements EncoderInterface
         #[\SensitiveParameter]
         string $binString
     ): string {
-        if (extension_loaded('sodium')) {
+        if (\extension_loaded('sodium')) {
             try {
                 return sodium_bin2hex($binString);
             } catch (SodiumException $ex) {
@@ -117,7 +117,7 @@ abstract class Hex implements EncoderInterface
         string $encodedString,
         bool $strictPadding = false
     ): string {
-        if (extension_loaded('sodium') && $strictPadding) {
+        if (\extension_loaded('sodium') && $strictPadding) {
             try {
                 return sodium_hex2bin($encodedString);
             } catch (SodiumException $ex) {

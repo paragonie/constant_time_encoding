@@ -53,7 +53,7 @@ abstract class Base64 implements EncoderInterface
         #[\SensitiveParameter]
         string $binString
     ): string {
-        if (extension_loaded('sodium')) {
+        if (\extension_loaded('sodium')) {
             $variant = match(static::class) {
                 Base64::class => SODIUM_BASE64_VARIANT_ORIGINAL,
                 Base64UrlSafe::class => SODIUM_BASE64_VARIANT_URLSAFE,
@@ -85,7 +85,7 @@ abstract class Base64 implements EncoderInterface
         #[\SensitiveParameter]
         string $src
     ): string {
-        if (extension_loaded('sodium')) {
+        if (\extension_loaded('sodium')) {
             $variant = match(static::class) {
                 Base64::class => SODIUM_BASE64_VARIANT_ORIGINAL_NO_PADDING,
                 Base64UrlSafe::class => SODIUM_BASE64_VARIANT_URLSAFE_NO_PADDING,
@@ -199,7 +199,7 @@ abstract class Base64 implements EncoderInterface
                     'Incorrect padding'
                 );
             }
-            if (extension_loaded('sodium')) {
+            if (\extension_loaded('sodium')) {
                 $variant = match(static::class) {
                     Base64::class => SODIUM_BASE64_VARIANT_ORIGINAL_NO_PADDING,
                     Base64UrlSafe::class => SODIUM_BASE64_VARIANT_URLSAFE_NO_PADDING,
