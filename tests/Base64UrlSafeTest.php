@@ -121,6 +121,22 @@ class Base64UrlSafeTest extends TestCase
     }
 
     /**
+     * Detect issue underlying #67 with ext-sodium
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function testStrictPaddingSodium(): void
+    {
+        for ($i = 1; $i < 32; ++$i) {
+            $random = random_bytes($i);
+            $encoded = Base64UrlSafe::encode($random);
+            $decoded = Base64UrlSafe::decode($encoded, true);
+            $this->assertSame($decoded, $random);
+        }
+    }
+
+    /**
      * @dataProvider invalidCharactersProvider
      */
     #[DataProvider("invalidCharactersProvider")]

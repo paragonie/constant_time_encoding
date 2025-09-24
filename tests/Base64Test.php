@@ -137,7 +137,7 @@ class Base64Test extends TestCase
         );
     }
 
-    public function testUnpadded()
+    public function testUnpadded(): void
     {
         for ($i = 1; $i < 32; ++$i) {
             $random = random_bytes($i);
@@ -161,10 +161,26 @@ class Base64Test extends TestCase
     }
 
     /**
+     * Detect issue underlying #67 with ext-sodium
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function testStrictPaddingSodium(): void
+    {
+        for ($i = 1; $i < 32; ++$i) {
+            $random = random_bytes($i);
+            $encoded = Base64::encode($random);
+            $decoded = Base64::decode($encoded, true);
+            $this->assertSame($decoded, $random);
+        }
+    }
+
+    /**
      * @dataProvider invalidCharactersProvider
      */
     #[DataProvider("invalidCharactersProvider")]
-    public function testInvalidCharacters(string $encoded)
+    public function testInvalidCharacters(string $encoded): void
     {
         $this->expectException(RangeException::class);
         Base64::decode($encoded);
