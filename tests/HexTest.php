@@ -4,6 +4,8 @@ namespace ParagonIE\ConstantTime\Tests;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use ParagonIE\ConstantTime\Hex;
+use function bin2hex;
+use function strtoupper;
 
 class HexTest extends TestCase
 {
@@ -19,7 +21,7 @@ class HexTest extends TestCase
                     Hex::decode($enc)
                 );
                 $this->assertSame(
-                    \bin2hex($random),
+                    bin2hex($random),
                     $enc
                 );
 
@@ -29,7 +31,7 @@ class HexTest extends TestCase
                     Hex::decode($enc)
                 );
                 $this->assertSame(
-                    \strtoupper(\bin2hex($random)),
+                    strtoupper(bin2hex($random)),
                     $enc
                 );
             }

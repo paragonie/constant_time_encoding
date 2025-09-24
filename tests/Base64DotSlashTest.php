@@ -2,12 +2,13 @@
 declare(strict_types=1);
 namespace ParagonIE\ConstantTime\Tests;
 
-use InvalidArgumentException;
 use ParagonIE\ConstantTime\Base64DotSlash;
-use ParagonIE\ConstantTime\Binary;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use RangeException;
+use function bin2hex;
+use function random_bytes;
+use function rtrim;
 
 class Base64DotSlashTest extends TestCase
 {
@@ -17,7 +18,7 @@ class Base64DotSlashTest extends TestCase
     {
         for ($i = 1; $i < 32; ++$i) {
             for ($j = 0; $j < 50; ++$j) {
-                $random = \random_bytes($i);
+                $random = random_bytes($i);
 
                 $enc = Base64DotSlash::encode($random);
                 $this->assertSame(
@@ -25,7 +26,7 @@ class Base64DotSlashTest extends TestCase
                     Base64DotSlash::decode($enc)
                 );
 
-                $unpadded = \rtrim($enc, '=');
+                $unpadded = rtrim($enc, '=');
                 $this->assertSame(
                     $random,
                     Base64DotSlash::decode($unpadded)
@@ -41,12 +42,12 @@ class Base64DotSlashTest extends TestCase
     public function testUnpadded()
     {
         for ($i = 1; $i < 32; ++$i) {
-            $random = \random_bytes($i);
+            $random = random_bytes($i);
             $encoded = Base64DotSlash::encodeUnpadded($random);
             $decoded = Base64DotSlash::decodeNoPadding($encoded);
             $this->assertSame(
-                \bin2hex($random),
-                \bin2hex($decoded)
+                bin2hex($random),
+                bin2hex($decoded)
             );
         }
     }
@@ -95,7 +96,7 @@ class Base64DotSlashTest extends TestCase
     #[DataProvider("invalidCharactersProvider")]
     public function testInvalidCharacters(string $encoded)
     {
-        $this->expectException(\RangeException::class);
+        $this->expectException(RangeException::class);
         Base64DotSlash::decode($encoded);
     }
 }

@@ -1,17 +1,22 @@
 <?php
 declare(strict_types=1);
 namespace ParagonIE\ConstantTime\Tests;
-use PHPUnit\Framework\TestCase;
 
+use Exception;
+use PHPUnit\Framework\TestCase;
 use ParagonIE\ConstantTime\Base32;
 use ParagonIE\ConstantTime\Base32Hex;
 use ParagonIE\ConstantTime\Base64UrlSafe;
 use ParagonIE\ConstantTime\Encoding;
 use ParagonIE\ConstantTime\Hex;
+use function base64_encode;
+use function bin2hex;
+use function random_bytes;
+use function strtr;
 
 class EncodingTest extends TestCase
 {
-    public function testBase32Encode()
+    public function testBase32Encode(): void
     {
         $this->assertSame(
             Encoding::base32Encode("\x00"),
@@ -89,7 +94,7 @@ class EncodingTest extends TestCase
         );
     }
 
-    public function testBase32Hex()
+    public function testBase32Hex(): void
     {
         $this->assertSame(
             Base32Hex::encode("\x00"),
@@ -126,7 +131,7 @@ class EncodingTest extends TestCase
     /**
      * Based on test vectors from RFC 4648
      */
-    public function testBase32Decode()
+    public function testBase32Decode(): void
     {
         $this->assertSame(
             "\x00\x00\x00\x00\x00\x00",
@@ -202,7 +207,7 @@ class EncodingTest extends TestCase
         );
     }
 
-    public function testBasicEncoding()
+    public function testBasicEncoding(): void
     {
         // Re-run the test at least 3 times for each length
         for ($j = 0; $j < 3; ++$j) {
@@ -210,7 +215,7 @@ class EncodingTest extends TestCase
                 $rand = random_bytes($i);
                 $enc = Encoding::hexEncode($rand);
                 $this->assertSame(
-                    \bin2hex($rand),
+                    bin2hex($rand),
                     $enc,
                     "Hex Encoding - Length: " . $i
                 );
@@ -223,7 +228,7 @@ class EncodingTest extends TestCase
                 // Uppercase variant:
                 $enc = Hex::encodeUpper($rand);
                 $this->assertSame(
-                    \strtoupper(\bin2hex($rand)),
+                    \strtoupper(bin2hex($rand)),
                     $enc,
                     "Hex Encoding - Length: " . $i
                 );
@@ -283,7 +288,7 @@ class EncodingTest extends TestCase
 
                 $enc = Base64UrlSafe::encode($rand);
                 $this->assertSame(
-                    \strtr(\base64_encode($rand), '+/', '-_'),
+                    strtr(base64_encode($rand), '+/', '-_'),
                     $enc
                 );
                 $this->assertSame(
@@ -294,6 +299,9 @@ class EncodingTest extends TestCase
         }
     }
 
+    /**
+     * @throws Exception
+     */
     public function testHex(): void
     {
         for ($i = 1; $i < 32; ++$i) {

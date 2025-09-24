@@ -7,6 +7,9 @@ use ParagonIE\ConstantTime\Base32Hex;
 use ParagonIE\ConstantTime\Binary;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use RangeException;
+use function random_bytes;
+use function rtrim;
 
 class Base32HexTest extends TestCase
 {
@@ -14,14 +17,14 @@ class Base32HexTest extends TestCase
     {
         for ($i = 1; $i < 32; ++$i) {
             for ($j = 0; $j < 50; ++$j) {
-                $random = \random_bytes($i);
+                $random = random_bytes($i);
 
                 $enc = Base32Hex::encode($random);
                 $this->assertSame(
                     $random,
                     Base32Hex::decode($enc)
                 );
-                $unpadded = \rtrim($enc, '=');
+                $unpadded = rtrim($enc, '=');
                 $this->assertSame(
                     $unpadded,
                     Base32Hex::encodeUnpadded($random)
@@ -35,7 +38,7 @@ class Base32HexTest extends TestCase
                 $this->assertSame(
                     $random,
                     Base32Hex::decodeUpper($enc)
-                );                $unpadded = \rtrim($enc, '=');
+                );                $unpadded = rtrim($enc, '=');
                 $this->assertSame(
                     $unpadded,
                     Base32Hex::encodeUpperUnpadded($random)
@@ -51,7 +54,7 @@ class Base32HexTest extends TestCase
     public function testUnpadded()
     {
         for ($i = 1; $i < 32; ++$i) {
-            $random = \random_bytes($i);
+            $random = random_bytes($i);
             $encoded = Base32Hex::encodeUnpadded($random);
             $decoded = Base32Hex::decodeNoPadding($encoded);
             $this->assertSame(
@@ -87,7 +90,7 @@ class Base32HexTest extends TestCase
     #[DataProvider("invalidCharactersProvider")]
     public function testInvalidCharacters(string $encoded)
     {
-        $this->expectException(\RangeException::class);
+        $this->expectException(RangeException::class);
         Base32Hex::decode($encoded);
     }
 
@@ -97,7 +100,7 @@ class Base32HexTest extends TestCase
     #[DataProvider("invalidCharactersProvider")]
     public function testInvalidCharactersUpper(string $encoded)
     {
-        $this->expectException(\RangeException::class);
+        $this->expectException(RangeException::class);
         Base32Hex::decodeUpper(strtoupper($encoded));
     }
 }
