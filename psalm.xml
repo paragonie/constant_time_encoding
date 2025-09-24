@@ -10,6 +10,10 @@
         </ignoreFiles>
     </projectFiles>
     <issueHandlers>
+        <!-- Psalm v4 isn't great at recognizing that a piece of code is only executed if the extension is loaded -->
+        <UndefinedFunction errorLevel="info" />
+        <InvalidArgument errorLevel="info" />
+        <UndefinedConstant errorLevel="info" />
         <UnnecessaryVarAnnotation errorLevel="info" />
     </issueHandlers>
 </psalm>
