@@ -2,6 +2,8 @@
 declare(strict_types=1);
 namespace ParagonIE\ConstantTime;
 
+use RangeException;
+use SensitiveParameter;
 use TypeError;
 
 /**
@@ -42,7 +44,7 @@ abstract class Encoding
      * @throws TypeError
      */
     public static function base32Encode(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $str
     ): string {
         return Base32::encode($str);
@@ -56,7 +58,7 @@ abstract class Encoding
      * @throws TypeError
      */
     public static function base32EncodeUpper(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $str
     ): string {
         return Base32::encodeUpper($str);
@@ -70,7 +72,7 @@ abstract class Encoding
      * @throws TypeError
      */
     public static function base32Decode(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $str
     ): string {
         return Base32::decode($str);
@@ -84,7 +86,7 @@ abstract class Encoding
      * @throws TypeError
      */
     public static function base32DecodeUpper(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $str
     ): string {
         return Base32::decodeUpper($str);
@@ -98,7 +100,7 @@ abstract class Encoding
      * @throws TypeError
      */
     public static function base32HexEncode(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $str
     ): string {
         return Base32Hex::encode($str);
@@ -112,7 +114,7 @@ abstract class Encoding
      * @throws TypeError
      */
     public static function base32HexEncodeUpper(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $str
     ): string {
         return Base32Hex::encodeUpper($str);
@@ -126,7 +128,7 @@ abstract class Encoding
      * @throws TypeError
      */
     public static function base32HexDecode(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $str
     ): string {
         return Base32Hex::decode($str);
@@ -140,7 +142,7 @@ abstract class Encoding
      * @throws TypeError
      */
     public static function base32HexDecodeUpper(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $str
     ): string {
         return Base32Hex::decodeUpper($str);
@@ -154,7 +156,7 @@ abstract class Encoding
      * @throws TypeError
      */
     public static function base64Encode(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $str
     ): string {
         return Base64::encode($str);
@@ -168,7 +170,7 @@ abstract class Encoding
      * @throws TypeError
      */
     public static function base64Decode(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $str
     ): string {
         return Base64::decode($str);
@@ -183,7 +185,7 @@ abstract class Encoding
      * @throws TypeError
      */
     public static function base64EncodeDotSlash(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $str
     ): string {
         return Base64DotSlash::encode($str);
@@ -196,11 +198,11 @@ abstract class Encoding
      *
      * @param string $str
      * @return string
-     * @throws \RangeException
+     * @throws RangeException
      * @throws TypeError
      */
     public static function base64DecodeDotSlash(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $str
     ): string {
         return Base64DotSlash::decode($str);
@@ -215,7 +217,7 @@ abstract class Encoding
      * @throws TypeError
      */
     public static function base64EncodeDotSlashOrdered(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $str
     ): string {
         return Base64DotSlashOrdered::encode($str);
@@ -228,11 +230,11 @@ abstract class Encoding
      *
      * @param string $str
      * @return string
-     * @throws \RangeException
+     * @throws RangeException
      * @throws TypeError
      */
     public static function base64DecodeDotSlashOrdered(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $str
     ): string {
         return Base64DotSlashOrdered::decode($str);
@@ -247,7 +249,7 @@ abstract class Encoding
      * @throws TypeError
      */
     public static function hexEncode(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $bin_string
     ): string {
         return Hex::encode($bin_string);
@@ -259,10 +261,10 @@ abstract class Encoding
      *
      * @param string $hex_string
      * @return string (raw binary)
-     * @throws \RangeException
+     * @throws RangeException
      */
     public static function hexDecode(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $hex_string
     ): string {
         return Hex::decode($hex_string);
@@ -277,7 +279,7 @@ abstract class Encoding
      * @throws TypeError
      */
     public static function hexEncodeUpper(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $bin_string
     ): string {
         return Hex::encodeUpper($bin_string);
@@ -291,7 +293,7 @@ abstract class Encoding
      * @return string
      */
     public static function hexDecodeUpper(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $bin_string
     ): string {
         return Hex::decode($bin_string);

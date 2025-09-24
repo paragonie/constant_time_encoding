@@ -15,7 +15,7 @@ use PHPUnit\Framework\TestCase;
  */
 class RFC4648Test extends TestCase
 {
-    public function testVectorBase64()
+    public function testVectorBase64(): void
     {
         $this->assertSame(Base64::encode(''), '');
         $this->assertSame(Base64::encode('f'), 'Zg==');
@@ -26,7 +26,7 @@ class RFC4648Test extends TestCase
         $this->assertSame(Base64::encode('foobar'), 'Zm9vYmFy');
     }
 
-    public function testVectorBase32()
+    public function testVectorBase32(): void
     {
         $this->assertSame(Base32::encode(''), '');
         $this->assertSame(Base32::encode('f'), 'my======');
@@ -45,7 +45,7 @@ class RFC4648Test extends TestCase
         $this->assertSame(Base32::encodeUpper('foobar'), 'MZXW6YTBOI======');
     }
 
-    public function testVectorBase32Hex()
+    public function testVectorBase32Hex(): void
     {
         $this->assertSame(Base32Hex::encode(''), '');
         $this->assertSame(Base32Hex::encode('f'), 'co======');
@@ -64,7 +64,7 @@ class RFC4648Test extends TestCase
         $this->assertSame(Base32Hex::encodeUpper('foobar'), 'CPNMUOJ1E8======');
     }
 
-    public function testVectorBase16()
+    public function testVectorBase16(): void
     {
         $this->assertSame(Hex::encode(''), '');
         $this->assertSame(Hex::encode('f'), '66');

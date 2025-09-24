@@ -6,6 +6,9 @@ use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use ParagonIE\ConstantTime\Base32;
+use RangeException;
+use function random_bytes;
+use function rtrim;
 
 class Base32Test extends TestCase
 {
@@ -13,14 +16,14 @@ class Base32Test extends TestCase
     {
         for ($i = 1; $i < 32; ++$i) {
             for ($j = 0; $j < 50; ++$j) {
-                $random = \random_bytes($i);
+                $random = random_bytes($i);
 
                 $enc = Base32::encode($random);
                 $this->assertSame(
                     $random,
                     Base32::decode($enc)
                 );
-                $unpadded = \rtrim($enc, '=');
+                $unpadded = rtrim($enc, '=');
                 $this->assertSame(
                     $unpadded,
                     Base32::encodeUnpadded($random)
@@ -35,7 +38,7 @@ class Base32Test extends TestCase
                     $random,
                     Base32::decodeUpper($enc)
                 );
-                $unpadded = \rtrim($enc, '=');
+                $unpadded = rtrim($enc, '=');
                 $this->assertSame(
                     $unpadded,
                     Base32::encodeUpperUnpadded($random)
@@ -66,7 +69,7 @@ class Base32Test extends TestCase
     public function testCanonicalBase32(string $canonical, string $munged)
     {
         Base32::decode($canonical);
-        $this->expectException(\RangeException::class);
+        $this->expectException(RangeException::class);
         Base32::decodeNoPadding($munged);
     }
 
@@ -106,7 +109,7 @@ class Base32Test extends TestCase
 
     public function testDecodeNoPaddingInvalidLength()
     {
-        $this->expectException(\RangeException::class);
+        $this->expectException(RangeException::class);
         Base32::decodeNoPadding('M');
     }
 
@@ -144,7 +147,7 @@ class Base32Test extends TestCase
     #[DataProvider("invalidStrictPaddingProvider")]
     public function testInvalidStrictPadding(string $encoded): void
     {
-        $this->expectException(\RangeException::class);
+        $this->expectException(RangeException::class);
         Base32::decode($encoded, true);
     }
 
@@ -154,7 +157,7 @@ class Base32Test extends TestCase
     #[DataProvider("invalidStrictPaddingProvider")]
     public function testInvalidStrictPaddingUpper(string $encoded): void
     {
-        $this->expectException(\RangeException::class);
+        $this->expectException(RangeException::class);
         Base32::decodeUpper($encoded, true);
     }
 
@@ -178,7 +181,7 @@ class Base32Test extends TestCase
     #[DataProvider("invalidCharactersProvider")]
     public function testInvalidCharacters(string $encoded): void
     {
-        $this->expectException(\RangeException::class);
+        $this->expectException(RangeException::class);
         Base32::decode($encoded);
     }
 
@@ -188,19 +191,19 @@ class Base32Test extends TestCase
     #[DataProvider("invalidCharactersProvider")]
     public function testInvalidCharactersUpper(string $encoded): void
     {
-        $this->expectException(\RangeException::class);
+        $this->expectException(RangeException::class);
         Base32::decodeUpper(strtoupper($encoded));
     }
 
     public function testSingleInvalidCharacter(): void
     {
-        $this->expectException(\RangeException::class);
+        $this->expectException(RangeException::class);
         Base32::decode('aaaaaaaa`aaaaaaa');
     }
 
     public function testInvalidPaddingBits(): void
     {
-        $this->expectException(\RangeException::class);
+        $this->expectException(RangeException::class);
         // Last 3 bits of last char should be 0
         Base32::decode('999999J=', true);
     }

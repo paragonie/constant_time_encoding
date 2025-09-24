@@ -3,12 +3,17 @@ declare(strict_types=1);
 namespace ParagonIE\ConstantTime\Tests;
 
 use Exception;
-use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use ParagonIE\ConstantTime\Base64UrlSafe;
 use RangeException;
 use TypeError;
+use function base64_encode;
+use function bin2hex;
+use function random_bytes;
+use function rtrim;
+use function strlen;
+use function strtr;
 
 class Base64UrlSafeTest extends TestCase
 {
@@ -18,11 +23,11 @@ class Base64UrlSafeTest extends TestCase
      * @throws Exception
      * @throws TypeError
      */
-    public function testRandom()
+    public function testRandom(): void
     {
         for ($i = 1; $i < 32; ++$i) {
             for ($j = 0; $j < 50; ++$j) {
-                $random = \random_bytes($i);
+                $random = random_bytes($i);
 
                 $enc = Base64UrlSafe::encode($random);
                 $this->assertSame(
@@ -30,11 +35,11 @@ class Base64UrlSafeTest extends TestCase
                     Base64UrlSafe::decode($enc)
                 );
                 $this->assertSame(
-                    \strtr(\base64_encode($random), '+/', '-_'),
+                    strtr(base64_encode($random), '+/', '-_'),
                     $enc
                 );
 
-                $unpadded = \rtrim($enc, '=');
+                $unpadded = rtrim($enc, '=');
                 $this->assertSame(
                     $unpadded,
                     Base64UrlSafe::encodeUnpadded($random)
@@ -46,28 +51,31 @@ class Base64UrlSafeTest extends TestCase
             }
         }
 
-        $random = \random_bytes(1 << 20);
+        $random = random_bytes(1 << 20);
         $enc = Base64UrlSafe::encode($random);
-        $this->assertTrue(\strlen($enc) > 65536);
+        $this->assertTrue(strlen($enc) > 65536);
         $this->assertSame(
             $random,
             Base64UrlSafe::decode($enc)
         );
         $this->assertSame(
-            \strtr(\base64_encode($random), '+/', '-_'),
+            strtr(base64_encode($random), '+/', '-_'),
             $enc
         );
     }
 
+    /**
+     * @throws Exception
+     */
     public function testUnpadded(): void
     {
         for ($i = 1; $i < 32; ++$i) {
-            $random = \random_bytes($i);
+            $random = random_bytes($i);
             $encoded = Base64UrlSafe::encodeUnpadded($random);
             $decoded = Base64UrlSafe::decodeNoPadding($encoded);
             $this->assertSame(
-                \bin2hex($random),
-                \bin2hex($decoded)
+                bin2hex($random),
+                bin2hex($decoded)
             );
         }
     }
@@ -118,7 +126,7 @@ class Base64UrlSafeTest extends TestCase
     #[DataProvider("invalidCharactersProvider")]
     public function testInvalidCharacters(string $encoded)
     {
-        $this->expectException(\RangeException::class);
+        $this->expectException(RangeException::class);
         Base64UrlSafe::decode($encoded);
     }
 }

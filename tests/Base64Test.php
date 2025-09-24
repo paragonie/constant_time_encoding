@@ -2,21 +2,30 @@
 declare(strict_types=1);
 namespace ParagonIE\ConstantTime\Tests;
 
+use Exception;
 use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use ParagonIE\ConstantTime\Base64;
 use RangeException;
+use function base64_decode;
+use function base64_encode;
+use function bin2hex;
+use function random_bytes;
+use function rtrim;
 
 class Base64Test extends TestCase
 {
     use CanonicalTrait;
 
-    public function testRandom()
+    /**
+     * @throws Exception
+     */
+    public function testRandom(): void
     {
         for ($i = 1; $i < 32; ++$i) {
             for ($j = 0; $j < 50; ++$j) {
-                $random = \random_bytes($i);
+                $random = random_bytes($i);
 
                 $enc = Base64::encode($random);
                 $this->assertSame(
@@ -24,11 +33,11 @@ class Base64Test extends TestCase
                     Base64::decode($enc)
                 );
                 $this->assertSame(
-                    \base64_encode($random),
+                    base64_encode($random),
                     $enc
                 );
 
-                $unpadded = \rtrim($enc, '=');
+                $unpadded = rtrim($enc, '=');
                 $this->assertSame(
                     $random,
                     Base64::decode($unpadded)
@@ -73,16 +82,15 @@ class Base64Test extends TestCase
         try {
             Base64::decode($str, true);
             $this->fail('Strict padding not enforced');
-        } catch (\Exception $ex) {
-
+        } catch (Exception ) {
             $this->assertSame(
                 Base64::decode($str),
-                \base64_decode($str)
+                base64_decode($str)
             );
         }
     }
 
-    public function testIssue22()
+    public function testIssue22(): void
     {
         // Non-strict: ok
         Base64::decode('00==');
@@ -92,7 +100,7 @@ class Base64Test extends TestCase
         Base64::decode('00==', true);
     }
 
-    public function testDecodeNoPadding()
+    public function testDecodeNoPadding(): void
     {
         Base64::decodeNoPadding('0w');
         $this->expectException(InvalidArgumentException::class);
@@ -132,12 +140,12 @@ class Base64Test extends TestCase
     public function testUnpadded()
     {
         for ($i = 1; $i < 32; ++$i) {
-            $random = \random_bytes($i);
+            $random = random_bytes($i);
             $encoded = Base64::encodeUnpadded($random);
             $decoded = Base64::decodeNoPadding($encoded);
             $this->assertSame(
-                \bin2hex($random),
-                \bin2hex($decoded)
+                bin2hex($random),
+                bin2hex($decoded)
             );
         }
     }
@@ -158,7 +166,7 @@ class Base64Test extends TestCase
     #[DataProvider("invalidCharactersProvider")]
     public function testInvalidCharacters(string $encoded)
     {
-        $this->expectException(\RangeException::class);
+        $this->expectException(RangeException::class);
         Base64::decode($encoded);
     }
 }
