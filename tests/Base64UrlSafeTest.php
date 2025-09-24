@@ -101,4 +101,14 @@ class Base64UrlSafeTest extends TestCase
             'BCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_A'
         );
     }
+
+    public function testStrictPaddingSodium()
+    {
+        for ($i = 1; $i < 32; ++$i) {
+            $random = random_bytes($i);
+            $encoded = Base64UrlSafe::encode($random);
+            $decoded = Base64UrlSafe::decode($encoded, true);
+            $this->assertSame($decoded, $random);
+        }
+    }
 }
