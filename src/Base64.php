@@ -53,15 +53,15 @@ abstract class Base64 implements EncoderInterface
         #[\SensitiveParameter]
         string $binString
     ): string {
-        if (extension_loaded('sodium')) {
+        if (\extension_loaded('sodium')) {
             $variant = match(static::class) {
-                Base64::class => SODIUM_BASE64_VARIANT_ORIGINAL,
-                Base64UrlSafe::class => SODIUM_BASE64_VARIANT_URLSAFE,
+                Base64::class => \SODIUM_BASE64_VARIANT_ORIGINAL,
+                Base64UrlSafe::class => \SODIUM_BASE64_VARIANT_URLSAFE,
                 default => 0,
             };
             if ($variant > 0) {
                 try {
-                    return sodium_bin2base64($binString, $variant);
+                    return \sodium_bin2base64($binString, $variant);
                 } catch (SodiumException $ex) {
                     throw new RangeException($ex->getMessage(), $ex->getCode(), $ex);
                 }
@@ -85,15 +85,15 @@ abstract class Base64 implements EncoderInterface
         #[\SensitiveParameter]
         string $src
     ): string {
-        if (extension_loaded('sodium')) {
+        if (\extension_loaded('sodium')) {
             $variant = match(static::class) {
-                Base64::class => SODIUM_BASE64_VARIANT_ORIGINAL_NO_PADDING,
-                Base64UrlSafe::class => SODIUM_BASE64_VARIANT_URLSAFE_NO_PADDING,
+                Base64::class => \SODIUM_BASE64_VARIANT_ORIGINAL_NO_PADDING,
+                Base64UrlSafe::class => \SODIUM_BASE64_VARIANT_URLSAFE_NO_PADDING,
                 default => 0,
             };
             if ($variant > 0) {
                 try {
-                    return sodium_bin2base64($src, $variant);
+                    return \sodium_bin2base64($src, $variant);
                 } catch (SodiumException $ex) {
                     throw new RangeException($ex->getMessage(), $ex->getCode(), $ex);
                 }
@@ -199,15 +199,15 @@ abstract class Base64 implements EncoderInterface
                     'Incorrect padding'
                 );
             }
-            if (extension_loaded('sodium')) {
+            if (\extension_loaded('sodium')) {
                 $variant = match(static::class) {
-                    Base64::class => SODIUM_BASE64_VARIANT_ORIGINAL_NO_PADDING,
-                    Base64UrlSafe::class => SODIUM_BASE64_VARIANT_URLSAFE_NO_PADDING,
+                    Base64::class => \SODIUM_BASE64_VARIANT_ORIGINAL_NO_PADDING,
+                    Base64UrlSafe::class => \SODIUM_BASE64_VARIANT_URLSAFE_NO_PADDING,
                     default => 0,
                 };
                 if ($variant > 0) {
                     try {
-                        return sodium_base642bin($encodedString, $variant);
+                        return \sodium_base642bin($encodedString, $variant);
                     } catch (SodiumException $ex) {
                         throw new RangeException($ex->getMessage(), $ex->getCode(), $ex);
                     }
