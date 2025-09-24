@@ -213,23 +213,24 @@ abstract class Base64 implements EncoderInterface
                     'Incorrect padding'
                 );
             }
-            if (extension_loaded('sodium')) {
-                $variant = match(static::class) {
-                    Base64::class => SODIUM_BASE64_VARIANT_ORIGINAL_NO_PADDING,
-                    Base64UrlSafe::class => SODIUM_BASE64_VARIANT_URLSAFE_NO_PADDING,
-                    default => 0,
-                };
-                if ($variant > 0) {
-                    try {
-                        return sodium_base642bin(\rtrim($encodedString, '='), $variant);
-                    } catch (SodiumException $ex) {
-                        throw new RangeException($ex->getMessage(), $ex->getCode(), $ex);
-                    }
+        }
+
+        $encodedString = rtrim($encodedString, '=');
+        $srcLen = strlen($encodedString);
+
+        if (extension_loaded('sodium')) {
+            $variant = match(static::class) {
+                Base64::class => SODIUM_BASE64_VARIANT_ORIGINAL_NO_PADDING,
+                Base64UrlSafe::class => SODIUM_BASE64_VARIANT_URLSAFE_NO_PADDING,
+                default => 0,
+            };
+            if ($variant > 0) {
+                try {
+                    return sodium_base642bin($encodedString, $variant);
+                } catch (SodiumException $ex) {
+                    throw new RangeException($ex->getMessage(), $ex->getCode(), $ex);
                 }
             }
-        } else {
-            $encodedString = rtrim($encodedString, '=');
-            $srcLen = strlen($encodedString);
         }
 
         $err = 0;
