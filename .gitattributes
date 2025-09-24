@@ -9,4 +9,4 @@
 /tests               export-ignore
 /infection.json.dist export-ignore
 /phpunit.xml.dist    export-ignore
-/psalm.xml           export-ignore
+/psalm*              export-ignore
