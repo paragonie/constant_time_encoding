@@ -8,11 +8,14 @@ on:
 jobs:
   psalm:
     name: Infection on PHP ${{ matrix.php-versions }}
+
     runs-on: ${{ matrix.operating-system }}
+
     strategy:
       matrix:
-        operating-system: ['ubuntu-latest']
+        operating-system: [ubuntu-latest]
         php-versions: ['8.3']
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -24,7 +27,7 @@ jobs:
           coverage: pcov
 
       - name: Install Composer dependencies
-        uses: "ramsey/composer-install@v3"
+        uses: ramsey/composer-install@v3
 
       - name: Mutation Tests
         run: composer mutation-test
