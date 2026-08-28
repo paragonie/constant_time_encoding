@@ -177,6 +177,38 @@ class Base64Test extends TestCase
     }
 
     /**
+     * @dataProvider permissiveDecodingProvider
+     */
+    #[DataProvider("permissiveDecodingProvider")]
+    public function testPermissiveDecoding(string $encoded, string $expected): void
+    {
+        $this->assertSame(
+            $expected,
+            bin2hex(Base64::decode($encoded))
+        );
+    }
+
+    /**
+     * Non-strict decoding accepts inputs that strict decoding rejects. Pin the exact output
+     * for each, so the permissive contract cannot drift.
+     *
+     * @return array<string, array{string, string}>
+     */
+    public static function permissiveDecodingProvider(): array
+    {
+        return [
+            'canonical'                 => ['AAAA', '000000'],
+            'canonical padded'          => ['AA==', '00'],
+            'canonical padded (3)'      => ['AAA=', '0000'],
+            'over-padded'               => ['AA======', '00'],
+            'length 1 mod 4'            => ['AAAAA', '000000'],
+            'non-canonical trailing'    => ['00==', 'd3'],
+            'non-canonical trailing 2'  => ['01==', 'd3'],
+            'non-canonical unpadded'    => ['AB', '00'],
+        ];
+    }
+
+    /**
      * @dataProvider invalidCharactersProvider
      */
     #[DataProvider("invalidCharactersProvider")]
