@@ -148,7 +148,7 @@ class Base32Test extends TestCase
     public function testInvalidStrictPadding(string $encoded): void
     {
         $this->expectException(RangeException::class);
-        Base32::decode($encoded, true);
+        Base32::decode(strtolower($encoded), true);
     }
 
     /**
