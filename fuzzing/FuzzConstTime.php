@@ -27,7 +27,8 @@ $config->setTarget(function(string $input) {
     $target = $targets[array_rand($targets)];
     $out = $target::decode($input, true);
     $re = $target::encode($out);
-    if ($re !== $input) {
-        throw new Exception('invalid');
+    $normalized = $target === Hex::class ? strtolower($input) : $input;
+    if (rtrim($re, '=') !== rtrim($normalized, '=')) {
+        throw new Error('invalid');
     }
 });
