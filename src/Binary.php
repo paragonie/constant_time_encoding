@@ -37,6 +37,7 @@ use function substr;
  * mbstring.func_overload
  *
  * @package ParagonIE\ConstantTime
+ * @api
  */
 abstract class Binary
 {
